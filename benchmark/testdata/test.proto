@@ -1,0 +1,11 @@
+syntax = "proto3";
+package testdata;
+option go_package = "/testdata";
+
+message Ping {
+    string Content = 1;
+}
+
+message Pong {
+    string Content = 2;
+}
