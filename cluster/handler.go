@@ -151,7 +151,7 @@ func (h *LocalHandler) addRemoteService(member *clusterpb.MemberInfo) {
 	defer h.mu.Unlock()
 
 	for _, s := range member.Services {
-		log.Println("Register remote service", s)
+		log.Println("Register remote service:", s)
 		h.remoteServices[s] = append(h.remoteServices[s], member)
 	}
 }
