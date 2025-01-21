@@ -100,16 +100,16 @@ func Listen(addr string, opts ...Option) {
 	runtime.CurrentNode = node
 
 	if node.ClientAddr != "" {
-		log.Println(fmt.Sprintf("Startup *Nano gate server* %s, client address: %v, service address: %s",
+		log.Println(fmt.Sprintf("Startup *gate server* %s, client address: %v, service address: %s",
 			app.name, node.ClientAddr, node.ServiceAddr))
 	} else {
-		log.Println(fmt.Sprintf("Startup *Nano backend server* %s, service address %s",
+		log.Println(fmt.Sprintf("Startup *backend server* %s, service address %s",
 			app.name, node.ServiceAddr))
 	}
 
 	go scheduler.Sched()
-	sg := make(chan os.Signal)
-	signal.Notify(sg, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGKILL, syscall.SIGTERM)
+	sg := make(chan os.Signal, 1)
+	signal.Notify(sg, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 
 	select {
 	case <-env.Die:

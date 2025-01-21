@@ -51,7 +51,7 @@ var (
 	hbd []byte // heartbeat packet data
 )
 
-type rpcHandler func(session *session.Session, msg *message.Message, noCopy bool)
+type rpcHandler func(session *session.Session, msg *message.Message, noCopy bool, addr string)
 
 // CustomerRemoteServiceRoute customer remote service route
 type CustomerRemoteServiceRoute func(service string, session *session.Session, members []*clusterpb.MemberInfo) *clusterpb.MemberInfo
@@ -324,7 +324,7 @@ func (h *LocalHandler) findMembers(service string) []*clusterpb.MemberInfo {
 	return h.remoteServices[service]
 }
 
-func (h *LocalHandler) remoteProcess(session *session.Session, msg *message.Message, noCopy bool) {
+func (h *LocalHandler) remoteProcess(session *session.Session, msg *message.Message, noCopy bool, addr string) {
 	index := strings.LastIndex(msg.Route, ".")
 	if index < 0 {
 		log.Println(fmt.Sprintf("nano/handler: invalid route %s", msg.Route))
@@ -342,27 +342,46 @@ func (h *LocalHandler) remoteProcess(session *session.Session, msg *message.Mess
 	// 1. if exist customer remote service route ,use it, otherwise use default strategy
 	// 2. Use the service address directly if the router contains binding item
 	// 3. Select a remote service address randomly and bind to router
-	var remoteAddr string
-	if h.currentNode.Options.RemoteServiceRoute != nil {
-		if addr, found := session.Router().Find(service); found {
-			remoteAddr = addr
-		} else {
-			member := h.currentNode.Options.RemoteServiceRoute(service, session, members)
-			if member == nil {
-				log.Println(fmt.Sprintf("customize remoteServiceRoute handler: %s is not found", msg.Route))
-				return
+	var remoteAddr = addr
+	if remoteAddr == "" {
+		if h.currentNode.Options.RemoteServiceRoute != nil {
+			if addr, found := session.Router().Find(service); found {
+				// check binded addr is still avaliable
+				for _, m := range members {
+					if m.ServiceAddr == addr {
+						remoteAddr = addr
+						break
+					}
+				}
 			}
-			remoteAddr = member.ServiceAddr
-			session.Router().Bind(service, remoteAddr)
-		}
-	} else {
-		if addr, found := session.Router().Find(service); found {
-			remoteAddr = addr
+			if remoteAddr == "" {
+				// if not binded , get one from callback func
+				member := h.currentNode.Options.RemoteServiceRoute(service, session, members)
+				if member == nil {
+					log.Println(fmt.Sprintf("customize remoteServiceRoute handler: %s is not found", msg.Route))
+					return
+				}
+				remoteAddr = member.ServiceAddr
+				session.Router().Bind(service, remoteAddr)
+			}
 		} else {
-			remoteAddr = members[rand.Intn(len(members))].ServiceAddr
-			session.Router().Bind(service, remoteAddr)
+			if addr, found := session.Router().Find(service); found {
+				// check binded addr is still avaliable
+				for _, m := range members {
+					if m.ServiceAddr == addr {
+						remoteAddr = addr
+						break
+					}
+				}
+			}
+			if remoteAddr == "" {
+				// if not binded , random one
+				remoteAddr = members[rand.Intn(len(members))].ServiceAddr
+				session.Router().Bind(service, remoteAddr)
+			}
 		}
 	}
+
 	pool, err := h.currentNode.rpcClient.getConnPool(remoteAddr)
 	if err != nil {
 		log.Println(err)
@@ -422,7 +441,7 @@ func (h *LocalHandler) processMessage(agent *agent, msg *message.Message) {
 
 	handler, found := h.localHandlers[msg.Route]
 	if !found {
-		h.remoteProcess(agent.session, msg, false)
+		h.remoteProcess(agent.session, msg, false, "")
 	} else {
 		h.localProcess(handler, lastMid, agent.session, msg)
 	}

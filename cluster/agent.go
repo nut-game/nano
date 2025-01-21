@@ -138,6 +138,11 @@ func (a *agent) Push(route string, v interface{}) error {
 
 // RPC, implementation for session.NetworkEntity interface
 func (a *agent) RPC(route string, v interface{}) error {
+	return a.RPCWithAddr(route, v, "")
+}
+
+// RPC, implementation for session.NetworkEntity interface with a remote addr
+func (a *agent) RPCWithAddr(route string, v interface{}, addr string) error {
 	if a.status() == statusClosed {
 		return ErrBrokenPipe
 	}
@@ -152,7 +157,7 @@ func (a *agent) RPC(route string, v interface{}) error {
 		Route: route,
 		Data:  data,
 	}
-	a.rpcHandler(a.session, msg, true)
+	a.rpcHandler(a.session, msg, true, addr)
 	return nil
 }
 

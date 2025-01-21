@@ -61,6 +61,12 @@ func (n *NetworkEntity) RPC(route string, v interface{}) error {
 	return nil
 }
 
+// RPC sends message to remote server with a remote addr
+func (n *NetworkEntity) RPCWithAddr(route string, v interface{}, addr string) error {
+	n.rpcCall = append(n.rpcCall, message{route: route, data: v})
+	return nil
+}
+
 // Push implements the session.NetworkEntity interface
 func (n *NetworkEntity) Push(route string, v interface{}) error {
 	n.messages = append(n.messages, message{route: route, data: v})

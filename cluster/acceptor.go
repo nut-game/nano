@@ -37,6 +37,11 @@ func (a *acceptor) Push(route string, v interface{}) error {
 
 // RPC implements the session.NetworkEntity interface
 func (a *acceptor) RPC(route string, v interface{}) error {
+	return a.RPCWithAddr(route, v, "")
+}
+
+// RPC implements the session.NetworkEntity interface with a remote addr
+func (a *acceptor) RPCWithAddr(route string, v interface{}, addr string) error {
 	// TODO: buffer
 	data, err := message.Serialize(v)
 	if err != nil {
@@ -47,7 +52,7 @@ func (a *acceptor) RPC(route string, v interface{}) error {
 		Route: route,
 		Data:  data,
 	}
-	a.rpcHandler(a.session, msg, true)
+	a.rpcHandler(a.session, msg, true, addr)
 	return nil
 }
 

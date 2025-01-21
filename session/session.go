@@ -34,6 +34,7 @@ import (
 type NetworkEntity interface {
 	Push(route string, v interface{}) error
 	RPC(route string, v interface{}) error
+	RPCWithAddr(route string, v interface{}, addr string) error
 	LastMid() uint64
 	Response(v interface{}) error
 	ResponseMid(mid uint64, v interface{}) error
@@ -85,6 +86,11 @@ func (s *Session) Router() *Router {
 // RPC sends message to remote server
 func (s *Session) RPC(route string, v interface{}) error {
 	return s.entity.RPC(route, v)
+}
+
+// RPC sends message to remote server with a remote addr
+func (s *Session) RPCWithAddr(route string, v interface{}, addr string) error {
+	return s.entity.RPCWithAddr(route, v, addr)
 }
 
 // Push message to client
