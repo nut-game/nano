@@ -1,3 +1,4 @@
+build
 # Binaries for programs and plugins
 *.exe
 *.dll
@@ -16,4 +17,9 @@
 .idea/
 .vscode/
 
+# macos
 .DS_Store
+
+# vim temp files
+*.swp
+*.swo
