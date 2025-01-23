@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package pitaya
+package nano
 
 import (
 	"context"
@@ -57,7 +57,7 @@ func TestStaticGetDieChan(t *testing.T) {
 
 	expected := make(chan bool)
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().GetDieChan().Return(expected)
 
 	// DefaultApp = app
@@ -69,7 +69,7 @@ func TestStaticSetDebug(t *testing.T) {
 
 	expected := true
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().SetDebug(expected)
 
 	// DefaultApp = app
@@ -81,7 +81,7 @@ func TestStaticSetHeartbeatTime(t *testing.T) {
 
 	expected := 2 * time.Second
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().SetHeartbeatTime(expected)
 
 	// DefaultApp = app
@@ -93,7 +93,7 @@ func TestStaticGetServerID(t *testing.T) {
 
 	expected := uuid.New().String()
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().GetServerID().Return(expected)
 
 	// DefaultApp = app
@@ -105,7 +105,7 @@ func TestStaticGetMetricsReporters(t *testing.T) {
 
 	expected := []metrics.Reporter{}
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().GetMetricsReporters().Return(expected)
 
 	// DefaultApp = app
@@ -117,7 +117,7 @@ func TestStaticGetServer(t *testing.T) {
 
 	expected := &cluster.Server{}
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().GetServer().Return(expected)
 
 	// DefaultApp = app
@@ -139,7 +139,7 @@ func TestStaticGetServerByID(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GetServerByID(row.id).Return(row.server, row.err)
 
 			// DefaultApp = app
@@ -165,7 +165,7 @@ func TestStaticGetServersByType(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GetServersByType(row.typ).Return(row.server, row.err)
 
 			// DefaultApp = app
@@ -181,7 +181,7 @@ func TestStaticGetServers(t *testing.T) {
 
 	expected := []*cluster.Server{{}}
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().GetServers().Return(expected)
 
 	// DefaultApp = app
@@ -200,7 +200,7 @@ func TestStaticGetSessionFromCtx(t *testing.T) {
 func TestStaticStart(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().Start()
 
 	// DefaultApp = app
@@ -212,7 +212,7 @@ func TestStaticSetDictionary(t *testing.T) {
 
 	expected := map[string]uint16{"test": 1}
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().SetDictionary(expected).Return(nil)
 
 	//DefaultApp = app
@@ -233,7 +233,7 @@ func TestStaticAddRoute(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().AddRoute(row.serverType, nil).Return(row.err) // Note that functions can't be tested for equality
 
 			//DefaultApp = app
@@ -246,7 +246,7 @@ func TestStaticAddRoute(t *testing.T) {
 func TestStaticShutdown(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().Shutdown()
 
 	//DefaultApp = app
@@ -256,7 +256,7 @@ func TestStaticShutdown(t *testing.T) {
 func TestStaticStartWorker(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().StartWorker()
 
 	//DefaultApp = app
@@ -281,7 +281,7 @@ func TestStaticRegisterRPCJob(t *testing.T) {
 	// 	t.Run(row.name, func(t *testing.T) {
 	// 		ctrl := gomock.NewController(t)
 
-	// 		app := mocks.NewMockPitaya(ctrl)
+	// 		app := mocks.NewMockNano(ctrl)
 	// 		job := create(ctrl)
 	// 		app.EXPECT().RegisterRPCJob(job).Return(row.err)
 
@@ -307,7 +307,7 @@ func TestStaticDocumentation(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().Documentation(row.expectedBool).Return(row.returned, row.err)
 
 			// DefaultApp = app
@@ -331,7 +331,7 @@ func TestStaticIsRunning(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().IsRunning().Return(row.returned)
 
 			// DefaultApp = app
@@ -358,7 +358,7 @@ func TestStaticRPC(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().RPC(ctx, routeStr, reply, arg).Return(row.returned)
 
 			// DefaultApp = app
@@ -386,7 +386,7 @@ func TestStaticRPCTo(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().RPCTo(ctx, serverId, routeStr, reply, arg).Return(row.returned)
 
 			//DefaultApp = app
@@ -413,7 +413,7 @@ func TestStaticReliableRPC(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().ReliableRPC(row.route, row.metadata, row.reply, row.arg).Return(row.jid, row.err)
 
 			//DefaultApp = app
@@ -443,7 +443,7 @@ func TestStaticReliableRPCWithOptions(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().ReliableRPCWithOptions(row.route, row.metadata, row.reply, row.arg, row.opts).Return(row.jid, row.err)
 
 			//DefaultApp = app
@@ -472,7 +472,7 @@ func TestStaticSendPushToUsers(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().SendPushToUsers(row.route, row.v, row.uids, row.frontendType).Return(row.returned, row.err)
 
 			//DefaultApp = app
@@ -499,7 +499,7 @@ func TestStaticSendKickToUsers(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().SendKickToUsers(row.uids, row.frontendType).Return(row.returned, row.err)
 
 			//DefaultApp = app
@@ -526,7 +526,7 @@ func TestStaticGroupCreate(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupCreate(ctx, groupName).Return(row.returned)
 
 			//DefaultApp = app
@@ -552,7 +552,7 @@ func TestStaticGroupCreateWithTTL(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupCreateWithTTL(ctx, groupName, ttl).Return(row.returned)
 
 			//DefaultApp = app
@@ -577,7 +577,7 @@ func TestStaticGroupMembers(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupMembers(ctx, row.groupName).Return(row.members, row.err)
 
 			//DefaultApp = app
@@ -606,7 +606,7 @@ func TestStaticGroupBroadcast(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupBroadcast(ctx, frontendType, groupName, route, nil).Return(row.returned)
 
 			//DefaultApp = app
@@ -633,7 +633,7 @@ func TestStaticGroupContainsMember(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupContainsMember(ctx, row.groupName, row.uid).Return(row.contains, row.err)
 
 			//DefaultApp = app
@@ -661,7 +661,7 @@ func TestStaticGroupAddMember(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupAddMember(ctx, groupName, uid).Return(row.returned)
 
 			//DefaultApp = app
@@ -687,7 +687,7 @@ func TestStaticGroupRemoveMember(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupRemoveMember(ctx, groupName, uid).Return(row.returned)
 
 			//DefaultApp = app
@@ -712,7 +712,7 @@ func TestStaticGroupRemoveAll(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupRemoveAll(ctx, groupName).Return(row.returned)
 
 			//DefaultApp = app
@@ -737,7 +737,7 @@ func TestStaticGroupCountMembers(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupCountMembers(ctx, row.groupName).Return(row.count, row.err)
 
 			//DefaultApp = app
@@ -764,7 +764,7 @@ func TestStaticGroupRenewTTL(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupRenewTTL(ctx, groupName).Return(row.returned)
 
 			//DefaultApp = app
@@ -789,7 +789,7 @@ func TestStaticGroupDelete(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GroupDelete(ctx, groupName).Return(row.returned)
 
 			//DefaultApp = app
@@ -803,7 +803,7 @@ func TestStaticRegister(t *testing.T) {
 	options := []component.Option{}
 	ctrl := gomock.NewController(t)
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().Register(c, options)
 
 	//DefaultApp = app
@@ -815,7 +815,7 @@ func TestStaticRegisterRemote(t *testing.T) {
 	options := []component.Option{}
 	ctrl := gomock.NewController(t)
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().RegisterRemote(c, options)
 
 	//DefaultApp = app
@@ -838,7 +838,7 @@ func TestStaticRegisterModule(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().RegisterModule(module, name).Return(row.returned)
 
 			//DefaultApp = app
@@ -863,7 +863,7 @@ func TestStaticRegisterModuleAfter(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().RegisterModuleAfter(module, name).Return(row.returned)
 
 			//DefaultApp = app
@@ -888,7 +888,7 @@ func TestStaticRegisterModuleBefore(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().RegisterModuleBefore(module, name).Return(row.returned)
 
 			//DefaultApp = app
@@ -912,7 +912,7 @@ func TestStaticGetModule(t *testing.T) {
 		t.Run(row.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
-			app := mocks.NewMockPitaya(ctrl)
+			app := mocks.NewMockNano(ctrl)
 			app.EXPECT().GetModule(row.moduleName).Return(row.module, row.err)
 
 			//DefaultApp = app
@@ -928,7 +928,7 @@ func TestGetNumberOfConnectedClients(t *testing.T) {
 
 	expected := int64(math.MaxInt64)
 
-	app := mocks.NewMockPitaya(ctrl)
+	app := mocks.NewMockNano(ctrl)
 	app.EXPECT().GetNumberOfConnectedClients().Return(expected)
 
 	//DefaultApp = app

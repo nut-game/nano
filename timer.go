@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package pitaya
+package nano
 
 import (
 	"math"
@@ -44,7 +44,7 @@ func NewTimer(interval time.Duration, fn timer.Func) *timer.Timer {
 // Stop the timer to release associated resources.
 func NewCountTimer(interval time.Duration, count int, fn timer.Func) *timer.Timer {
 	if fn == nil {
-		panic("pitaya/timer: nil timer function")
+		panic("nano/timer: nil timer function")
 	}
 	if interval <= 0 {
 		panic("non-positive interval for NewTimer")

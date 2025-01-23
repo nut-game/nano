@@ -111,7 +111,7 @@ func TestReportTimingFromCtx(t *testing.T) {
 		ReportTimingFromCtx(ctx, []Reporter{mockMetricsReporter}, expectedType, expectedErr)
 	})
 
-	t.Run("test-failed-route-with-pitaya-error", func(t *testing.T) {
+	t.Run("test-failed-route-with-nano-error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 		mockMetricsReporter := mocks.NewMockReporter(ctrl)

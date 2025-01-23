@@ -1,6 +1,6 @@
 package interfaces
 
-// Logger interface for pitaya loggers
+// Logger interface for nano loggers
 type Logger interface {
 	Fatal(format ...interface{})
 	Fatalf(format string, args ...interface{})

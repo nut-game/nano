@@ -1,4 +1,4 @@
-package pitaya
+package nano
 
 import (
 	"github.com/google/uuid"
@@ -21,11 +21,11 @@ import (
 	"github.com/nut-game/nano/worker"
 )
 
-// Builder holds dependency instances for a pitaya App
+// Builder holds dependency instances for a nano App
 type Builder struct {
 	acceptors        []acceptor.Acceptor
-	postBuildHooks   []func(app Pitaya)
-	Config           config.PitayaConfig
+	postBuildHooks   []func(app Nano)
+	Config           config.NanoConfig
 	DieChan          chan bool
 	PacketDecoder    codec.PacketDecoder
 	PacketEncoder    codec.PacketEncoder
@@ -45,14 +45,14 @@ type Builder struct {
 	HandlerHooks     *pipeline.HandlerHooks
 }
 
-// PitayaBuilder Builder interface
-type PitayaBuilder interface {
-	// AddPostBuildHook adds a post-build hook to the builder, a function receiving a Pitaya instance as parameter.
-	AddPostBuildHook(hook func(app Pitaya))
-	Build() Pitaya
+// NanoBuilder Builder interface
+type NanoBuilder interface {
+	// AddPostBuildHook adds a post-build hook to the builder, a function receiving a Nano instance as parameter.
+	AddPostBuildHook(hook func(app Nano))
+	Build() Nano
 }
 
-// NewBuilderWithConfigs return a builder instance with default dependency instances for a pitaya App
+// NewBuilderWithConfigs return a builder instance with default dependency instances for a nano App
 // with configs defined by a config file (config.Config) and default paths (see documentation).
 func NewBuilderWithConfigs(
 	isFrontend bool,
@@ -61,35 +61,35 @@ func NewBuilderWithConfigs(
 	serverMetadata map[string]string,
 	conf *config.Config,
 ) *Builder {
-	pitayaConfig := config.NewPitayaConfig(conf)
+	config := config.NewNanoConfig(conf)
 	return NewBuilder(
 		isFrontend,
 		serverType,
 		serverMode,
 		serverMetadata,
-		*pitayaConfig,
+		*config,
 	)
 }
 
-// NewDefaultBuilder return a builder instance with default dependency instances for a pitaya App,
+// NewDefaultBuilder return a builder instance with default dependency instances for a nano App,
 // with default configs
-func NewDefaultBuilder(isFrontend bool, serverType string, serverMode ServerMode, serverMetadata map[string]string, pitayaConfig config.PitayaConfig) *Builder {
+func NewDefaultBuilder(isFrontend bool, serverType string, serverMode ServerMode, serverMetadata map[string]string, nanoConfig config.NanoConfig) *Builder {
 	return NewBuilder(
 		isFrontend,
 		serverType,
 		serverMode,
 		serverMetadata,
-		pitayaConfig,
+		nanoConfig,
 	)
 }
 
-// NewBuilder return a builder instance with default dependency instances for a pitaya App,
+// NewBuilder return a builder instance with default dependency instances for a nano App,
 // with configs explicitly defined
 func NewBuilder(isFrontend bool,
 	serverType string,
 	serverMode ServerMode,
 	serverMetadata map[string]string,
-	config config.PitayaConfig,
+	config config.NanoConfig,
 ) *Builder {
 	server := cluster.NewServer(uuid.New().String(), serverType, isFrontend, serverMetadata)
 	dieChan := make(chan bool)
@@ -148,7 +148,7 @@ func NewBuilder(isFrontend bool,
 
 	return &Builder{
 		acceptors:        []acceptor.Acceptor{},
-		postBuildHooks:   make([]func(app Pitaya), 0),
+		postBuildHooks:   make([]func(app Nano), 0),
 		Config:           config,
 		DieChan:          dieChan,
 		PacketDecoder:    codec.NewPomeloPacketDecoder(),
@@ -179,13 +179,13 @@ func (builder *Builder) AddAcceptor(ac acceptor.Acceptor) {
 	builder.acceptors = append(builder.acceptors, ac)
 }
 
-// AddPostBuildHook adds a post-build hook to the builder, a function receiving a Pitaya instance as parameter.
-func (builder *Builder) AddPostBuildHook(hook func(app Pitaya)) {
+// AddPostBuildHook adds a post-build hook to the builder, a function receiving a Nano instance as parameter.
+func (builder *Builder) AddPostBuildHook(hook func(app Nano)) {
 	builder.postBuildHooks = append(builder.postBuildHooks, hook)
 }
 
 // Build returns a valid App instance
-func (builder *Builder) Build() Pitaya {
+func (builder *Builder) Build() Nano {
 	handlerPool := service.NewHandlerPool()
 	var remoteService *service.RemoteService
 	if builder.ServerMode == Standalone {
@@ -214,7 +214,7 @@ func (builder *Builder) Build() Pitaya {
 			handlerPool,
 		)
 
-		builder.RPCServer.SetPitayaServer(remoteService)
+		builder.RPCServer.SetNanoServer(remoteService)
 	}
 
 	agentFactory := agent.NewAgentFactory(builder.DieChan,
@@ -268,8 +268,8 @@ func (builder *Builder) Build() Pitaya {
 	return app
 }
 
-// NewDefaultApp returns a default pitaya app instance
-func NewDefaultApp(isFrontend bool, serverType string, serverMode ServerMode, serverMetadata map[string]string, config config.PitayaConfig) Pitaya {
+// NewDefaultApp returns a default nano app instance
+func NewDefaultApp(isFrontend bool, serverType string, serverMode ServerMode, serverMetadata map[string]string, config config.NanoConfig) Nano {
 	builder := NewDefaultBuilder(isFrontend, serverType, serverMode, serverMetadata, config)
 	return builder.Build()
 }

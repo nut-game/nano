@@ -6,7 +6,7 @@ import (
 
 	"strings"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/acceptor"
 	"github.com/nut-game/nano/component"
 	"github.com/nut-game/nano/config"
@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var app pitaya.Pitaya
+var app nano.Nano
 
 func configureWorker() {
 	worker := services.Worker{}
@@ -29,14 +29,14 @@ func main() {
 	flag.Parse()
 
 	conf := viper.New()
-	conf.SetDefault("pitaya.worker.redis.url", "localhost:6379")
-	conf.SetDefault("pitaya.worker.redis.pool", "3")
+	conf.SetDefault("nano.worker.redis.url", "localhost:6379")
+	conf.SetDefault("nano.worker.redis.pool", "3")
 
 	config := config.NewConfig(conf)
 
 	tcp := acceptor.NewTCPAcceptor(fmt.Sprintf(":%d", *port))
 
-	builder := pitaya.NewBuilderWithConfigs(*isFrontend, *svType, pitaya.Cluster, map[string]string{}, config)
+	builder := nano.NewBuilderWithConfigs(*isFrontend, *svType, nano.Cluster, map[string]string{}, config)
 	if *isFrontend {
 		builder.AddAcceptor(tcp)
 	}

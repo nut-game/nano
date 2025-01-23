@@ -5,9 +5,9 @@ import (
 )
 
 // StructValidator is the interface that must be implemented
-// by a struct validator for the request arguments on pitaya.
+// by a struct validator for the request arguments on nano.
 //
-// The default struct validator used by pitaya is https://github.com/go-playground/validator.
+// The default struct validator used by nano is https://github.com/go-playground/validator.
 type StructValidator interface {
 	Validate(context.Context, interface{}) (context.Context, interface{}, error)
 }

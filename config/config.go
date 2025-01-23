@@ -8,8 +8,8 @@ import (
 
 const DefaultWriteTimeout = 10 * time.Second
 
-// PitayaConfig provides all the configuration for a pitaya app
-type PitayaConfig struct {
+// NanoConfig provides all the configuration for a nano app
+type NanoConfig struct {
 	SerializerType   uint16 `mapstructure:"serializertype"`
 	DefaultPipelines struct {
 		StructValidation struct {
@@ -61,9 +61,9 @@ type PitayaConfig struct {
 	Worker  WorkerConfig  `mapstructure:"worker"`
 }
 
-// NewDefaultPitayaConfig provides default configuration for Pitaya App
-func NewDefaultPitayaConfig() *PitayaConfig {
-	return &PitayaConfig{
+// NewDefaultNanoConfig provides default configuration for nano App
+func NewDefaultNanoConfig() *NanoConfig {
+	return &NanoConfig{
 		SerializerType: 1,
 		DefaultPipelines: struct {
 			StructValidation struct {
@@ -165,10 +165,10 @@ func NewDefaultPitayaConfig() *PitayaConfig {
 	}
 }
 
-// NewPitayaConfig returns a config instance with values extracted from default config paths
-func NewPitayaConfig(config *Config) *PitayaConfig {
-	conf := NewDefaultPitayaConfig()
-	if err := config.UnmarshalKey("pitaya", &conf); err != nil {
+// NewNanoConfig returns a config instance with values extracted from default config paths
+func NewNanoConfig(config *Config) *NanoConfig {
+	conf := NewDefaultNanoConfig()
+	if err := config.UnmarshalKey("nano", &conf); err != nil {
 		panic(err)
 	}
 	return conf
@@ -321,7 +321,7 @@ func newDefaultEtcdServiceDiscoveryConfig() *EtcdServiceDiscoveryConfig {
 		User:        "",
 		Pass:        "",
 		DialTimeout: time.Duration(5 * time.Second),
-		Prefix:      "pitaya/",
+		Prefix:      "nano/",
 		Heartbeat: struct {
 			TTL time.Duration `mapstructure:"ttl"`
 			Log bool          `mapstructure:"log"`
@@ -372,7 +372,7 @@ func NewDefaultCustomMetricsSpec() *models.CustomMetricsSpec {
 func NewCustomMetricsSpec(config *Config) *models.CustomMetricsSpec {
 	spec := &models.CustomMetricsSpec{}
 
-	if err := config.UnmarshalKey("pitaya.metrics.custom", &spec); err != nil {
+	if err := config.UnmarshalKey("nano.metrics.custom", &spec); err != nil {
 		return NewDefaultCustomMetricsSpec()
 	}
 
@@ -429,7 +429,7 @@ func newDefaultStatsdConfig() *StatsdConfig {
 	return &StatsdConfig{
 		Enabled: false,
 		Host:    "localhost:9125",
-		Prefix:  "pitaya.",
+		Prefix:  "nano.",
 		Rate:    1,
 	}
 }
@@ -561,7 +561,7 @@ func newDefaultEtcdGroupServiceConfig() *EtcdGroupServiceConfig {
 	return &EtcdGroupServiceConfig{
 		DialTimeout:        time.Duration(5 * time.Second),
 		Endpoints:          []string{"localhost:2379"},
-		Prefix:             "pitaya/",
+		Prefix:             "nano/",
 		TransactionTimeout: time.Duration(5 * time.Second),
 	}
 }
@@ -569,7 +569,7 @@ func newDefaultEtcdGroupServiceConfig() *EtcdGroupServiceConfig {
 // NewEtcdGroupServiceConfig reads from config to build ETCD configuration
 func newEtcdGroupServiceConfig(config *Config) *EtcdGroupServiceConfig {
 	conf := newDefaultEtcdGroupServiceConfig()
-	if err := config.UnmarshalKey("pitaya.groups.etcd", &conf); err != nil {
+	if err := config.UnmarshalKey("nano.groups.etcd", &conf); err != nil {
 		panic(err)
 	}
 	return conf
@@ -601,19 +601,19 @@ func newDefaultETCDBindingConfig() *ETCDBindingConfig {
 	return &ETCDBindingConfig{
 		DialTimeout: time.Duration(5 * time.Second),
 		Endpoints:   []string{"localhost:2379"},
-		Prefix:      "pitaya/",
+		Prefix:      "nano/",
 		LeaseTTL:    time.Duration(5 * time.Hour),
 	}
 }
 
-// ModulesConfig provides configuration for Pitaya Modules
+// ModulesConfig provides configuration for nano Modules
 type ModulesConfig struct {
 	BindingStorage struct {
 		Etcd ETCDBindingConfig `mapstructure:"etcd"`
 	} `mapstructure:"bindingstorage"`
 }
 
-// NewDefaultModulesConfig provides default configuration for Pitaya Modules
+// NewDefaultModulesConfig provides default configuration for nano Modules
 func newDefaultModulesConfig() *ModulesConfig {
 	return &ModulesConfig{
 		BindingStorage: struct {

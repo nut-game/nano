@@ -77,7 +77,7 @@ func TestNewNatsRPCServer(t *testing.T) {
 	mockMetricsReporters := []metrics.Reporter{mockMetricsReporter}
 	mockSessionPool := sessionmocks.NewMockSessionPool(ctrl)
 
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	n, err := NewNatsRPCServer(cfg, sv, mockMetricsReporters, nil, mockSessionPool)
 	assert.NoError(t, err)
@@ -102,7 +102,7 @@ func TestNatsRPCServerConfigure(t *testing.T) {
 
 	for _, table := range tables {
 		t.Run(fmt.Sprintf("%s-%d-%d", table.natsConnect, table.messagesBufferSize, table.pushBufferSize), func(t *testing.T) {
-			cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+			cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 			cfg.Connect = table.natsConnect
 			cfg.Buffer.Messages = table.messagesBufferSize
 			cfg.Buffer.Push = table.pushBufferSize
@@ -114,22 +114,22 @@ func TestNatsRPCServerConfigure(t *testing.T) {
 
 func TestNatsRPCServerGetUserMessagesTopic(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, "pitaya/connector/user/bla/push", GetUserMessagesTopic("bla", "connector"))
-	assert.Equal(t, "pitaya/game/user/123bla/push", GetUserMessagesTopic("123bla", "game"))
-	assert.Equal(t, "pitaya/connector/user/1/push", GetUserMessagesTopic("1", "connector"))
+	assert.Equal(t, "nano/connector/user/bla/push", GetUserMessagesTopic("bla", "connector"))
+	assert.Equal(t, "nano/game/user/123bla/push", GetUserMessagesTopic("123bla", "game"))
+	assert.Equal(t, "nano/connector/user/1/push", GetUserMessagesTopic("1", "connector"))
 }
 
 func TestNatsRPCServerGetUserKickTopic(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, "pitaya/connector/user/0/kick", GetUserKickTopic("0", "connector"))
-	assert.Equal(t, "pitaya/game/user/1/kick", GetUserKickTopic("1", "game"))
-	assert.Equal(t, "pitaya/connector/user/10/kick", GetUserKickTopic("10", "connector"))
-	assert.Equal(t, "pitaya/game/user/11/kick", GetUserKickTopic("11", "game"))
+	assert.Equal(t, "nano/connector/user/0/kick", GetUserKickTopic("0", "connector"))
+	assert.Equal(t, "nano/game/user/1/kick", GetUserKickTopic("1", "game"))
+	assert.Equal(t, "nano/connector/user/10/kick", GetUserKickTopic("10", "connector"))
+	assert.Equal(t, "nano/game/user/11/kick", GetUserKickTopic("11", "game"))
 }
 
 func TestNatsRPCServerGetUnhandledRequestsChannel(t *testing.T) {
 	t.Parallel()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	n, _ := NewNatsRPCServer(cfg, sv, nil, nil, nil)
 	assert.NotNil(t, n.GetUnhandledRequestsChannel())
@@ -138,7 +138,7 @@ func TestNatsRPCServerGetUnhandledRequestsChannel(t *testing.T) {
 
 func TestNatsRPCServerGetBindingsChannel(t *testing.T) {
 	t.Parallel()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	n, _ := NewNatsRPCServer(cfg, sv, nil, nil, nil)
 	assert.Equal(t, n.bindingsChan, n.GetBindingsChannel())
@@ -146,7 +146,7 @@ func TestNatsRPCServerGetBindingsChannel(t *testing.T) {
 
 func TestNatsRPCServerOnSessionBind(t *testing.T) {
 	t.Parallel()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 
 	ctrl := gomock.NewController(t)
@@ -167,7 +167,7 @@ func TestNatsRPCServerOnSessionBind(t *testing.T) {
 
 func TestNatsRPCServerSubscribeToBindingsChannel(t *testing.T) {
 	t.Parallel()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	rpcServer, _ := NewNatsRPCServer(cfg, sv, nil, nil, nil)
 	s := helpers.GetTestNatsServer(t)
@@ -185,7 +185,7 @@ func TestNatsRPCServerSubscribeToBindingsChannel(t *testing.T) {
 
 func TestNatsRPCServerSubscribeUserKickChannel(t *testing.T) {
 	t.Parallel()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	rpcServer, _ := NewNatsRPCServer(cfg, sv, nil, nil, nil)
 	s := helpers.GetTestNatsServer(t)
@@ -207,7 +207,7 @@ func TestNatsRPCServerSubscribeUserKickChannel(t *testing.T) {
 
 func TestNatsRPCServerGetUserPushChannel(t *testing.T) {
 	t.Parallel()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	n, _ := NewNatsRPCServer(cfg, sv, nil, nil, nil)
 	assert.NotNil(t, n.getUserPushChannel())
@@ -216,7 +216,7 @@ func TestNatsRPCServerGetUserPushChannel(t *testing.T) {
 
 func TestNatsRPCServerGetUserKickChannel(t *testing.T) {
 	t.Parallel()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	n, _ := NewNatsRPCServer(cfg, sv, nil, nil, nil)
 	assert.NotNil(t, n.getUserKickChannel())
@@ -224,7 +224,7 @@ func TestNatsRPCServerGetUserKickChannel(t *testing.T) {
 }
 
 func TestNatsRPCServerSubscribeToUserMessages(t *testing.T) {
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	rpcServer, _ := NewNatsRPCServer(cfg, sv, nil, nil, nil)
 	s := helpers.GetTestNatsServer(t)
@@ -254,7 +254,7 @@ func TestNatsRPCServerSubscribeToUserMessages(t *testing.T) {
 }
 
 func TestNatsRPCServerSubscribe(t *testing.T) {
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	rpcServer, _ := NewNatsRPCServer(cfg, sv, nil, nil, nil)
 	s := helpers.GetTestNatsServer(t)
@@ -284,7 +284,7 @@ func TestNatsRPCServerSubscribe(t *testing.T) {
 }
 
 func TestNatsRPCServerHandleMessages(t *testing.T) {
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -328,7 +328,7 @@ func TestNatsRPCServerHandleMessages(t *testing.T) {
 
 func TestNatsRPCServerInitShouldFailIfConnFails(t *testing.T) {
 	t.Parallel()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	cfg.Connect = "nats://localhost:1"
 	sv := getServer()
 
@@ -344,7 +344,7 @@ func TestNatsRPCServerInit(t *testing.T) {
 	s := helpers.GetTestNatsServer(t)
 	ctrl := gomock.NewController(t)
 	defer s.Shutdown()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	cfg.Connect = fmt.Sprintf("nats://%s", s.Addr())
 	sv := getServer()
 
@@ -382,7 +382,7 @@ func TestNatsRPCServerProcessBindings(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	s := helpers.GetTestNatsServer(t)
 	defer s.Shutdown()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	cfg.Connect = fmt.Sprintf("nats://%s", s.Addr())
 	sv := getServer()
 	mockSessionPool := sessionmocks.NewMockSessionPool(ctrl)
@@ -392,10 +392,10 @@ func TestNatsRPCServerProcessBindings(t *testing.T) {
 
 	assert.NoError(t, err)
 
-	pitayaSvMock := protosmocks.NewMockPitayaServer(ctrl)
+	nanoSvMock := protosmocks.NewMockNanoServer(ctrl)
 	defer ctrl.Finish()
 
-	rpcServer.SetPitayaServer(pitayaSvMock)
+	rpcServer.SetNanoServer(nanoSvMock)
 
 	bindMsg := &protos.BindMsg{
 		Uid: "testuid",
@@ -412,7 +412,7 @@ func TestNatsRPCServerProcessBindings(t *testing.T) {
 	unmarshalledMsg := &protos.BindMsg{}
 	_ = proto.Unmarshal(bindData, unmarshalledMsg)
 
-	pitayaSvMock.EXPECT().SessionBindRemote(context.Background(), unmarshalledMsg).Do(func(ctx context.Context, b *protos.BindMsg) {
+	nanoSvMock.EXPECT().SessionBindRemote(context.Background(), unmarshalledMsg).Do(func(ctx context.Context, b *protos.BindMsg) {
 		assert.Equal(t, bindMsg.Uid, b.Uid)
 		assert.Equal(t, bindMsg.Fid, b.Fid)
 	})
@@ -425,7 +425,7 @@ func TestNatsRPCServerProcessPushes(t *testing.T) {
 	s := helpers.GetTestNatsServer(t)
 	ctrl := gomock.NewController(t)
 	defer s.Shutdown()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	cfg.Connect = fmt.Sprintf("nats://%s", s.Addr())
 	sv := getServer()
 	mockSessionPool := sessionmocks.NewMockSessionPool(ctrl)
@@ -435,10 +435,10 @@ func TestNatsRPCServerProcessPushes(t *testing.T) {
 
 	assert.NoError(t, err)
 
-	pitayaSvMock := protosmocks.NewMockPitayaServer(ctrl)
+	nanoSvMock := protosmocks.NewMockNanoServer(ctrl)
 	defer ctrl.Finish()
 
-	rpcServer.SetPitayaServer(pitayaSvMock)
+	rpcServer.SetNanoServer(nanoSvMock)
 
 	push := &protos.Push{
 		Route: "someroute",
@@ -446,7 +446,7 @@ func TestNatsRPCServerProcessPushes(t *testing.T) {
 		Data:  []byte{0x01},
 	}
 
-	pitayaSvMock.EXPECT().PushToUser(context.Background(), push).Do(func(ctx context.Context, p *protos.Push) {
+	nanoSvMock.EXPECT().PushToUser(context.Background(), push).Do(func(ctx context.Context, p *protos.Push) {
 		assert.Equal(t, push.Route, p.Route)
 		assert.Equal(t, push.Uid, p.Uid)
 		assert.Equal(t, push.Data, p.Data)
@@ -460,7 +460,7 @@ func TestNatsRPCServerProcessKick(t *testing.T) {
 	s := helpers.GetTestNatsServer(t)
 	ctrl := gomock.NewController(t)
 	defer s.Shutdown()
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	cfg.Connect = fmt.Sprintf("nats://%s", s.Addr())
 	sv := getServer()
 	mockSessionPool := sessionmocks.NewMockSessionPool(ctrl)
@@ -470,16 +470,16 @@ func TestNatsRPCServerProcessKick(t *testing.T) {
 
 	assert.NoError(t, err)
 
-	pitayaSvMock := protosmocks.NewMockPitayaServer(ctrl)
+	nanoSvMock := protosmocks.NewMockNanoServer(ctrl)
 	defer ctrl.Finish()
 
-	rpcServer.SetPitayaServer(pitayaSvMock)
+	rpcServer.SetNanoServer(nanoSvMock)
 
 	kick := &protos.KickMsg{
 		UserId: "someuid",
 	}
 
-	pitayaSvMock.EXPECT().KickUser(gomock.Any(), kick).Do(func(ctx context.Context, p *protos.KickMsg) {
+	nanoSvMock.EXPECT().KickUser(gomock.Any(), kick).Do(func(ctx context.Context, p *protos.KickMsg) {
 		assert.Equal(t, kick.UserId, p.UserId)
 	})
 
@@ -488,7 +488,7 @@ func TestNatsRPCServerProcessKick(t *testing.T) {
 }
 
 func TestNatsRPCServerReportMetrics(t *testing.T) {
-	cfg := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Nats
+	cfg := config.NewDefaultNanoConfig().Cluster.RPC.Server.Nats
 	sv := getServer()
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()

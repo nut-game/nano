@@ -118,7 +118,7 @@ func (h *HandlerPool) ProcessHandlerMessage(
 func (h *HandlerPool) getHandler(rt *route.Route) (*component.Handler, error) {
 	handler, ok := h.handlers[rt.Short()]
 	if !ok {
-		e := fmt.Errorf("pitaya/handler: %s not found", rt.String())
+		e := fmt.Errorf("nano/handler: %s not found", rt.String())
 		return nil, e
 	}
 	return handler, nil

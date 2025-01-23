@@ -7,7 +7,7 @@ import (
 
 	"strings"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/acceptor"
 	"github.com/nut-game/nano/cluster"
 	"github.com/nut-game/nano/component"
@@ -17,11 +17,9 @@ import (
 	"github.com/nut-game/nano/route"
 	"github.com/nut-game/nano/tracing"
 	"github.com/sirupsen/logrus"
-
-
 )
 
-var app pitaya.Pitaya
+var app nano.Nano
 
 func configureBackend() {
 	room := services.NewRoom(app)
@@ -93,7 +91,7 @@ func main() {
 
 	configureOpenTelemetry(logrus.New())
 
-	builder := pitaya.NewDefaultBuilder(*isFrontend, *svType, pitaya.Cluster, map[string]string{}, *config.NewDefaultPitayaConfig())
+	builder := nano.NewDefaultBuilder(*isFrontend, *svType, nano.Cluster, map[string]string{}, *config.NewDefaultNanoConfig())
 	if *isFrontend {
 		tcp := acceptor.NewTCPAcceptor(fmt.Sprintf(":%d", *port))
 		builder.AddAcceptor(tcp)

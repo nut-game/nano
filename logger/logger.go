@@ -35,7 +35,7 @@ func initLogger() interfaces.Logger {
 	plog.Level = logrus.DebugLevel
 
 	log := plog.WithFields(logrus.Fields{
-		"source": "pitaya",
+		"source": "nano",
 	})
 	return logruswrapper.NewWithFieldLogger(log)
 }

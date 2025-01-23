@@ -609,7 +609,7 @@ func (sd *etcdServiceDiscovery) Shutdown() error {
 	return nil
 }
 
-// revoke prevents Pitaya from crashing when etcd is not available
+// revoke prevents Nano from crashing when etcd is not available
 func (sd *etcdServiceDiscovery) revoke() error {
 	close(sd.stopLeaseChan)
 	c := make(chan error, 1)

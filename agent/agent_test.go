@@ -948,7 +948,7 @@ func TestAgentAnswerWithError(t *testing.T) {
 			expectedErr: e.NewError(assert.AnError, e.ErrUnknownCode),
 		},
 		{
-			name:        "should return custom code for pitaya error and JSON serializer",
+			name:        "should return custom code for nano error and JSON serializer",
 			answeredErr: e.NewError(assert.AnError, "CUSTOM-123"),
 			serializer:  jsonSerializer,
 			expectedErr: e.NewError(assert.AnError, "CUSTOM-123"),
@@ -960,7 +960,7 @@ func TestAgentAnswerWithError(t *testing.T) {
 			expectedErr: e.NewError(assert.AnError, e.ErrUnknownCode),
 		},
 		{
-			name:        "should return custom code for pitaya error and Protobuf serializer",
+			name:        "should return custom code for nano error and Protobuf serializer",
 			answeredErr: e.NewError(assert.AnError, "CUSTOM-123"),
 			serializer:  protobufSerializer,
 			expectedErr: e.NewError(assert.AnError, "CUSTOM-123"),
@@ -972,7 +972,7 @@ func TestAgentAnswerWithError(t *testing.T) {
 			expectedErr: e.NewError(assert.AnError, e.ErrUnknownCode),
 		},
 		{
-			name:        "should return custom code for pitaya error and custom serializer",
+			name:        "should return custom code for nano error and custom serializer",
 			answeredErr: e.NewError(assert.AnError, "CUSTOM-123"),
 			serializer:  customSerializer,
 			expectedErr: e.NewError(assert.AnError, "CUSTOM-123"),

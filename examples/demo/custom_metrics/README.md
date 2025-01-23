@@ -2,11 +2,14 @@ Custom Metrics Example
 =======================
 
 # Run
+
 `make run-custom-metrics-example`
 
 # Call routes
-By using [pitaya-cli](https://github.com/topfreegames/pitaya-cli), call:
-```
+
+By using [nano-cli](https://github.com/topfreegames/nano-cli), call:
+
+```bash
 connect localhost:3250
 request room.room.setcounter {"value": 1.0, "tag1": "value1", "tag2": "value2"}
 request room.room.setgauge1 {"value": 1.0, "tag1": "value1"}

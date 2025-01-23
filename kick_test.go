@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package pitaya
+package nano
 
 import (
 	"context"
@@ -56,7 +56,7 @@ func TestSendKickToUsersLocalSession(t *testing.T) {
 	mockSessionPool.EXPECT().GetSessionByUID(table.uid1).Return(s1).Times(1)
 	mockSessionPool.EXPECT().GetSessionByUID(table.uid2).Return(s2).Times(1)
 
-	config := config.NewDefaultPitayaConfig()
+	config := config.NewDefaultNanoConfig()
 	builder := NewDefaultBuilder(true, "testtype", Cluster, map[string]string{}, *config)
 	builder.SessionPool = mockSessionPool
 	app := builder.Build()
@@ -89,7 +89,7 @@ func TestSendKickToUsersFail(t *testing.T) {
 	mockRPCClient := clustermocks.NewMockRPCClient(ctrl)
 	mockRPCClient.EXPECT().SendKick(table.uid2, table.frontendType, &protos.KickMsg{UserId: table.uid2}).Return(table.err).Times(1)
 
-	config := config.NewDefaultPitayaConfig()
+	config := config.NewDefaultNanoConfig()
 	builder := NewDefaultBuilder(true, "testtype", Cluster, map[string]string{}, *config)
 	builder.SessionPool = mockSessionPool
 	builder.RPCClient = mockRPCClient
@@ -118,7 +118,7 @@ func TestSendKickToUsersRemoteSession(t *testing.T) {
 			defer ctrl.Finish()
 			mockRPCClient := clustermocks.NewMockRPCClient(ctrl)
 
-			config := config.NewDefaultPitayaConfig()
+			config := config.NewDefaultNanoConfig()
 			app := NewDefaultApp(true, "testtype", Cluster, map[string]string{}, *config).(*App)
 			app.rpcClient = mockRPCClient
 

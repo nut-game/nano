@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/component"
 	"github.com/nut-game/nano/examples/demo/protos"
 	"github.com/nut-game/nano/timer"
@@ -18,7 +18,7 @@ type (
 	Room struct {
 		component.Base
 		timer *timer.Timer
-		app   pitaya.Pitaya
+		app   nano.Nano
 		Stats *protos.Stats
 	}
 
@@ -64,7 +64,7 @@ type (
 )
 
 // NewRoom returns a new room
-func NewRoom(app pitaya.Pitaya) *Room {
+func NewRoom(app nano.Nano) *Room {
 	return &Room{
 		app:   app,
 		Stats: &protos.Stats{},
@@ -78,7 +78,7 @@ func (r *Room) Init() {
 
 // AfterInit component lifetime callback
 func (r *Room) AfterInit() {
-	r.timer = pitaya.NewTimer(time.Minute, func() {
+	r.timer = nano.NewTimer(time.Minute, func() {
 		count, err := r.app.GroupCountMembers(context.Background(), "room")
 		println("UserCount: Time=>", time.Now().String(), "Count=>", count, "Error=>", err)
 		println("OutboundBytes", r.Stats.OutboundBytes)
@@ -88,14 +88,14 @@ func (r *Room) AfterInit() {
 
 // Entry is the entrypoint
 func (r *Room) Entry(ctx context.Context, msg []byte) (*protos.JoinResponse, error) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx) // The default logger contains a requestId, the route being executed and the sessionId
+	logger := nano.GetDefaultLoggerFromCtx(ctx) // The default logger contains a requestId, the route being executed and the sessionId
 	s := r.app.GetSessionFromCtx(ctx)
 
 	err := s.Bind(ctx, uuid.New().String())
 	if err != nil {
 		logger.Error("Failed to bind session")
 		logger.Error(err)
-		return nil, pitaya.Error(err, "RH-000", map[string]string{"failed": "bind"})
+		return nil, nano.Error(err, "RH-000", map[string]string{"failed": "bind"})
 	}
 	return &protos.JoinResponse{Result: "ok"}, nil
 }
@@ -110,7 +110,7 @@ func (r *Room) GetSessionData(ctx context.Context) (*SessionData, error) {
 
 // SetSessionData sets the session data
 func (r *Room) SetSessionData(ctx context.Context, data *SessionData) ([]byte, error) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx)
+	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	s := r.app.GetSessionFromCtx(ctx)
 	err := s.SetData(data.Data)
 	if err != nil {
@@ -133,7 +133,7 @@ func (r *Room) NotifyPush(ctx context.Context) {
 
 // Join room
 func (r *Room) Join(ctx context.Context) (*protos.JoinResponse, error) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx)
+	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	s := r.app.GetSessionFromCtx(ctx)
 	err := r.app.GroupAddMember(ctx, "room", s.UID())
 	if err != nil {
@@ -159,7 +159,7 @@ func (r *Room) Join(ctx context.Context) (*protos.JoinResponse, error) {
 
 // Leave room
 func (r *Room) Leave(ctx context.Context) ([]byte, error) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx)
+	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	s := r.app.GetSessionFromCtx(ctx)
 	err := r.app.GroupRemoveMember(ctx, "room", s.UID())
 	if err != nil {
@@ -171,7 +171,7 @@ func (r *Room) Leave(ctx context.Context) ([]byte, error) {
 
 // Message sync last message to all members
 func (r *Room) Message(ctx context.Context, msg *protos.UserMessage) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx)
+	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	err := r.app.GroupBroadcast(ctx, "connector", "room", "onMessage", msg)
 	if err != nil {
 		logger.Error("Error broadcasting message")
@@ -181,13 +181,13 @@ func (r *Room) Message(ctx context.Context, msg *protos.UserMessage) {
 
 // SendRPC sends rpc
 func (r *Room) SendRPC(ctx context.Context, msg *protos.SendRPCMsg) (*protos.RPCRes, error) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx)
+	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	ret := &protos.RPCRes{}
 	err := r.app.RPCTo(ctx, msg.ServerId, msg.Route, ret, &protos.RPCMsg{Msg: msg.Msg})
 	if err != nil {
 		logger.Errorf("Failed to execute RPCTo %s - %s", msg.ServerId, msg.Route)
 		logger.Error(err)
-		return nil, pitaya.Error(err, "RPC-000")
+		return nil, nano.Error(err, "RPC-000")
 	}
 	return ret, nil
 }

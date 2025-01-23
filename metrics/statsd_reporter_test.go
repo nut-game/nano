@@ -38,7 +38,7 @@ func TestNewStatsdReporter(t *testing.T) {
 	defer ctrl.Finish()
 	mockClient := metricsmocks.NewMockClient(ctrl)
 
-	cfg := config.NewDefaultPitayaConfig().Metrics
+	cfg := config.NewDefaultNanoConfig().Metrics
 	sr, err := NewStatsdReporter(cfg, "svType", mockClient)
 	assert.NoError(t, err)
 	assert.Equal(t, mockClient, sr.client)
@@ -51,7 +51,7 @@ func TestReportLatency(t *testing.T) {
 	defer ctrl.Finish()
 	mockClient := metricsmocks.NewMockClient(ctrl)
 
-	cfg := config.NewDefaultPitayaConfig().Metrics
+	cfg := config.NewDefaultNanoConfig().Metrics
 	cfg.ConstLabels = map[string]string{
 		"defaultTag": "value",
 	}
@@ -86,7 +86,7 @@ func TestReportLatencyError(t *testing.T) {
 	defer ctrl.Finish()
 	mockClient := metricsmocks.NewMockClient(ctrl)
 
-	cfg := config.NewDefaultPitayaConfig().Metrics
+	cfg := config.NewDefaultNanoConfig().Metrics
 	sr, err := NewStatsdReporter(cfg, "svType", mockClient)
 	assert.NoError(t, err)
 
@@ -102,7 +102,7 @@ func TestReportCount(t *testing.T) {
 	defer ctrl.Finish()
 	mockClient := metricsmocks.NewMockClient(ctrl)
 
-	cfg := config.NewDefaultPitayaConfig().Metrics
+	cfg := config.NewDefaultNanoConfig().Metrics
 	cfg.ConstLabels = map[string]string{
 		"defaultTag": "value",
 	}
@@ -132,7 +132,7 @@ func TestReportCountError(t *testing.T) {
 	defer ctrl.Finish()
 	mockClient := metricsmocks.NewMockClient(ctrl)
 
-	cfg := config.NewDefaultPitayaConfig().Metrics
+	cfg := config.NewDefaultNanoConfig().Metrics
 	sr, err := NewStatsdReporter(cfg, "svType", mockClient)
 	assert.NoError(t, err)
 
@@ -148,7 +148,7 @@ func TestReportGauge(t *testing.T) {
 	defer ctrl.Finish()
 	mockClient := metricsmocks.NewMockClient(ctrl)
 
-	cfg := config.NewDefaultPitayaConfig().Metrics
+	cfg := config.NewDefaultNanoConfig().Metrics
 	cfg.ConstLabels = map[string]string{
 		"defaultTag": "value",
 	}
@@ -178,7 +178,7 @@ func TestReportGaugeError(t *testing.T) {
 	defer ctrl.Finish()
 	mockClient := metricsmocks.NewMockClient(ctrl)
 
-	cfg := config.NewDefaultPitayaConfig().Metrics
+	cfg := config.NewDefaultNanoConfig().Metrics
 	cfg.ConstLabels = map[string]string{
 		"defaultTag": "value",
 	}

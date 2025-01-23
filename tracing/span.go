@@ -97,7 +97,7 @@ func StartSpan(
 	opName string,
 	attributes ...attribute.KeyValue,
 ) (context.Context, trace.Span) {
-	tracer := otel.Tracer("pitaya")
+	tracer := otel.Tracer("nano")
 	ctx, span := tracer.Start(parentCtx, opName,
 		trace.WithAttributes(attributes...),
 	)

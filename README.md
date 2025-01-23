@@ -1,21 +1,21 @@
-# pitaya [![Build Status][7]][8] [![Coverage Status][9]][10] [![GoDoc][1]][2] [![Docs][11]][12] [![Go Report Card][3]][4] [![MIT licensed][5]][6]
+# nano [![Build Status][7]][8] [![Coverage Status][9]][10] [![GoDoc][1]][2] [![Docs][11]][12] [![Go Report Card][3]][4] [![MIT licensed][5]][6]
 
 ---
 
-[1]: https://godoc.org/github.com/topfreegames/pitaya?status.svg
-[2]: https://godoc.org/github.com/topfreegames/pitaya
-[3]: https://goreportcard.com/badge/github.com/topfreegames/pitaya
-[4]: https://goreportcard.com/report/github.com/topfreegames/pitaya
+[1]: https://godoc.org/github.com/topfreegames/nano?status.svg
+[2]: https://godoc.org/github.com/topfreegames/nano
+[3]: https://goreportcard.com/badge/github.com/topfreegames/nano
+[4]: https://goreportcard.com/report/github.com/topfreegames/nano
 [5]: https://img.shields.io/badge/license-MIT-blue.svg
 [6]: LICENSE
-[7]: https://github.com/topfreegames/pitaya/actions/workflows/tests.yaml/badge.svg
-[8]: https://github.com/topfreegames/pitaya/actions/workflows/tests.yaml
-[9]: https://coveralls.io/repos/github/topfreegames/pitaya/badge.svg?branch=master
-[10]: https://coveralls.io/github/topfreegames/pitaya?branch=master
-[11]: https://readthedocs.org/projects/pitaya/badge/?version=latest
-[12]: https://pitaya.readthedocs.io/en/latest/?badge=latest
+[7]: https://github.com/topfreegames/nano/actions/workflows/tests.yaml/badge.svg
+[8]: https://github.com/topfreegames/nano/actions/workflows/tests.yaml
+[9]: https://coveralls.io/repos/github/topfreegames/nano/badge.svg?branch=master
+[10]: https://coveralls.io/github/topfreegames/nano?branch=master
+[11]: https://readthedocs.org/projects/nano/badge/?version=latest
+[12]: https://nano.readthedocs.io/en/latest/?badge=latest
 
-Pitaya is an simple, fast and lightweight game server framework with clustering support and client libraries for iOS, Android, Unity and others through the [C SDK](https://github.com/topfreegames/libpitaya).
+Nano is an simple, fast and lightweight game server framework with clustering support and client libraries for iOS, Android, Unity and others through the [C SDK](https://github.com/topfreegames/libpitaya).
 It provides a basic development framework for distributed multiplayer games and server-side applications.
 
 ## Getting Started
@@ -28,18 +28,22 @@ It provides a basic development framework for distributed multiplayer games and 
 * [docker](https://www.docker.com) (optional, used for running etcd and nats dependencies on containers)
 
 ### Installing
+
 clone the repo
+
+```bash
+git clone https://github.com/nut-game/nano.git
 ```
-git clone https://github.com/topfreegames/pitaya.git
-```
-setup pitaya dependencies
-```
+
+setup nano dependencies
+
+```bash
 make setup
 ```
 
-### Hacking pitaya
+### Hacking nano
 
-Here's one example of running Pitaya:
+Here's one example of running nano:
 
 Start etcd (This command requires docker-compose and will run an etcd container locally. An etcd may be run without docker if preferred.)
 ```
@@ -54,7 +58,7 @@ run the room backend server from the cluster_grpc example
 make run-cluster-grpc-example-room
 ```
 
-Now there should be 2 pitaya servers running, a frontend connector and a backend room. To send requests, use a REPL client for pitaya [pitaya-cli](https://github.com/topfreegames/pitaya/tree/main/pitaya-cli).
+Now there should be 2 nano servers running, a frontend connector and a backend room. To send requests, use a REPL client for nano [pitaya-cli](https://github.com/topfreegames/pitaya/tree/main/pitaya-cli).
 
 ```
 $ pitaya-cli

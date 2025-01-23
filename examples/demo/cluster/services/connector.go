@@ -5,22 +5,22 @@ import (
 	"encoding/json"
 	"fmt"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/component"
 	"github.com/nut-game/nano/examples/demo/protos"
-	pitayaprotos "github.com/nut-game/nano/protos"
+	sysprotos "github.com/nut-game/nano/protos"
 )
 
 // ConnectorRemote is a remote that will receive rpc's
 type ConnectorRemote struct {
 	component.Base
-	app pitaya.Pitaya
+	app nano.Nano
 }
 
 // Connector struct
 type Connector struct {
 	component.Base
-	app pitaya.Pitaya
+	app nano.Nano
 }
 
 // SessionData struct
@@ -35,12 +35,12 @@ type Response struct {
 }
 
 // NewConnector ctor
-func NewConnector(app pitaya.Pitaya) *Connector {
+func NewConnector(app nano.Nano) *Connector {
 	return &Connector{app: app}
 }
 
 // NewConnectorRemote ctor
-func NewConnectorRemote(app pitaya.Pitaya) *ConnectorRemote {
+func NewConnectorRemote(app nano.Nano) *ConnectorRemote {
 	return &ConnectorRemote{app: app}
 }
 
@@ -66,7 +66,7 @@ func (c *Connector) SetSessionData(ctx context.Context, data *SessionData) (*pro
 	s := c.app.GetSessionFromCtx(ctx)
 	err := s.SetData(data.Data)
 	if err != nil {
-		return nil, pitaya.Error(err, "CN-000", map[string]string{"failed": "set data"})
+		return nil, nano.Error(err, "CN-000", map[string]string{"failed": "set data"})
 	}
 	return reply(200, "success")
 }
@@ -89,7 +89,7 @@ func (c *ConnectorRemote) RemoteFunc(ctx context.Context, msg *protos.RPCMsg) (*
 }
 
 // Docs returns documentation
-func (c *ConnectorRemote) Docs(ctx context.Context, ddd *pitayaprotos.Doc) (*pitayaprotos.Doc, error) {
+func (c *ConnectorRemote) Docs(ctx context.Context, ddd *sysprotos.Doc) (*sysprotos.Doc, error) {
 	d, err := c.app.Documentation(true)
 	if err != nil {
 		return nil, err
@@ -100,14 +100,14 @@ func (c *ConnectorRemote) Docs(ctx context.Context, ddd *pitayaprotos.Doc) (*pit
 		return nil, err
 	}
 
-	return &pitayaprotos.Doc{Doc: string(doc)}, nil
+	return &sysprotos.Doc{Doc: string(doc)}, nil
 }
 
-func (c *ConnectorRemote) Descriptor(ctx context.Context, names *pitayaprotos.ProtoNames) (*pitayaprotos.ProtoDescriptors, error) {
+func (c *ConnectorRemote) Descriptor(ctx context.Context, names *sysprotos.ProtoNames) (*sysprotos.ProtoDescriptors, error) {
 	descriptors := make([][]byte, len(names.Name))
 
 	for i, protoName := range names.Name {
-		desc, err := pitaya.Descriptor(protoName)
+		desc, err := nano.Descriptor(protoName)
 		if err != nil {
 			return nil, fmt.Errorf("failed to get descriptor for '%s': %w", protoName, err)
 		}
@@ -115,5 +115,5 @@ func (c *ConnectorRemote) Descriptor(ctx context.Context, names *pitayaprotos.Pr
 		descriptors[i] = desc
 	}
 
-	return &pitayaprotos.ProtoDescriptors{Desc: descriptors}, nil
+	return &sysprotos.ProtoDescriptors{Desc: descriptors}, nil
 }

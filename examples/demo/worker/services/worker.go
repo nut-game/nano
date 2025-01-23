@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/component"
 	"github.com/nut-game/nano/examples/demo/worker/protos"
 	"google.golang.org/protobuf/proto"
@@ -15,14 +15,14 @@ type Worker struct {
 }
 
 // Configure starts workers and register rpc job
-func (w *Worker) Configure(app pitaya.Pitaya) {
+func (w *Worker) Configure(app nano.Nano) {
 	app.StartWorker()
 	app.RegisterRPCJob(&RPCJob{app: app})
 }
 
 // RPCJob implements worker.RPCJob
 type RPCJob struct {
-	app pitaya.Pitaya
+	app nano.Nano
 }
 
 // ServerDiscovery returns a serverID="", meaning any server
@@ -34,7 +34,7 @@ func (r *RPCJob) ServerDiscovery(
 	return "", nil
 }
 
-// RPC calls pitaya's rpc
+// RPC calls nano's rpc
 func (r *RPCJob) RPC(
 	ctx context.Context,
 	serverID, routeStr string,

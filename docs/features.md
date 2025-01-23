@@ -1,7 +1,7 @@
 Features
 ========
 
-Pitaya has a modular and configurable architecture which helps to hide the complexity of scaling the application and managing clients' sessions and communications.
+nano has a modular and configurable architecture which helps to hide the complexity of scaling the application and managing clients' sessions and communications.
 
 Some of its core features are described below.
 
@@ -21,14 +21,14 @@ They are useful for creating game rooms for example, you just put all the player
 
 ## Listeners
 
-Frontend servers must specify one or more acceptors to handle incoming client connections, Pitaya comes with TCP and Websocket acceptors already implemented, and other acceptors can be added to the application by implementing the acceptor interface.
+Frontend servers must specify one or more acceptors to handle incoming client connections, nano comes with TCP and Websocket acceptors already implemented, and other acceptors can be added to the application by implementing the acceptor interface.
 
 ## Acceptor Wrappers
 
-Wrappers can be used on acceptors, like TCP and Websocket, to read and change incoming data before performing the message forwarding. To create a new wrapper just implement the Wrapper interface (or inherit the struct from BaseWrapper) and add it into your acceptor by using the WithWrappers method. Next there are some examples of acceptor wrappers. 
+Wrappers can be used on acceptors, like TCP and Websocket, to read and change incoming data before performing the message forwarding. To create a new wrapper just implement the Wrapper interface (or inherit the struct from BaseWrapper) and add it into your acceptor by using the WithWrappers method. Next there are some examples of acceptor wrappers.
 
 ### Rate limiting
-Read the incoming data on each player's connection to limit requests troughput. After the limit is exceeded, requests are dropped until slots are available again. The requests count and management is done on player's connection, therefore it happens even before session bind. The used algorithm is the [Leaky Bucket](https://en.wikipedia.org/wiki/Leaky_bucket#Comparison_with_the_token_bucket_algorithm). This algorithm represents a leaky bucket that has its output flow slower than its input flow. It saves each request timestamp in a `slot` (of a total of `limit` slots) and this slot is freed again after `interval`. For example: if `limit` of 1 request in an `interval` of 1 second, when a request happens at 0.2s the next request will only be handled by pitaya after 1s (at 1.2s).
+Read the incoming data on each player's connection to limit requests troughput. After the limit is exceeded, requests are dropped until slots are available again. The requests count and management is done on player's connection, therefore it happens even before session bind. The used algorithm is the [Leaky Bucket](https://en.wikipedia.org/wiki/Leaky_bucket#Comparison_with_the_token_bucket_algorithm). This algorithm represents a leaky bucket that has its output flow slower than its input flow. It saves each request timestamp in a `slot` (of a total of `limit` slots) and this slot is freed again after `interval`. For example: if `limit` of 1 request in an `interval` of 1 second, when a request happens at 0.2s the next request will only be handled by nano after 1s (at 1.2s).
 
 ```
 0     request
@@ -41,7 +41,7 @@ Read the incoming data on each player's connection to limit requests troughput. 
 
 ## Message forwarding
 
-When a server instance receives a client message, it checks the target server type by looking at the route. If the target server type is different from the receiving server type, the instance forwards the message to an appropriate server instance of the correct type. The client doesn't need to take any action to forward the message, this process is done automatically by Pitaya.
+When a server instance receives a client message, it checks the target server type by looking at the route. If the target server type is different from the receiving server type, the instance forwards the message to an appropriate server instance of the correct type. The client doesn't need to take any action to forward the message, this process is done automatically by nano.
 
 By default the routing function chooses one instance of the target server type at random. Custom functions can be defined to change this behavior.
 
@@ -51,19 +51,19 @@ Messages can be pushed to users without previous information about either sessio
 
 ## Modules
 
-Modules are entities that can be registered to the Pitaya application and must implement the defined [interface](https://github.com/topfreegames/pitaya/tree/master/interfaces/interfaces.go#L24). Pitaya is responsible for calling the appropriate lifecycle methods as needed, the registered modules can be retrieved by name.
+Modules are entities that can be registered to the nano application and must implement the defined [interface](https://github.com/topfreegames/nano/tree/master/interfaces/interfaces.go#L24). nano is responsible for calling the appropriate lifecycle methods as needed, the registered modules can be retrieved by name.
 
 ### SessionModules
 
-SessionModules are an extension of the Module interface. If a module implements the `interfaces.SessionModule` interface, and session draining is enabled in Pitaya, Pitaya will not shut down before all SessionModules report their session count as zero.
+SessionModules are an extension of the Module interface. If a module implements the `interfaces.SessionModule` interface, and session draining is enabled in nano, nano will not shut down before all SessionModules report their session count as zero.
 
-When Pitaya receives a SIGTERM signal, it will invoke the `StartSessionDraining` method on all registered SessionModules. After this Pitaya will periodically call the `SessionCount` method on all registered SessionModules to check if they have reached zero.
+When nano receives a SIGTERM signal, it will invoke the `StartSessionDraining` method on all registered SessionModules. After this nano will periodically call the `SessionCount` method on all registered SessionModules to check if they have reached zero.
 
-**Note:** Pitaya will shut down after the session drain timeout has passed, or it receives another signal, even if the session count is not zero.
+**Note:** nano will shut down after the session drain timeout has passed, or it receives another signal, even if the session count is not zero.
 
 ### Built in modules
 
-Pitaya comes with a few already implemented modules, and more modules can be implemented as needed. The modules Pitaya has currently are:
+nano comes with a few already implemented modules, and more modules can be implemented as needed. The modules nano has currently are:
 
 #### Binary
 
@@ -79,9 +79,9 @@ This module implements functionality needed by the gRPC RPC implementation to en
 
 ## Monitoring
 
-Pitaya has support for metrics reporting, it comes with Prometheus and Statsd support already implemented and has support for custom reporters that implement the `Reporter` interface. Pitaya also comes with support for open tracing compatible frameworks, allowing the easy integration of Jaeger and others.
+nano has support for metrics reporting, it comes with Prometheus and Statsd support already implemented and has support for custom reporters that implement the `Reporter` interface. nano also comes with support for open tracing compatible frameworks, allowing the easy integration of Jaeger and others.
 
-The list of metrics reported by the `Reporter` is: 
+The list of metrics reported by the `Reporter` is:
 
 - Response time: the time to process a message, in nanoseconds. It is segmented
   by route, status, server type and response code;
@@ -96,7 +96,7 @@ The list of metrics reported by the `Reporter` is:
 - Goroutines count: the current number Goroutines;
 - Heap size: the current heap size;
 - Heap objects count: the current number of objects at the heap;
-- Worker jobs retry: the current amount of RPC reliability worker job retries; 
+- Worker jobs retry: the current amount of RPC reliability worker job retries;
 - Worker jobs total: the current amount of RPC reliability worker jobs. It is
   segmented by job status;
 - Worker queue size: the current size of RPC reliability worker job queues. It
@@ -104,7 +104,7 @@ The list of metrics reported by the `Reporter` is:
 
 ### Custom Metrics
 
-Besides pitaya default monitoring, it is possible to create new metrics. If using only Statsd reporter, no configuration is needed. If using Prometheus, it is necessary do add a configuration specifying the metrics parameters. More details on [doc](configuration.html#metrics-reporting) and this [example](https://github.com/topfreegames/pitaya/tree/master/examples/demo/custom_metrics).
+Besides nano default monitoring, it is possible to create new metrics. If using only Statsd reporter, no configuration is needed. If using Prometheus, it is necessary do add a configuration specifying the metrics parameters. More details on [doc](configuration.html#metrics-reporting) and this [example](https://github.com/topfreegames/nano/tree/master/examples/demo/custom_metrics).
 
 ## Pipelines
 
@@ -112,7 +112,7 @@ Pipelines are middlewares which allow methods to be executed before and after ha
 
 ## RPCs
 
-Pitaya has support for RPC calls when in cluster mode, there are two components to enable this, RPC client and RPC server. There are currently two options for using RPCs implemented for Pitaya, NATS and gRPC, the default is NATS.
+nano has support for RPC calls when in cluster mode, there are two components to enable this, RPC client and RPC server. There are currently two options for using RPCs implemented for nano, NATS and gRPC, the default is NATS.
 
 There are two types of RPCs, _Sys_ and _User_.
 
@@ -122,11 +122,11 @@ These are the RPCs done by the servers when forwarding handler messages to the a
 
 ### User RPCs
 
-User RPCs are done when the application actively calls a remote method in another server. The call can specify the ID of the target server or let Pitaya choose one according to the routing logic.
+User RPCs are done when the application actively calls a remote method in another server. The call can specify the ID of the target server or let nano choose one according to the routing logic.
 
 ### User Reliable RPCs
 
-These are done when the application calls a remote using workers, that is, Pitaya retries the RPC if any error occurrs.
+These are done when the application calls a remote using workers, that is, nano retries the RPC if any error occurrs.
 
 **Important**: the remote that is being called must be idempotent; also the ReliableRPC will not return the remote's reply since it is asynchronous, it only returns the job id (jid) if success.
 
@@ -144,7 +144,7 @@ then transfer the ctx to RPC() or RPCTo() function as the context parameter
 
 ## Server operation mode
 
-Pitaya has two types of operation: standalone and cluster mode.
+nano has two types of operation: standalone and cluster mode.
 
 ### Standalone mode
 
@@ -156,17 +156,17 @@ Cluster mode is a more complete mode, using service discovery, RPC client and se
 
 ## Serializers
 
-Pitaya has support for different types of message serializers for the messages sent to and from the client, the default serializer is the JSON serializer and Pitaya comes with native support for the Protobuf serializer as well. New serializers can be implemented by implementing the `serialize.Serializer` interface.
+nano has support for different types of message serializers for the messages sent to and from the client, the default serializer is the JSON serializer and nano comes with native support for the Protobuf serializer as well. New serializers can be implemented by implementing the `serialize.Serializer` interface.
 
-The desired serializer can be set by the application by calling the `SetSerializer` method from the `pitaya` package.
+The desired serializer can be set by the application by calling the `SetSerializer` method from the `nano` package.
 
 ## Service discovery
 
-Servers operating in cluster mode must have a service discovery client to be able to work. Pitaya comes with a default client using etcd, which is used if no other client is defined. The service discovery client is responsible for registering the server and keeping the list of valid servers updated, as well as providing information about requested servers as needed.
+Servers operating in cluster mode must have a service discovery client to be able to work. nano comes with a default client using etcd, which is used if no other client is defined. The service discovery client is responsible for registering the server and keeping the list of valid servers updated, as well as providing information about requested servers as needed.
 
 ## Sessions
 
-Every connection established by the clients has an associated session instance, which is ephemeral and destroyed when the connection closes. Sessions are part of the core functionality of Pitaya, because they allow asynchronous communication with the clients and storage of data between requests. The main features of sessions are:
+Every connection established by the clients has an associated session instance, which is ephemeral and destroyed when the connection closes. Sessions are part of the core functionality of nano, because they allow asynchronous communication with the clients and storage of data between requests. The main features of sessions are:
 
 * **ID binding** - Sessions can be bound to an user ID, allowing other parts of the application to send messages to the user without needing to know which server or connection the user is connected to
 * **Data storage** - Sessions can be used for data storage, storing and retrieving data between requests
@@ -187,4 +187,3 @@ Callbacks can be added to some session lifecycle changes, such as closing and bi
 ### Backend sessions
 
 Backend sessions have access to the sessions through the handler's methods, but they have some limitations and special characteristics. Changes to session variables must be pushed to the frontend server by calling `s.PushToFront` (this is not needed for `s.Bind` operations), setting callbacks to session lifecycle operations is also not allowed. One can also not retrieve a session by user ID from a backend server.
-

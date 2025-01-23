@@ -30,7 +30,7 @@ import (
 
 func setup(t *testing.T) (*integration.ClusterV3, GroupService) {
 	cluster, cli := helpers.GetTestEtcd(t)
-	etcdGroupService, err := NewEtcdGroupService(*&config.NewDefaultPitayaConfig().Groups.Etcd, cli)
+	etcdGroupService, err := NewEtcdGroupService(*&config.NewDefaultNanoConfig().Groups.Etcd, cli)
 	if err != nil {
 		panic(err)
 	}

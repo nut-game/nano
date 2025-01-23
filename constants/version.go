@@ -20,5 +20,5 @@
 
 package constants
 
-// VERSION returns current pitaya version
-var VERSION = "0.1.0"
+// VERSION returns current nano version
+var VERSION = "0.3.0"

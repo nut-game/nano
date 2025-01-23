@@ -24,8 +24,8 @@ type MockPitayaClientMockRecorder struct {
 	mock *MockPitayaClient
 }
 
-// NewMockPitayaClient creates a new mock instance.
-func NewMockPitayaClient(ctrl *gomock.Controller) *MockPitayaClient {
+// NewMockNanoClient creates a new mock instance.
+func NewMockNanoClient(ctrl *gomock.Controller) *MockPitayaClient {
 	mock := &MockPitayaClient{ctrl: ctrl}
 	mock.recorder = &MockPitayaClientMockRecorder{mock}
 	return mock
@@ -128,8 +128,8 @@ type MockPitayaServerMockRecorder struct {
 	mock *MockPitayaServer
 }
 
-// NewMockPitayaServer creates a new mock instance.
-func NewMockPitayaServer(ctrl *gomock.Controller) *MockPitayaServer {
+// NewMockNanoServer creates a new mock instance.
+func NewMockNanoServer(ctrl *gomock.Controller) *MockPitayaServer {
 	mock := &MockPitayaServer{ctrl: ctrl}
 	mock.recorder = &MockPitayaServerMockRecorder{mock}
 	return mock

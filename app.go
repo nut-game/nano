@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package pitaya
+package nano
 
 import (
 	"context"
@@ -68,8 +68,8 @@ const (
 	Standalone
 )
 
-// Pitaya App interface
-type Pitaya interface {
+// Nano App interface
+type Nano interface {
 	GetDieChan() chan bool
 	SetDebug(debug bool)
 	SetHeartbeatTime(interval time.Duration)
@@ -132,7 +132,7 @@ type Pitaya interface {
 // App is the base app struct
 type App struct {
 	acceptors         []acceptor.Acceptor
-	config            config.PitayaConfig
+	config            config.NanoConfig
 	debug             bool
 	dieChan           chan bool
 	heartbeat         time.Duration
@@ -159,7 +159,7 @@ type App struct {
 	sessionPool       session.SessionPool
 }
 
-// NewApp is the base constructor for a pitaya app instance
+// NewApp is the base constructor for a nano app instance
 func NewApp(
 	serverMode ServerMode,
 	serializer serialize.Serializer,
@@ -176,7 +176,7 @@ func NewApp(
 	groups groups.GroupService,
 	sessionPool session.SessionPool,
 	metricsReporters []metrics.Reporter,
-	config config.PitayaConfig,
+	config config.NanoConfig,
 ) *App {
 	app := &App{
 		server:            server,
@@ -257,8 +257,8 @@ func (app *App) GetServers() []*cluster.Server {
 	return app.serviceDiscovery.GetServers()
 }
 
-// IsRunning indicates if the Pitaya app has been initialized. Note: This
-// doesn't cover acceptors, only the pitaya internal registration and modules
+// IsRunning indicates if the nano app has been initialized. Note: This
+// doesn't cover acceptors, only the nano internal registration and modules
 // initialization.
 func (app *App) IsRunning() bool {
 	return app.running
@@ -309,7 +309,7 @@ func (app *App) Start() {
 		}
 		// set the service discovery as the last module to be started to ensure
 		// all modules have been properly initialized before the server starts
-		// receiving requests from other pitaya servers
+		// receiving requests from other nano servers
 		if err := app.RegisterModuleAfter(app.serviceDiscovery, "serviceDiscovery"); err != nil {
 			logger.Log.Fatal("failed to register service discovery module: %s", err.Error())
 		}
@@ -448,7 +448,7 @@ func (app *App) AddRoute(
 	return nil
 }
 
-// Shutdown send a signal to let 'pitaya' shutdown itself.
+// Shutdown send a signal to let 'nano' shutdown itself.
 func (app *App) Shutdown() {
 	select {
 	case <-app.dieChan: // prevent closing closed channel
@@ -484,7 +484,7 @@ func GetDefaultLoggerFromCtx(ctx context.Context) logging.Logger {
 
 // AddMetricTagsToPropagateCtx adds a key and metric tags that will
 // be propagated through RPC calls. Use the same tags that are at
-// 'pitaya.metrics.additionalLabels' config
+// 'nano.metrics.additionalLabels' config
 func AddMetricTagsToPropagateCtx(
 	ctx context.Context,
 	tags map[string]string,
@@ -545,7 +545,7 @@ func Descriptor(protoName string) ([]byte, error) {
 	return docgenerator.ProtoDescriptors(protoName)
 }
 
-// StartWorker configures, starts and returns pitaya worker
+// StartWorker configures, starts and returns nano worker
 func (app *App) StartWorker() {
 	app.worker.Start()
 }

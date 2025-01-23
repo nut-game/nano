@@ -33,7 +33,7 @@ import (
 	"github.com/nut-game/nano/logger"
 )
 
-// Binary is a pitaya module that starts a binary as a child process and
+// Binary is a nano module that starts a binary as a child process and
 // pipes its stdout
 type Binary struct {
 	Base

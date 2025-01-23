@@ -36,7 +36,7 @@ import (
 // Here, "limit" is the number of requests it accepts during an "interval" duration.
 // After making a request, a slot is occupied and only freed after "interval"
 // duration. If a new request comes when no slots are available, the buffer from
-// Read is droped and ignored by pitaya.
+// Read is droped and ignored by nano.
 // On the client side, this will yield a timeout error and the client must
 // be prepared to handle it.
 type RateLimiter struct {

@@ -27,8 +27,8 @@ import (
 	"github.com/nut-game/nano/session"
 )
 
-// PitayaClient iface
-type PitayaClient interface {
+// NanoClient iface
+type NanoClient interface {
 	ConnectTo(addr string, tlsConfig ...*tls.Config) error
 	ConnectToWS(addr string, path string, tlsConfig ...*tls.Config) error
 	ConnectedStatus() bool

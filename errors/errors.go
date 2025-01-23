@@ -26,7 +26,7 @@ import "errors"
 // This will be used when no error code is sent by the handler
 const ErrUnknownCode = "PIT-000"
 
-// ErrInternalCode is a string code representing an internal Pitaya error
+// ErrInternalCode is a string code representing an internal Nano error
 const ErrInternalCode = "PIT-500"
 
 // ErrNotFoundCode is a string code representing a not found related error
@@ -50,12 +50,12 @@ type Error struct {
 
 // NewError ctor
 func NewError(err error, code string, metadata ...map[string]string) *Error {
-	var pitayaErr *Error
-	if ok := errors.As(err, &pitayaErr); ok {
+	var nanoErr *Error
+	if ok := errors.As(err, &nanoErr); ok {
 		if len(metadata) > 0 {
-			mergeMetadatas(pitayaErr, metadata[0])
+			mergeMetadatas(nanoErr, metadata[0])
 		}
-		return pitayaErr
+		return nanoErr
 	}
 
 	e := &Error{
@@ -73,33 +73,33 @@ func (e *Error) Error() string {
 	return e.Message
 }
 
-func mergeMetadatas(pitayaErr *Error, metadata map[string]string) {
-	if pitayaErr.Metadata == nil {
-		pitayaErr.Metadata = metadata
+func mergeMetadatas(nanoErr *Error, metadata map[string]string) {
+	if nanoErr.Metadata == nil {
+		nanoErr.Metadata = metadata
 		return
 	}
 
 	for key, value := range metadata {
-		pitayaErr.Metadata[key] = value
+		nanoErr.Metadata[key] = value
 	}
 }
 
 // CodeFromError returns the code of error.
 // If error is nil, return empty string.
-// If error is not a pitaya error, returns unkown code
+// If error is not a nano error, returns unkown code
 func CodeFromError(err error) string {
 	if err == nil {
 		return ""
 	}
 
-	pitayaErr, ok := err.(*Error)
+	nanoErr, ok := err.(*Error)
 	if !ok {
 		return ErrUnknownCode
 	}
 
-	if pitayaErr == nil {
+	if nanoErr == nil {
 		return ""
 	}
 
-	return pitayaErr.Code
+	return nanoErr.Code
 }

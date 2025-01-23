@@ -59,7 +59,7 @@ type NatsRPCServer struct {
 	userKickCh             chan *protos.KickMsg
 	sub                    *nats.Subscription
 	dropped                int
-	pitayaServer           protos.PitayaServer
+	nanoServer             protos.PitayaServer
 	metricsReporters       []metrics.Reporter
 	sessionPool            session.SessionPool
 	appDieChan             chan bool
@@ -136,17 +136,17 @@ func (ns *NatsRPCServer) GetBindingsChannel() chan *nats.Msg {
 
 // GetUserMessagesTopic get the topic for user
 func GetUserMessagesTopic(uid string, svType string) string {
-	return fmt.Sprintf("pitaya/%s/user/%s/push", svType, uid)
+	return fmt.Sprintf("nano/%s/user/%s/push", svType, uid)
 }
 
 // GetUserKickTopic get the topic for kicking an user
 func GetUserKickTopic(uid string, svType string) string {
-	return fmt.Sprintf("pitaya/%s/user/%s/kick", svType, uid)
+	return fmt.Sprintf("nano/%s/user/%s/kick", svType, uid)
 }
 
 // GetBindBroadcastTopic gets the topic on which bind events will be broadcasted
 func GetBindBroadcastTopic(svType string) string {
-	return fmt.Sprintf("pitaya/%s/bindings", svType)
+	return fmt.Sprintf("nano/%s/bindings", svType)
 }
 
 // onSessionBind should be called on each session bind
@@ -165,9 +165,9 @@ func (ns *NatsRPCServer) onSessionBind(ctx context.Context, s session.Session) e
 	return nil
 }
 
-// SetPitayaServer sets the pitaya server
-func (ns *NatsRPCServer) SetPitayaServer(ps protos.PitayaServer) {
-	ns.pitayaServer = ps
+// SetNanoServer sets the nano server
+func (ns *NatsRPCServer) SetNanoServer(ps protos.PitayaServer) {
+	ns.nanoServer = ps
 }
 
 func (ns *NatsRPCServer) subscribeToBindingsChannel() error {
@@ -288,7 +288,7 @@ func (ns *NatsRPCServer) processMessages(threadID int) {
 
 			logger.Log.Errorf("error getting context from request: %s", err)
 		} else {
-			ns.responses[threadID], err = ns.pitayaServer.Call(ctx, ns.requests[threadID])
+			ns.responses[threadID], err = ns.nanoServer.Call(ctx, ns.requests[threadID])
 			if err != nil {
 				logger.Log.Errorf("error processing route %s: %s", ns.requests[threadID].GetMsg().GetRoute(), err)
 			}
@@ -309,14 +309,14 @@ func (ns *NatsRPCServer) processSessionBindings() {
 			logger.Log.Errorf("error processing binding msg: %v", err)
 			continue
 		}
-		ns.pitayaServer.SessionBindRemote(context.Background(), b)
+		ns.nanoServer.SessionBindRemote(context.Background(), b)
 	}
 }
 
 func (ns *NatsRPCServer) processPushes() {
 	for push := range ns.getUserPushChannel() {
 		logger.Log.Debugf("sending push to user %s: %v", push.GetUid(), string(push.Data))
-		_, err := ns.pitayaServer.PushToUser(context.Background(), push)
+		_, err := ns.nanoServer.PushToUser(context.Background(), push)
 		if err != nil {
 			logger.Log.Errorf("error sending push to user: %v", err)
 		}
@@ -326,7 +326,7 @@ func (ns *NatsRPCServer) processPushes() {
 func (ns *NatsRPCServer) processKick() {
 	for kick := range ns.getUserKickChannel() {
 		logger.Log.Debugf("Sending kick to user %s: %v", kick.GetUserId())
-		_, err := ns.pitayaServer.KickUser(context.Background(), kick)
+		_, err := ns.nanoServer.KickUser(context.Background(), kick)
 		if err != nil {
 			logger.Log.Errorf("error sending kick to user: %v", err)
 		}

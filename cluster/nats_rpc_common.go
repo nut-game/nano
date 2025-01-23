@@ -28,7 +28,7 @@ import (
 )
 
 func getChannel(serverType, serverID string) string {
-	return fmt.Sprintf("pitaya/servers/%s/%s", serverType, serverID)
+	return fmt.Sprintf("nano/servers/%s/%s", serverType, serverID)
 }
 
 func setupNatsConn(connectString string, appDieChan chan bool, options ...nats.Option) (*nats.Conn, error) {

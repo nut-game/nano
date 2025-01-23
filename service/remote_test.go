@@ -335,7 +335,7 @@ func TestRemoteServiceRemoteCall(t *testing.T) {
 			expectedErr: e.NewError(assert.AnError, e.ErrInternalCode),
 		},
 		{
-			name:        "should propagate error for routing pitaya error",
+			name:        "should propagate error for routing nano error",
 			route:       *route.NewRoute("sv", "svc", "method"),
 			serverArg:   nil,
 			routeErr:    e.NewError(assert.AnError, "CUSTOM-123"),
@@ -345,7 +345,7 @@ func TestRemoteServiceRemoteCall(t *testing.T) {
 			expectedErr: e.NewError(assert.AnError, "CUSTOM-123"),
 		},
 		{
-			name:        "should propagate error for routing wrapped pitaya error",
+			name:        "should propagate error for routing wrapped nano error",
 			route:       *route.NewRoute("sv", "svc", "method"),
 			serverArg:   nil,
 			routeErr:    fmt.Errorf("wrapper error: %w", e.NewError(assert.AnError, "CUSTOM-123")),

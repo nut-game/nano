@@ -1,7 +1,7 @@
-# pitaya-chat-demo
-chat room demo base on [pitaya](https://github.com/topfreegames/pitaya) in 100 lines
+# nano-chat-demo
+chat room demo base on [nano](https://github.com/topfreegames/nano) in 100 lines
 
-refs: https://github.com/topfreegames/pitaya
+refs: https://github.com/topfreegames/nano
 
 ## Required
 - golang

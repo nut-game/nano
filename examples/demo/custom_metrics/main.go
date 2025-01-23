@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/acceptor"
 	"github.com/nut-game/nano/component"
 	"github.com/nut-game/nano/config"
@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var app pitaya.Pitaya
+var app nano.Nano
 
 func main() {
 	port := flag.Int("port", 3250, "the port to listen")
@@ -33,7 +33,7 @@ func main() {
 	tcp := acceptor.NewTCPAcceptor(fmt.Sprintf(":%d", *port))
 
 	conf := config.NewConfig(cfg)
-	builder := pitaya.NewBuilderWithConfigs(isFrontend, svType, pitaya.Cluster, map[string]string{}, conf)
+	builder := nano.NewBuilderWithConfigs(isFrontend, svType, nano.Cluster, map[string]string{}, conf)
 	builder.AddAcceptor(tcp)
 	app = builder.Build()
 

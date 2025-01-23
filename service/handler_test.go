@@ -217,7 +217,7 @@ func TestHandlerServiceLocalProcess(t *testing.T) {
 		rt   *route.Route
 		err  interface{}
 	}{
-		{"process_handler_msg_err", &message.Message{}, route.NewRoute("bla", "bla", "bla"), &protos.Error{Msg: "pitaya/handler: bla.bla.bla not found", Code: "PIT-404"}},
+		{"process_handler_msg_err", &message.Message{}, route.NewRoute("bla", "bla", "bla"), &protos.Error{Msg: "nano/handler: bla.bla.bla not found", Code: "PIT-404"}},
 		{"success", &message.Message{ID: 1, Data: []byte(`["ok"]`)}, rt, nil},
 	}
 	for _, table := range tables {

@@ -283,5 +283,5 @@ func (ns *NatsRPCClient) stop() {
 }
 
 func (ns *NatsRPCClient) getSubscribeChannel() string {
-	return fmt.Sprintf("pitaya/servers/%s/%s", ns.server.Type, ns.server.ID)
+	return fmt.Sprintf("nano/servers/%s/%s", ns.server.Type, ns.server.ID)
 }

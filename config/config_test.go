@@ -38,42 +38,42 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	os.Setenv("PITAYA_HEARTBEAT_INTERVAL", "123s")
-	os.Setenv("PITAYA_CONCURRENCY_TEST", "42")
-	os.Setenv("PITAYA_BUFFER_TEST", "14")
+	os.Setenv("NANO_HEARTBEAT_INTERVAL", "123s")
+	os.Setenv("NANO_CONCURRENCY_TEST", "42")
+	os.Setenv("NANO_BUFFER_TEST", "14")
 }
 
 func shutdown() {
-	os.Unsetenv("PITAYA_HEARTBEAT_INTERVAL")
-	os.Unsetenv("PITAYA_CONCURRENCY_TEST")
-	os.Unsetenv("PITAYA_BUFFER_TEST")
+	os.Unsetenv("NANO_HEARTBEAT_INTERVAL")
+	os.Unsetenv("NANO_CONCURRENCY_TEST")
+	os.Unsetenv("NANO_BUFFER_TEST")
 }
 
 func TestNewConfig(t *testing.T) {
 	t.Parallel()
 
 	cfg := viper.New()
-	cfg.SetDefault("pitaya.buffer.agent.messages", 20)
-	cfg.Set("pitaya.concurrency.handler.dispatch", 23)
-	cfg.SetDefault("pitaya.no.default", "custom")
+	cfg.SetDefault("nano.buffer.agent.messages", 20)
+	cfg.Set("nano.concurrency.handler.dispatch", 23)
+	cfg.SetDefault("nano.no.default", "custom")
 
 	tables := []struct {
 		in  []*viper.Viper
 		key string
 		val interface{}
 	}{
-		{[]*viper.Viper{}, "pitaya.buffer.agent.messages", 100},
-		{[]*viper.Viper{cfg}, "pitaya.buffer.agent.messages", 20},
-		{[]*viper.Viper{}, "pitaya.no.default", nil},
-		{[]*viper.Viper{cfg}, "pitaya.no.default", "custom"},
-		{[]*viper.Viper{}, "pitaya.concurrency.handler.dispatch", 25},
-		{[]*viper.Viper{cfg}, "pitaya.concurrency.handler.dispatch", 23},
-		{[]*viper.Viper{}, "pitaya.heartbeat.interval", "123s"},
-		{[]*viper.Viper{cfg}, "pitaya.heartbeat.interval", "123s"},
-		{[]*viper.Viper{}, "pitaya.concurrency.test", "42"},
-		{[]*viper.Viper{cfg}, "pitaya.concurrency.test", "42"},
-		{[]*viper.Viper{}, "pitaya.buffer.test", "14"},
-		{[]*viper.Viper{cfg}, "pitaya.buffer.test", "14"},
+		{[]*viper.Viper{}, "nano.buffer.agent.messages", 100},
+		{[]*viper.Viper{cfg}, "nano.buffer.agent.messages", 20},
+		{[]*viper.Viper{}, "nano.no.default", nil},
+		{[]*viper.Viper{cfg}, "nano.no.default", "custom"},
+		{[]*viper.Viper{}, "nano.concurrency.handler.dispatch", 25},
+		{[]*viper.Viper{cfg}, "nano.concurrency.handler.dispatch", 23},
+		{[]*viper.Viper{}, "nano.heartbeat.interval", "123s"},
+		{[]*viper.Viper{cfg}, "nano.heartbeat.interval", "123s"},
+		{[]*viper.Viper{}, "nano.concurrency.test", "42"},
+		{[]*viper.Viper{cfg}, "nano.concurrency.test", "42"},
+		{[]*viper.Viper{}, "nano.buffer.test", "14"},
+		{[]*viper.Viper{cfg}, "nano.buffer.test", "14"},
 	}
 
 	for _, table := range tables {
@@ -92,8 +92,8 @@ func TestGetDuration(t *testing.T) {
 		key string
 		val time.Duration
 	}{
-		{"pitaya.heartbeat.interval", 123 * time.Second},
-		{"pitaya.cluster.sd.etcd.dialtimeout", 5 * time.Second},
+		{"nano.heartbeat.interval", 123 * time.Second},
+		{"nano.cluster.sd.etcd.dialtimeout", 5 * time.Second},
 		{"unexistent", time.Duration(0)},
 	}
 
@@ -112,7 +112,7 @@ func TestGetString(t *testing.T) {
 		key string
 		val []string
 	}{
-		{"pitaya.cluster.sd.etcd.endpoints", []string{"localhost:2379"}},
+		{"nano.cluster.sd.etcd.endpoints", []string{"localhost:2379"}},
 		{"unexistent", nil},
 	}
 
@@ -131,7 +131,7 @@ func TestGetInt(t *testing.T) {
 		key string
 		val int
 	}{
-		{"pitaya.buffer.agent.messages", 100},
+		{"nano.buffer.agent.messages", 100},
 		{"unexistent", 0},
 	}
 
@@ -150,7 +150,7 @@ func TestGetStringSlice(t *testing.T) {
 		key string
 		val []string
 	}{
-		{"pitaya.cluster.sd.etcd.endpoints", []string{"localhost:2379"}},
+		{"nano.cluster.sd.etcd.endpoints", []string{"localhost:2379"}},
 		{"unexistent", nil},
 	}
 
@@ -169,7 +169,7 @@ func TestGet(t *testing.T) {
 		key string
 		val interface{}
 	}{
-		{"pitaya.buffer.agent.messages", 100},
+		{"nano.buffer.agent.messages", 100},
 		{"unexistent", nil},
 	}
 

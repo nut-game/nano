@@ -144,8 +144,8 @@ func StartServer(
 
 	// always use a random port for prometheus, to avoid e2e conflicts
 	cmd.Env = []string{
-		fmt.Sprintf("PITAYA_METRICS_PROMETHEUS_PORT=%d", promPort),
-		fmt.Sprintf("PITAYA_CLUSTER_RPC_CLIENT_GRPC_LAZYCONNECTION=%v", lazyConnection),
+		fmt.Sprintf("NANO_METRICS_PROMETHEUS_PORT=%d", promPort),
+		fmt.Sprintf("NANO_CLUSTER_RPC_CLIENT_GRPC_LAZYCONNECTION=%v", lazyConnection),
 	}
 
 	outPipe, err := cmd.StderrPipe()

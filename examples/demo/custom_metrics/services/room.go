@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/component"
 	"github.com/nut-game/nano/examples/demo/custom_metrics/messages"
 )
@@ -11,11 +11,11 @@ import (
 // Room server
 type Room struct {
 	component.Base
-	app pitaya.Pitaya
+	app nano.Nano
 }
 
 // NewRoom ctor
-func NewRoom(app pitaya.Pitaya) *Room {
+func NewRoom(app nano.Nano) *Room {
 	return &Room{
 		app: app,
 	}

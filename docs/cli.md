@@ -1,50 +1,50 @@
-Pitaya CLI
+Nano CLI
 ==========
 
-A REPL cli client made in go for pitaya.
+A REPL cli client made in go for Nano.
 
 ## Installing
 
 ```
-go install github.com/nut-game/nano/pitaya-cli
+go install github.com/nut-game/nano/Nano-cli
 ```
 
 ## Usage
 
-For cli flags, run `pitaya-cli --help`
+For cli flags, run `Nano-cli --help`
 
 ```
-$ pitaya
+$ Nano
 
-Pitaya command line utilities
+Nano command line utilities
 
 Usage:
-  pitaya [command]
+  Nano [command]
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
-  repl        starts pitaya repl tool
+  repl        starts Nano repl tool
 
 Flags:
-  -h, --help   help for pitaya
+  -h, --help   help for Nano
 
-Use "pitaya [command] --help" for more information about a command.
+Use "Nano [command] --help" for more information about a command.
 
-$ pitaya repl
+$ Nano repl
 
-Pitaya REPL Client
+nano REPL Client
 >>> help
 
 Commands:
   clear             clear the screen
-  connect           connects to pitaya
-  disconnect        disconnects from pitaya server
+  connect           connects to nano
+  disconnect        disconnects from nano server
   exit              exit the program
   help              display help
-  notify            makes a notify to pitaya server
+  notify            makes a notify to nano server
   push              insert information of push return
-  request           makes a request to pitaya server
+  request           makes a request to nano server
   sethandshake      sets a handshake parameter
 ```
 
@@ -55,21 +55,21 @@ For connecting to a server that uses protobuf as serializer the server must impl
 - Descriptors: The list of protos descriptions, this will be used by the CLI to
   encode/decode the messages.
 
-To implement those routes you can use some functions provided by pitaya, here is
+To implement those routes you can use some functions provided by nano, here is
 a short example of both routes:
 ```go
 import (
 	// ...
 
-	"github.com/topfreegames/pitaya"
-	"github.com/topfreegames/pitaya/protos"
+	"github.com/topfreegames/nano"
+	"github.com/topfreegames/nano/protos"
 )
 
 // Docs handler
 func (c *MyHandler) Docs(ctx context.Context) (*protos.Doc, error) {
-	d, err := pitaya.Documentation(true)
+	d, err := nano.Documentation(true)
 	if err != nil {
-		return nil, fmt.Errorf("failed to generate documentation for pitaya routes: %w", err)
+		return nil, fmt.Errorf("failed to generate documentation for nano routes: %w", err)
 	}
 
 	doc, err := json.Marshal(d)
@@ -85,7 +85,7 @@ func (c *MyHandler) Descriptors(ctx context.Context, names *protos.ProtoNames) (
 	descriptors := make([][]byte, len(names.Name))
 
 	for i, protoName := range names.Name {
-		desc, err := pitaya.Descriptor(protoName)
+		desc, err := nano.Descriptor(protoName)
 		if err != nil {
 			return nil, fmt.Errorf("failed to get descriptor for '%s': %w", protoName, err)
 		}
@@ -99,15 +99,15 @@ func (c *MyHandler) Descriptors(ctx context.Context, names *protos.ProtoNames) (
 
 When initilizing the CLI, you have to provide the docs route as the following:
 ```
-pitaya-cli -docs connector.docsHandler.docs
+nano-cli -docs connector.docsHandler.docs
 ```
 
 NOTE: The descriptors handler is automatically discovered by the client.
 It must only follow the signature mentioned earlier.
 
-A full example of running pitaya-cli with protobuf:
+A full example of running nano-cli with protobuf:
 ```
-pitaya-cli -docs connector.docsHandler.docs
+nano-cli -docs connector.docsHandler.docs
 >>> push connector.playerHandler.matchfound protos.FindMatchPush
 >>> connect localhost:30124
 >>> request connector.playerHandler.create
@@ -120,13 +120,13 @@ You can edit handshake parameters before connecting to the server.
 
 You may pass the full handshake json:
 ```
-Pitaya REPL Client
+nano REPL Client
 >>> sethandshake {"sys":{"clientVersion":"1.0.6", "clientBuildNumber":"999","platform":"ios"}}
 ```
 
 Or edit one of three specific parameters:
 ```
-Pitaya REPL Client
+nano REPL Client
 >>> sethandshake platform ios
 >>> sethandshake buildNumber 999
 >>> sethandshake version 1.0.6
@@ -134,7 +134,7 @@ Pitaya REPL Client
 
 ### Read commands from file
 
-It's possible to add a list of sequential requests into a file and pitaya-cli will execute them in order.
+It's possible to add a list of sequential requests into a file and nano-cli will execute them in order.
 
 For example: commands.txt
 
@@ -144,4 +144,4 @@ request connector.playerHandler.create
 request connector.playerHandler.findmatch {"RoomType":"xxxx"}
 ```
 
-Then run: `pitaya-cli --filename commands.txt`
+Then run: `nano-cli --filename commands.txt`

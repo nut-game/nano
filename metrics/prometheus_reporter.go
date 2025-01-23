@@ -59,7 +59,7 @@ func (p *PrometheusReporter) registerCustomMetrics(
 	for _, summary := range spec.Summaries {
 		p.summaryReportersMap[summary.Name] = prometheus.NewSummaryVec(
 			prometheus.SummaryOpts{
-				Namespace:   "pitaya",
+				Namespace:   "nano",
 				Subsystem:   summary.Subsystem,
 				Name:        summary.Name,
 				Help:        summary.Help,
@@ -73,7 +73,7 @@ func (p *PrometheusReporter) registerCustomMetrics(
 	for _, histogram := range spec.Histograms {
 		p.histogramReportersMap[histogram.Name] = prometheus.NewHistogramVec(
 			prometheus.HistogramOpts{
-				Namespace:   "pitaya",
+				Namespace:   "nano",
 				Subsystem:   histogram.Subsystem,
 				Name:        histogram.Name,
 				Help:        histogram.Help,
@@ -87,7 +87,7 @@ func (p *PrometheusReporter) registerCustomMetrics(
 	for _, gauge := range spec.Gauges {
 		p.gaugeReportersMap[gauge.Name] = prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
-				Namespace:   "pitaya",
+				Namespace:   "nano",
 				Subsystem:   gauge.Subsystem,
 				Name:        gauge.Name,
 				Help:        gauge.Help,
@@ -100,7 +100,7 @@ func (p *PrometheusReporter) registerCustomMetrics(
 	for _, counter := range spec.Counters {
 		p.countReportersMap[counter.Name] = prometheus.NewCounterVec(
 			prometheus.CounterOpts{
-				Namespace:   "pitaya",
+				Namespace:   "nano",
 				Subsystem:   counter.Subsystem,
 				Name:        counter.Name,
 				Help:        counter.Help,
@@ -130,7 +130,7 @@ func (p *PrometheusReporter) registerMetrics(
 	// HandlerResponseTimeMs summary
 	p.summaryReportersMap[ResponseTime] = prometheus.NewSummaryVec(
 		prometheus.SummaryOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "handler",
 			Name:        ResponseTime,
 			Help:        "the time to process a msg in nanoseconds",
@@ -142,7 +142,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.histogramReportersMap[ResponseTime] = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "handler",
 			Name:        ResponseTime,
 			Help:        "the time to process a msg in nanoseconds",
@@ -155,7 +155,7 @@ func (p *PrometheusReporter) registerMetrics(
 	// ProcessDelay summary
 	p.summaryReportersMap[ProcessDelay] = prometheus.NewSummaryVec(
 		prometheus.SummaryOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "handler",
 			Name:        ProcessDelay,
 			Help:        "the delay to start processing a msg in nanoseconds",
@@ -168,7 +168,7 @@ func (p *PrometheusReporter) registerMetrics(
 	// ConnectedClients gauge
 	p.gaugeReportersMap[ConnectedClients] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "acceptor",
 			Name:        ConnectedClients,
 			Help:        "the number of clients connected right now",
@@ -179,7 +179,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[CountServers] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "service_discovery",
 			Name:        CountServers,
 			Help:        "the number of discovered servers by service discovery",
@@ -190,7 +190,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[ChannelCapacity] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "channel",
 			Name:        ChannelCapacity,
 			Help:        "the available capacity of the channel",
@@ -201,7 +201,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[DroppedMessages] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "rpc_server",
 			Name:        DroppedMessages,
 			Help:        "the number of rpc server dropped messages (messages that are not handled)",
@@ -212,7 +212,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[Goroutines] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "sys",
 			Name:        Goroutines,
 			Help:        "the current number of goroutines",
@@ -223,7 +223,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[HeapSize] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "sys",
 			Name:        HeapSize,
 			Help:        "the current heap size",
@@ -234,7 +234,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[HeapObjects] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "sys",
 			Name:        HeapObjects,
 			Help:        "the current number of allocated heap objects",
@@ -245,7 +245,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[WorkerJobsRetry] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "worker",
 			Name:        WorkerJobsRetry,
 			Help:        "the current number of job retries",
@@ -256,7 +256,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[WorkerQueueSize] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "worker",
 			Name:        WorkerQueueSize,
 			Help:        "the current queue size",
@@ -267,7 +267,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.gaugeReportersMap[WorkerJobsTotal] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "worker",
 			Name:        WorkerJobsTotal,
 			Help:        "the total executed jobs",
@@ -278,7 +278,7 @@ func (p *PrometheusReporter) registerMetrics(
 
 	p.countReportersMap[ExceededRateLimiting] = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Namespace:   "pitaya",
+			Namespace:   "nano",
 			Subsystem:   "acceptor",
 			Name:        ExceededRateLimiting,
 			Help:        "the number of blocked requests by exceeded rate limiting",

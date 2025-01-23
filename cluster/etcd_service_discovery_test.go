@@ -106,7 +106,7 @@ func TestNewEtcdServiceDiscovery(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -119,7 +119,7 @@ func TestEtcdSDBootstrapLease(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -134,7 +134,7 @@ func TestEtcdSDBootstrapLeaseError(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -148,7 +148,7 @@ func TestEtcdSDBootstrapServer(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -173,7 +173,7 @@ func TestEtcdSDDeleteServer(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -213,7 +213,7 @@ func TestEtcdSDDeleteLocalInvalidServers(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -234,7 +234,7 @@ func TestEtcdSDGetServer(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -250,7 +250,7 @@ func TestEtcdSDGetServer(t *testing.T) {
 func TestEtcdSDGetServers(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTablesMultipleServers {
-		config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+		config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 		c, cli := helpers.GetTestEtcd(t)
 		defer c.Terminate(t)
 		e := getEtcdSD(t, config, &Server{}, cli)
@@ -269,7 +269,7 @@ func TestEtcdSDInit(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			config.SyncServers.Interval = time.Duration(300 * time.Millisecond)
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
@@ -297,7 +297,7 @@ func TestEtcdBeforeShutdown(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -315,7 +315,7 @@ func TestEtcdShutdown(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
 			e := getEtcdSD(t, config, table.server, cli)
@@ -331,7 +331,7 @@ func TestEtcdWatchChangesAddNewServers(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			config.SyncServers.Interval = time.Duration(100 * time.Millisecond)
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
@@ -363,7 +363,7 @@ func TestEtcdWatchChangesDeleteServers(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDTables {
 		t.Run(table.server.ID, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			config.SyncServers.Interval = 100 * time.Millisecond
 			c, cli := helpers.GetTestEtcd(t)
 			defer c.Terminate(t)
@@ -401,7 +401,7 @@ func TestEtcdWatchChangesWithBlacklist(t *testing.T) {
 	t.Parallel()
 	for _, table := range etcdSDBlacklistTables {
 		t.Run(table.name, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.SD.Etcd
+			config := config.NewDefaultNanoConfig().Cluster.SD.Etcd
 			config.SyncServers.Interval = 100 * time.Millisecond
 			config.ServerTypesBlacklist = table.serverTypeBlacklist
 			c, cli := helpers.GetTestEtcd(t)

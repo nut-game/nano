@@ -98,7 +98,7 @@ func (p *Channel) ExecuteBeforePipeline(ctx context.Context, data interface{}) (
 		for _, h := range p.Handlers {
 			ctx, res, err = h(ctx, res)
 			if err != nil {
-				logger.Log.Debugf("pitaya/handler: broken pipeline: %s", err.Error())
+				logger.Log.Debugf("nano/handler: broken pipeline: %s", err.Error())
 				return ctx, res, err
 			}
 		}
@@ -117,7 +117,7 @@ func (p *AfterChannel) ExecuteAfterPipeline(ctx context.Context, res interface{}
 	return ret, err
 }
 
-// PushFront should not be used after pitaya is running
+// PushFront should not be used after nano is running
 func (p *Channel) PushFront(h HandlerTempl) {
 	Handlers := make([]HandlerTempl, len(p.Handlers)+1)
 	Handlers[0] = h
@@ -125,17 +125,17 @@ func (p *Channel) PushFront(h HandlerTempl) {
 	p.Handlers = Handlers
 }
 
-// PushBack should not be used after pitaya is running
+// PushBack should not be used after nano is running
 func (p *Channel) PushBack(h HandlerTempl) {
 	p.Handlers = append(p.Handlers, h)
 }
 
-// Clear should not be used after pitaya is running
+// Clear should not be used after nano is running
 func (p *Channel) Clear() {
 	p.Handlers = make([]HandlerTempl, 0)
 }
 
-// PushFront should not be used after pitaya is running
+// PushFront should not be used after nano is running
 func (p *AfterChannel) PushFront(h AfterHandlerTempl) {
 	Handlers := make([]AfterHandlerTempl, len(p.Handlers)+1)
 	Handlers[0] = h
@@ -143,12 +143,12 @@ func (p *AfterChannel) PushFront(h AfterHandlerTempl) {
 	p.Handlers = Handlers
 }
 
-// PushBack should not be used after pitaya is running
+// PushBack should not be used after nano is running
 func (p *AfterChannel) PushBack(h AfterHandlerTempl) {
 	p.Handlers = append(p.Handlers, h)
 }
 
-// Clear should not be used after pitaya is running
+// Clear should not be used after nano is running
 func (p *AfterChannel) Clear() {
 	p.Handlers = make([]AfterHandlerTempl, 0)
 }

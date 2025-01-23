@@ -490,7 +490,7 @@ func (a *agentImpl) heartbeat() {
 func (a *agentImpl) onSessionClosed(s session.Session) {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Log.Errorf("pitaya/onSessionClosed: %v", err)
+			logger.Log.Errorf("nano/onSessionClosed: %v", err)
 		}
 	}()
 
@@ -560,8 +560,8 @@ func (a *agentImpl) write() {
 func (a *agentImpl) writeToConnection(ctx context.Context, data []byte) error {
 	span := createConnectionSpan(ctx, a.conn, "conn write")
 
-        a.conn.SetWriteDeadline(time.Now().Add(a.writeTimeout))
-        _, writeErr := a.conn.Write(data)
+	a.conn.SetWriteDeadline(time.Now().Add(a.writeTimeout))
+	_, writeErr := a.conn.Write(data)
 
 	if span != nil {
 		defer span.End()

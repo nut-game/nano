@@ -1,11 +1,11 @@
 Tracing
 =======
 
-Pitaya supports tracing using [OpenTelemetry](https://opentelemetry.io/).
+nano supports tracing using [OpenTelemetry](https://opentelemetry.io/).
 
 ### Using OpenTelemetry tracing
 
-Pitaya supports tracing using [OpenTelemetry](https://opentelemetry.io/). To enable and configure OpenTelemetry tracing, you can use standard OpenTelemetry environment variables.
+nano supports tracing using [OpenTelemetry](https://opentelemetry.io/). To enable and configure OpenTelemetry tracing, you can use standard OpenTelemetry environment variables.
 
 First, make sure to call the `InitializeOtel` function in your main application:
 
@@ -43,7 +43,7 @@ make run-cluster-example-frontend-tracing
 make run-cluster-example-backend-tracing
 ```
 
-The last two commands will run your Pitaya servers with OpenTelemetry configured with the following envs:
+The last two commands will run your nano servers with OpenTelemetry configured with the following envs:
 
 ```bash
 OTEL_SERVICE_NAME=example-frontend OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 OTEL_EXPORTER_OTLP_PROTOCOL=grpc OTEL_TRACES_SAMPLER=parentbased_traceidratio OTEL_TRACES_SAMPLER_ARG="1"

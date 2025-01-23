@@ -1,7 +1,7 @@
 Handshake Validators
 =====
 
-Pitaya allows to defined Handshake Validators.<br />
+nano allows to defined Handshake Validators.<br />
 
 The primary purpose of these validators is to perform validation checks on the data transmitted by the client. The validators play a crucial role in verifying the integrity and reliability of the client's input before establishing a connection.
 
@@ -15,7 +15,7 @@ Once the handshake process is initiated, the validators will be invoked to execu
 
 ```go
 cfg := config.NewDefaultBuilderConfig()
-builder := pitaya.NewDefaultBuilder(isFrontEnd, "my-server-type", pitaya.Cluster, map[string]string{}, *cfg)
+builder := nano.NewDefaultBuilder(isFrontEnd, "my-server-type", nano.Cluster, map[string]string{}, *cfg)
 builder.SessionPool.AddHandshakeValidator("MyCustomValidator", func (data *session.HandshakeData) error {
 	if data.Sys.Version != "1.0.0" {
 		return errors.New("Unknown client version")

@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package pitaya
+package nano
 
 import (
 	"context"
@@ -31,8 +31,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func createGroupTestApp() Pitaya {
-	config := config.NewDefaultPitayaConfig()
+func createGroupTestApp() Nano {
+	config := config.NewDefaultNanoConfig()
 	app := NewDefaultApp(true, "testtype", Cluster, map[string]string{}, *config)
 	return app
 }
@@ -379,7 +379,7 @@ func TestBroadcast(t *testing.T) {
 	mockSessionPool.EXPECT().GetSessionByUID(uid1).Return(s1).Times(1)
 	mockSessionPool.EXPECT().GetSessionByUID(uid2).Return(s2).Times(1)
 
-	config := config.NewDefaultPitayaConfig()
+	config := config.NewDefaultNanoConfig()
 	builder := NewDefaultBuilder(true, "testtype", Cluster, map[string]string{}, *config)
 	builder.SessionPool = mockSessionPool
 	app := builder.Build()

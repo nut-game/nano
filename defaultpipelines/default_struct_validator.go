@@ -8,7 +8,7 @@ import (
 )
 
 // DefaultValidator is the default arguments validator for handlers
-// in pitaya
+// in nano
 type DefaultValidator struct {
 	once     sync.Once
 	validate *validator.Validate

@@ -52,7 +52,7 @@ type sessionPoolImpl struct {
 	SessionCount int64
 }
 
-// SessionPool centralizes all sessions within a Pitaya app
+// SessionPool centralizes all sessions within a Nano app
 type SessionPool interface {
 	NewSession(entity networkentity.NetworkEntity, frontend bool, UID ...string) Session
 	GetSessionCount() int64

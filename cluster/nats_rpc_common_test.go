@@ -40,8 +40,8 @@ func getServer() *Server {
 
 func TestNatsRPCCommonGetChannel(t *testing.T) {
 	t.Parallel()
-	assert.Equal(t, "pitaya/servers/type1/sv1", getChannel("type1", "sv1"))
-	assert.Equal(t, "pitaya/servers/2type1/2sv1", getChannel("2type1", "2sv1"))
+	assert.Equal(t, "nano/servers/type1/sv1", getChannel("type1", "sv1"))
+	assert.Equal(t, "nano/servers/2type1/2sv1", getChannel("2type1", "2sv1"))
 }
 
 func TestNatsRPCCommonSetupNatsConn(t *testing.T) {

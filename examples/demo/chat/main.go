@@ -10,7 +10,7 @@ import (
 
 	"strings"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/acceptor"
 	"github.com/nut-game/nano/component"
 	"github.com/nut-game/nano/config"
@@ -25,7 +25,7 @@ type (
 	Room struct {
 		component.Base
 		timer *timer.Timer
-		app   pitaya.Pitaya
+		app   nano.Nano
 	}
 
 	// UserMessage represents a message that user sent
@@ -52,7 +52,7 @@ type (
 )
 
 // NewRoom returns a Handler Base implementation
-func NewRoom(app pitaya.Pitaya) *Room {
+func NewRoom(app nano.Nano) *Room {
 	return &Room{
 		app: app,
 	}
@@ -60,7 +60,7 @@ func NewRoom(app pitaya.Pitaya) *Room {
 
 // AfterInit component lifetime callback
 func (r *Room) AfterInit() {
-	r.timer = pitaya.NewTimer(time.Minute, func() {
+	r.timer = nano.NewTimer(time.Minute, func() {
 		count, err := r.app.GroupCountMembers(context.Background(), "room")
 		logger.Log.Debugf("UserCount: Time=> %s, Count=> %d, Error=> %v", time.Now().String(), count, err)
 	})
@@ -73,7 +73,7 @@ func (r *Room) Join(ctx context.Context, msg []byte) (*JoinResponse, error) {
 	err := s.Bind(ctx, strconv.Itoa(int(fakeUID))) // binding session uid
 
 	if err != nil {
-		return nil, pitaya.Error(err, "RH-000", map[string]string{"failed": "bind"})
+		return nil, nano.Error(err, "RH-000", map[string]string{"failed": "bind"})
 	}
 
 	uids, err := r.app.GroupMembers(ctx, "room")
@@ -102,11 +102,11 @@ func (r *Room) Message(ctx context.Context, msg *UserMessage) {
 	}
 }
 
-var app pitaya.Pitaya
+var app nano.Nano
 
 func main() {
 	conf := configApp()
-	builder := pitaya.NewDefaultBuilder(true, "chat", pitaya.Standalone, map[string]string{}, *conf)
+	builder := nano.NewDefaultBuilder(true, "chat", nano.Standalone, map[string]string{}, *conf)
 	builder.AddAcceptor(acceptor.NewWSAcceptor(":3250"))
 	builder.Groups = groups.NewMemoryGroupService(builder.Config.Groups.Memory)
 	app = builder.Build()
@@ -134,8 +134,8 @@ func main() {
 	app.Start()
 }
 
-func configApp() *config.PitayaConfig {
-	conf := config.NewDefaultPitayaConfig()
+func configApp() *config.NanoConfig {
+	conf := config.NewDefaultNanoConfig()
 	conf.Buffer.Handler.LocalProcess = 15
 	conf.Heartbeat.Interval = time.Duration(15 * time.Second)
 	conf.Buffer.Agent.Messages = 32

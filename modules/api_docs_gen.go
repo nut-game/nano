@@ -25,7 +25,7 @@ import (
 	"github.com/nut-game/nano/logger"
 )
 
-// APIDocsGen is a pitaya module that generates api docs for pitaya servers
+// APIDocsGen is a nano module that generates api docs for nano servers
 type APIDocsGen struct {
 	Base
 	basePath string

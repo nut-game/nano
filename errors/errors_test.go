@@ -63,7 +63,7 @@ func TestNewError(t *testing.T) {
 			input{err: errors.New(uuid.New().String()), code: code, metadata: map[string]string{"key": "value"}},
 			expected{code: code, metadata: map[string]string{"key": "value"}},
 		},
-		{"pitaya_error",
+		{"nano_error",
 			input{
 				err:      NewError(errors.New(uuid.New().String()), code, map[string]string{"key1": "value1", "key2": "value2"}),
 				code:     "another-code",
@@ -71,7 +71,7 @@ func TestNewError(t *testing.T) {
 			},
 			expected{code: code, metadata: map[string]string{"key1": "new-value1", "key2": "value2", "key3": "value3"}},
 		},
-		{"pitaya_error_nil_metadata",
+		{"nano_error_nil_metadata",
 			input{
 				err:      NewError(errors.New(uuid.New().String()), code),
 				code:     "another-code",
@@ -122,17 +122,17 @@ func TestCodeFromError(t *testing.T) {
 			code: "",
 		},
 
-		"test_not_pitaya_error": {
+		"test_not_nano_error": {
 			err:  errTest,
 			code: ErrUnknownCode,
 		},
 
-		"test_nil_pitaya_error": {
+		"test_nil_nano_error": {
 			err:  func() *Error { var err *Error; return err }(),
 			code: "",
 		},
 
-		"test_pitaya_error": {
+		"test_nano_error": {
 			err:  NewError(errTest, codeNotFound),
 			code: codeNotFound,
 		},

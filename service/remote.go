@@ -340,7 +340,7 @@ func processRemoteMessage(ctx context.Context, req *protos.Request, r *RemoteSer
 func (r *RemoteService) handleRPCUser(ctx context.Context, req *protos.Request, rt *route.Route) *protos.Response {
 	remote, ok := r.remotes[rt.Short()]
 	if !ok {
-		logger.Log.Warnf("pitaya/remote: %s not found", rt.Short())
+		logger.Log.Warnf("nano/remote: %s not found", rt.Short())
 		response := &protos.Response{
 			Error: &protos.Error{
 				Code: e.ErrNotFoundCode,
@@ -448,7 +448,7 @@ func (r *RemoteService) handleRPCSys(ctx context.Context, req *protos.Request, r
 		r.sessionPool,
 	)
 	if err != nil {
-		logger.Log.Warn("pitaya/handler: cannot instantiate remote agent")
+		logger.Log.Warn("nano/handler: cannot instantiate remote agent")
 		response := &protos.Response{
 			Error: &protos.Error{
 				Code: e.ErrInternalCode,

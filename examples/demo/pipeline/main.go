@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/acceptor"
 	"github.com/nut-game/nano/component"
 	"github.com/nut-game/nano/config"
@@ -39,7 +39,7 @@ type CreatePlayerCheatResponse struct {
 
 // CreatePlayerCheat ...
 func (g *MetagameServer) CreatePlayerCheat(ctx context.Context, args *CreatePlayerCheatArgs) (*CreatePlayerCheatResponse, error) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx) // The default logger contains a requestId, the route being executed and the sessionId
+	logger := nano.GetDefaultLoggerFromCtx(ctx) // The default logger contains a requestId, the route being executed and the sessionId
 	logger.Info("CreatePlayerChest called")
 	// Do nothing. This is just an example of how pipelines can be helpful
 	return &CreatePlayerCheatResponse{
@@ -65,7 +65,7 @@ func (g *MetagameServer) HandlerNoArg(ctx context.Context) (*HandlerNoArgRespons
 // as a pipeline function executes for every handler and each of them
 // most probably have different parameter types.
 func (g *MetagameServer) simpleBefore(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx)
+	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	logger.Info("Simple Before exec")
 
 	if in != nil {
@@ -81,13 +81,13 @@ func (g *MetagameServer) simpleBefore(ctx context.Context, in interface{}) (cont
 
 // Simple example of an after pipeline. The 2nd argument is the handler response.
 func (g *MetagameServer) simpleAfter(ctx context.Context, resp interface{}, err error) (interface{}, error) {
-	logger := pitaya.GetDefaultLoggerFromCtx(ctx)
+	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	logger.Infof("Simple After exec - response: %v , error: %v", resp, err)
 
 	return resp, err
 }
 
-var app pitaya.Pitaya
+var app nano.Nano
 
 func main() {
 	svType := flag.String("type", "metagameDemo", "the server type")
@@ -97,10 +97,10 @@ func main() {
 	port := 3251
 	metagameServer := NewMetagameMock()
 
-	config := config.NewDefaultPitayaConfig()
+	config := config.NewDefaultNanoConfig()
 	config.DefaultPipelines.StructValidation.Enabled = true
 
-	builder := pitaya.NewDefaultBuilder(*isFrontend, *svType, pitaya.Cluster, map[string]string{}, *config)
+	builder := nano.NewDefaultBuilder(*isFrontend, *svType, nano.Cluster, map[string]string{}, *config)
 	tcp := acceptor.NewTCPAcceptor(fmt.Sprintf(":%d", port))
 	builder.AddAcceptor(tcp)
 	builder.HandlerHooks.BeforeHandler.PushBack(metagameServer.simpleBefore)

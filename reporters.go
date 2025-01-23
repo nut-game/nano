@@ -1,4 +1,4 @@
-package pitaya
+package nano
 
 import (
 	"github.com/nut-game/nano/config"

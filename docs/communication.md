@@ -27,15 +27,15 @@ The overview of what happens when a client connects and makes a request is:
 
 ### Acceptors
 
-The first thing the client must do is establish a connection with the Pitaya server. And for that to happen, the server must have specified one or more acceptors.
+The first thing the client must do is establish a connection with the nano server. And for that to happen, the server must have specified one or more acceptors.
 
-Acceptors are the entities responsible for listening for connections, establishing them, abstracting and forwarding them to the handler service. Pitaya comes with support for TCP and websocket acceptors. Custom acceptors can be implemented and added to Pitaya applications, they just need to implement the proper interface.
+Acceptors are the entities responsible for listening for connections, establishing them, abstracting and forwarding them to the handler service. nano comes with support for TCP and websocket acceptors. Custom acceptors can be implemented and added to nano applications, they just need to implement the proper interface.
 
 ### Handler service
 
 After the low level connection is established it is passed to the handler service to handle. The handler service is responsible for handling the lifecycle of the clients' connections. It reads from the low-level connection, decodes the received packets and handles them properly, calling the local server's handler if the target server type is the same as the local one or forwarding the message to the remote service otherwise.
 
-Pitaya has a configuration to define the number of concurrent messages being processed at the same time, both local and remote messages count for the concurrency, so if the server expects to deal with slow routes this configuration might need to be tweaked a bit. The configuration is `pitaya.concurrency.handler.dispatch`.
+nano has a configuration to define the number of concurrent messages being processed at the same time, both local and remote messages count for the concurrency, so if the server expects to deal with slow routes this configuration might need to be tweaked a bit. The configuration is `nano.concurrency.handler.dispatch`.
 
 ### Agent
 
@@ -63,7 +63,7 @@ In the receiving side the service identifies it is a _Sys_ RPC and creates a rem
 
 ### Pipeline
 
-The pipeline in Pitaya is a set of functions that can be defined to be run before or after every handler request. The functions receive the context and the raw message and should return the request object and error, they are allowed to modify the context and return a modified request. If the before function returns an error the request fails and the process is aborted.
+The pipeline in nano is a set of functions that can be defined to be run before or after every handler request. The functions receive the context and the raw message and should return the request object and error, they are allowed to modify the context and return a modified request. If the before function returns an error the request fails and the process is aborted.
 
 ### Serializer
 
@@ -71,4 +71,4 @@ The handler must first deserialize the message before processing it. So the func
 
 ### Handler
 
-Each Pitaya server can register multiple handler structures, as long as they have different names. Each structure can have multiple methods and Pitaya will choose the right structure and methods based on the called route.
+Each nano server can register multiple handler structures, as long as they have different names. Each structure can have multiple methods and nano will choose the right structure and methods based on the called route.

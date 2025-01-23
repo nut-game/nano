@@ -27,21 +27,21 @@ func getRPCClient(c config.GRPCClientConfig) (*GRPCClient, error) {
 }
 
 func TestNewGRPCClient(t *testing.T) {
-	c := config.NewDefaultPitayaConfig().Cluster.RPC.Client.Grpc
+	c := config.NewDefaultNanoConfig().Cluster.RPC.Client.Grpc
 	g, err := getRPCClient(c)
 	assert.NoError(t, err)
 	assert.NotNil(t, g)
 }
 
 func TestCall(t *testing.T) {
-	c := config.NewDefaultPitayaConfig().Cluster.RPC.Client.Grpc
+	c := config.NewDefaultNanoConfig().Cluster.RPC.Client.Grpc
 	g, err := getRPCClient(c)
 	assert.NoError(t, err)
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPitayaClient := protosmocks.NewMockPitayaClient(ctrl)
+	mockNanoClient := protosmocks.NewMockNanoClient(ctrl)
 	g.clientMap.Store(g.server.ID, &grpcClient{
-		cli:       mockPitayaClient,
+		cli:       mockNanoClient,
 		connected: true,
 	})
 
@@ -67,7 +67,7 @@ func TestCall(t *testing.T) {
 	expected, err := buildRequest(ctx, rpcType, r, sess, msg, g.server)
 	assert.NoError(t, err)
 
-	mockPitayaClient.EXPECT().Call(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, in *protos.Request, opts ...grpc.CallOption) (*protos.Response, error) {
+	mockNanoClient.EXPECT().Call(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, in *protos.Request, opts ...grpc.CallOption) (*protos.Response, error) {
 		assert.Equal(t, expected.FrontendID, in.FrontendID)
 		assert.Equal(t, expected.Type, in.Type)
 		assert.Equal(t, expected.Msg, in.Msg)
@@ -87,7 +87,7 @@ func TestBroadcastSessionBind(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockBindingStorage := mocks.NewMockBindingStorage(ctrl)
-	mockPitayaClient := protosmocks.NewMockPitayaClient(ctrl)
+	mockNanoClient := protosmocks.NewMockNanoClient(ctrl)
 	tables := []struct {
 		name           string
 		bindingStorage interfaces.BindingStorage
@@ -96,14 +96,14 @@ func TestBroadcastSessionBind(t *testing.T) {
 
 	for _, table := range tables {
 		t.Run(table.name, func(t *testing.T) {
-			c := config.NewDefaultPitayaConfig().Cluster.RPC.Client.Grpc
+			c := config.NewDefaultNanoConfig().Cluster.RPC.Client.Grpc
 			g, err := getRPCClient(c)
 			assert.NoError(t, err)
 			uid := "someuid"
-			//mockPitayaClient := protosmocks.NewMockPitayaClient(ctrl)
+			//mockNanoClient := protosmocks.NewMockNanoClient(ctrl)
 
 			if table.bindingStorage != nil {
-				g.clientMap.Store(g.server.ID, &grpcClient{connected: true, cli: mockPitayaClient})
+				g.clientMap.Store(g.server.ID, &grpcClient{connected: true, cli: mockNanoClient})
 
 				g.bindingStorage = mockBindingStorage
 				mockBindingStorage.EXPECT().GetUserFrontendID(uid, gomock.Any()).DoAndReturn(func(u, svType string) (string, error) {
@@ -113,7 +113,7 @@ func TestBroadcastSessionBind(t *testing.T) {
 					return g.server.ID, nil
 				})
 
-				mockPitayaClient.EXPECT().SessionBindRemote(gomock.Any(), gomock.Any()).Do(func(ctx context.Context, msg *protos.BindMsg, opts ...grpc.CallOption) {
+				mockNanoClient.EXPECT().SessionBindRemote(gomock.Any(), gomock.Any()).Do(func(ctx context.Context, msg *protos.BindMsg, opts ...grpc.CallOption) {
 					assert.Equal(t, uid, msg.Uid, g.server.ID, msg.Fid)
 				})
 			}
@@ -132,7 +132,7 @@ func TestSendKick(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockBindingStorage := mocks.NewMockBindingStorage(ctrl)
-	mockPitayaClient := protosmocks.NewMockPitayaClient(ctrl)
+	mockNanoClient := protosmocks.NewMockNanoClient(ctrl)
 	tables := []struct {
 		name           string
 		userID         string
@@ -156,12 +156,12 @@ func TestSendKick(t *testing.T) {
 
 	for _, table := range tables {
 		t.Run(table.name, func(t *testing.T) {
-			c := config.NewDefaultPitayaConfig().Cluster.RPC.Client.Grpc
+			c := config.NewDefaultNanoConfig().Cluster.RPC.Client.Grpc
 			g, err := getRPCClient(c)
 			assert.NoError(t, err)
 
 			if table.bindingStorage != nil {
-				g.clientMap.Store(table.sv.ID, &grpcClient{connected: true, cli: mockPitayaClient})
+				g.clientMap.Store(table.sv.ID, &grpcClient{connected: true, cli: mockNanoClient})
 				g.bindingStorage = table.bindingStorage
 				mockBindingStorage.EXPECT().GetUserFrontendID(table.userID, gomock.Any()).DoAndReturn(func(u, svType string) (string, error) {
 					assert.Equal(t, table.userID, u)
@@ -169,7 +169,7 @@ func TestSendKick(t *testing.T) {
 					return table.sv.ID, nil
 				})
 
-				mockPitayaClient.EXPECT().KickUser(gomock.Any(), gomock.Any()).Do(func(ctx context.Context, msg *protos.KickMsg, opts ...grpc.CallOption) {
+				mockNanoClient.EXPECT().KickUser(gomock.Any(), gomock.Any()).Do(func(ctx context.Context, msg *protos.KickMsg, opts ...grpc.CallOption) {
 					assert.Equal(t, table.userID, msg.UserId)
 				})
 			}
@@ -192,7 +192,7 @@ func TestSendPush(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockBindingStorage := mocks.NewMockBindingStorage(ctrl)
-	mockPitayaClient := protosmocks.NewMockPitayaClient(ctrl)
+	mockNanoClient := protosmocks.NewMockNanoClient(ctrl)
 	tables := []struct {
 		name           string
 		bindingStorage interfaces.BindingStorage
@@ -216,12 +216,12 @@ func TestSendPush(t *testing.T) {
 
 	for _, table := range tables {
 		t.Run(table.name, func(t *testing.T) {
-			g, err := getRPCClient(config.NewDefaultPitayaConfig().Cluster.RPC.Client.Grpc)
+			g, err := getRPCClient(config.NewDefaultNanoConfig().Cluster.RPC.Client.Grpc)
 			assert.NoError(t, err)
 			uid := "someuid"
 
 			if table.bindingStorage != nil && table.sv.ID == "" {
-				g.clientMap.Store(table.sv.ID, &grpcClient{connected: true, cli: mockPitayaClient})
+				g.clientMap.Store(table.sv.ID, &grpcClient{connected: true, cli: mockNanoClient})
 				g.bindingStorage = table.bindingStorage
 				mockBindingStorage.EXPECT().GetUserFrontendID(uid, gomock.Any()).DoAndReturn(func(u, svType string) (string, error) {
 					assert.Equal(t, uid, u)
@@ -229,14 +229,14 @@ func TestSendPush(t *testing.T) {
 					return table.sv.ID, nil
 				})
 
-				mockPitayaClient.EXPECT().PushToUser(gomock.Any(), gomock.Any()).Do(func(ctx context.Context, msg *protos.Push, opts ...grpc.CallOption) {
+				mockNanoClient.EXPECT().PushToUser(gomock.Any(), gomock.Any()).Do(func(ctx context.Context, msg *protos.Push, opts ...grpc.CallOption) {
 					assert.Equal(t, uid, msg.Uid)
 					assert.Equal(t, msg.Route, "sv.svc.mth")
 					assert.Equal(t, msg.Data, []byte{0x01})
 				})
 			} else if table.bindingStorage == nil && table.sv.ID != "" {
-				g.clientMap.Store(table.sv.ID, &grpcClient{connected: true, cli: mockPitayaClient})
-				mockPitayaClient.EXPECT().PushToUser(gomock.Any(), gomock.Any()).Do(func(ctx context.Context, msg *protos.Push, opts ...grpc.CallOption) {
+				g.clientMap.Store(table.sv.ID, &grpcClient{connected: true, cli: mockNanoClient})
+				mockNanoClient.EXPECT().PushToUser(gomock.Any(), gomock.Any()).Do(func(ctx context.Context, msg *protos.Push, opts ...grpc.CallOption) {
 					assert.Equal(t, uid, msg.Uid)
 					assert.Equal(t, msg.Route, "sv.svc.mth")
 					assert.Equal(t, msg.Data, []byte{0x01})
@@ -263,9 +263,9 @@ func TestSendPush(t *testing.T) {
 func TestAddServer(t *testing.T) {
 	t.Run("try-connect", func(t *testing.T) {
 		// listen
-		clientConfig := config.NewDefaultPitayaConfig().Cluster.RPC.Client.Grpc
+		clientConfig := config.NewDefaultNanoConfig().Cluster.RPC.Client.Grpc
 
-		serverConfig := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Grpc
+		serverConfig := config.NewDefaultNanoConfig().Cluster.RPC.Server.Grpc
 		serverConfig.Port = helpers.GetFreePort(t)
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
@@ -282,8 +282,8 @@ func TestAddServer(t *testing.T) {
 		gs, err := NewGRPCServer(serverConfig, server, []metrics.Reporter{})
 		assert.NoError(t, err)
 
-		mockPitayaServer := protosmocks.NewMockPitayaServer(ctrl)
-		gs.SetPitayaServer(mockPitayaServer)
+		mockNanoServer := protosmocks.NewMockNanoServer(ctrl)
+		gs.SetNanoServer(mockNanoServer)
 
 		err = gs.Init()
 		assert.NoError(t, err)
@@ -302,10 +302,10 @@ func TestAddServer(t *testing.T) {
 
 	t.Run("lazy", func(t *testing.T) {
 		// listen
-		clientConfig := config.NewDefaultPitayaConfig().Cluster.RPC.Client.Grpc
+		clientConfig := config.NewDefaultNanoConfig().Cluster.RPC.Client.Grpc
 		clientConfig.LazyConnection = true
 
-		serverConfig := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Grpc
+		serverConfig := config.NewDefaultNanoConfig().Cluster.RPC.Server.Grpc
 		serverConfig.Port = helpers.GetFreePort(t)
 
 		ctrl := gomock.NewController(t)
@@ -323,8 +323,8 @@ func TestAddServer(t *testing.T) {
 		gs, err := NewGRPCServer(serverConfig, server, []metrics.Reporter{})
 		assert.NoError(t, err)
 
-		mockPitayaServer := protosmocks.NewMockPitayaServer(ctrl)
-		gs.SetPitayaServer(mockPitayaServer)
+		mockNanoServer := protosmocks.NewMockNanoServer(ctrl)
+		gs.SetNanoServer(mockNanoServer)
 
 		err = gs.Init()
 		assert.NoError(t, err)
@@ -393,7 +393,7 @@ func TestGetServerHost(t *testing.T) {
 
 	for name, table := range tables {
 		t.Run(name, func(t *testing.T) {
-			config := config.NewDefaultPitayaConfig().Cluster.Info
+			config := config.NewDefaultNanoConfig().Cluster.Info
 			config.Region = table.clientRegion
 			infoRetriever := NewInfoRetriever(config)
 			gs := &GRPCClient{infoRetriever: infoRetriever}
@@ -412,9 +412,9 @@ func TestRemoveServer(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	clientConfig := config.NewDefaultPitayaConfig().Cluster.RPC.Client.Grpc
+	clientConfig := config.NewDefaultNanoConfig().Cluster.RPC.Client.Grpc
 
-	serverConfig := config.NewDefaultPitayaConfig().Cluster.RPC.Server.Grpc
+	serverConfig := config.NewDefaultNanoConfig().Cluster.RPC.Server.Grpc
 	serverConfig.Port = helpers.GetFreePort(t)
 
 	server := &Server{
@@ -428,8 +428,8 @@ func TestRemoveServer(t *testing.T) {
 	}
 	gs, err := NewGRPCServer(serverConfig, server, []metrics.Reporter{})
 	assert.NoError(t, err)
-	mockPitayaServer := protosmocks.NewMockPitayaServer(ctrl)
-	gs.SetPitayaServer(mockPitayaServer)
+	mockNanoServer := protosmocks.NewMockNanoServer(ctrl)
+	gs.SetNanoServer(mockNanoServer)
 	err = gs.Init()
 	assert.NoError(t, err)
 

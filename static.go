@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package pitaya
+package nano
 
 import (
 	"context"
@@ -37,7 +37,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-var DefaultApp Pitaya
+var DefaultApp Nano
 
 // Configure configures the app
 func Configure(

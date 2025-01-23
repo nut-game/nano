@@ -12,10 +12,10 @@ func TestInfoRetrieverRegion(t *testing.T) {
 	t.Parallel()
 
 	c := viper.New()
-	c.Set("pitaya.cluster.info.region", "us")
+	c.Set("nano.cluster.info.region", "us")
 	conf := config.NewConfig(c)
 
-	infoRetriever := NewInfoRetriever(*&config.NewPitayaConfig(conf).Cluster.Info)
+	infoRetriever := NewInfoRetriever(*&config.NewNanoConfig(conf).Cluster.Info)
 
 	assert.Equal(t, "us", infoRetriever.Region())
 }

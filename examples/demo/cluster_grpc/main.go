@@ -8,7 +8,7 @@ import (
 
 	"strings"
 
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/acceptor"
 	"github.com/nut-game/nano/cluster"
 	"github.com/nut-game/nano/component"
@@ -20,7 +20,7 @@ import (
 	"github.com/nut-game/nano/route"
 )
 
-var app pitaya.Pitaya
+var app nano.Nano
 
 func configureBackend() {
 	room := services.NewRoom(app)
@@ -102,8 +102,8 @@ func main() {
 	app.Start()
 }
 
-func createApp(port int, isFrontend bool, svType string, meta map[string]string, rpcServerPort int) (pitaya.Pitaya, *modules.ETCDBindingStorage) {
-	builder := pitaya.NewDefaultBuilder(isFrontend, svType, pitaya.Cluster, meta, *config.NewDefaultPitayaConfig())
+func createApp(port int, isFrontend bool, svType string, meta map[string]string, rpcServerPort int) (nano.Nano, *modules.ETCDBindingStorage) {
+	builder := nano.NewDefaultBuilder(isFrontend, svType, nano.Cluster, meta, *config.NewDefaultNanoConfig())
 
 	grpcServerConfig := builder.Config.Cluster.RPC.Server.Grpc
 	grpcServerConfig.Port = rpcServerPort

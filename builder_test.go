@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package pitaya
+package nano
 
 import (
 	"testing"
@@ -31,13 +31,13 @@ import (
 func TestPostBuildHooks(t *testing.T) {
 	acc := acceptor.NewTCPAcceptor("0.0.0.0:0")
 	for _, table := range tables {
-		builderConfig := config.NewDefaultPitayaConfig()
+		builderConfig := config.NewDefaultNanoConfig()
 
 		t.Run("with_post_build_hooks", func(t *testing.T) {
 			called := false
 			builder := NewDefaultBuilder(table.isFrontend, table.serverType, table.serverMode, table.serverMetadata, *builderConfig)
 			builder.AddAcceptor(acc)
-			builder.AddPostBuildHook(func(app Pitaya) {
+			builder.AddPostBuildHook(func(app Nano) {
 				called = true
 			})
 			app := builder.Build()

@@ -28,7 +28,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/acceptor"
 	"github.com/nut-game/nano/cluster"
 	"github.com/nut-game/nano/component"
@@ -49,7 +49,7 @@ import (
 // TestSvc service for e2e tests
 type TestSvc struct {
 	component.Base
-	app         pitaya.Pitaya
+	app         nano.Nano
 	sessionPool session.SessionPool
 }
 
@@ -88,7 +88,7 @@ func (tr *TestRemoteSvc) RPCTestPtrReturnsPtr(ctx context.Context, req *test.Tes
 
 // RPCTestReturnsError remote for e2e tests
 func (tr *TestRemoteSvc) RPCTestReturnsError(ctx context.Context, data *test.TestRequest) (*test.TestResponse, error) {
-	return nil, pitaya.Error(errors.New("test error"), "PIT-433", map[string]string{"some": "meta"})
+	return nil, nano.Error(errors.New("test error"), "PIT-433", map[string]string{"some": "meta"})
 }
 
 // RPCTestNoArgs remote for e2e tests
@@ -111,7 +111,7 @@ func (t *TestSvc) Init() {
 func (t *TestSvc) TestRequestKickUser(ctx context.Context, userID []byte) (*test.TestResponse, error) {
 	s := t.sessionPool.GetSessionByUID(string(userID))
 	if s == nil {
-		return nil, pitaya.Error(constants.ErrSessionNotFound, "PIT-404")
+		return nil, nano.Error(constants.ErrSessionNotFound, "PIT-404")
 	}
 	err := s.Kick(ctx)
 	if err != nil {
@@ -127,7 +127,7 @@ func (t *TestSvc) TestRequestKickUser(ctx context.Context, userID []byte) (*test
 func (t *TestSvc) TestRequestKickMe(ctx context.Context) (*test.TestResponse, error) {
 	s := t.app.GetSessionFromCtx(ctx)
 	if s == nil {
-		return nil, pitaya.Error(constants.ErrSessionNotFound, "PIT-404")
+		return nil, nano.Error(constants.ErrSessionNotFound, "PIT-404")
 	}
 	err := s.Kick(ctx)
 	if err != nil {
@@ -177,7 +177,7 @@ func (t *TestSvc) TestRequestReceiveReturnsRaw(ctx context.Context, in []byte) (
 
 // TestRequestReturnsError handler for e2e tests
 func (t *TestSvc) TestRequestReturnsError(ctx context.Context, in []byte) ([]byte, error) {
-	return nil, pitaya.Error(errors.New("somerror"), "PIT-555")
+	return nil, nano.Error(errors.New("somerror"), "PIT-555")
 }
 
 // TestBind handler for e2e tests
@@ -186,11 +186,11 @@ func (t *TestSvc) TestBind(ctx context.Context) ([]byte, error) {
 	s := t.app.GetSessionFromCtx(ctx)
 	err := s.Bind(ctx, uid)
 	if err != nil {
-		return nil, pitaya.Error(err, "PIT-444")
+		return nil, nano.Error(err, "PIT-444")
 	}
 	err = t.app.GroupAddMember(ctx, "g1", s.UID())
 	if err != nil {
-		return nil, pitaya.Error(err, "PIT-441")
+		return nil, nano.Error(err, "PIT-441")
 	}
 	return []byte("ack"), nil
 }
@@ -200,11 +200,11 @@ func (t *TestSvc) TestBindID(ctx context.Context, byteUID []byte) ([]byte, error
 	s := t.app.GetSessionFromCtx(ctx)
 	err := s.Bind(ctx, string(byteUID))
 	if err != nil {
-		return nil, pitaya.Error(err, "PIT-444")
+		return nil, nano.Error(err, "PIT-444")
 	}
 	err = t.app.GroupAddMember(ctx, "g1", s.UID())
 	if err != nil {
-		return nil, pitaya.Error(err, "PIT-441")
+		return nil, nano.Error(err, "PIT-441")
 	}
 	return []byte("ack"), nil
 }
@@ -244,14 +244,14 @@ func (t *TestSvc) TestSendRPCNoArgs(ctx context.Context, msg *TestRPCRequest) (*
 	return rep, nil
 }
 
-// var app pitaya.Pitaya
+// var app nano.Nano
 
 func main() {
 	port := flag.Int("port", 32222, "the port to listen")
 	svType := flag.String("type", "connector", "the server type")
 	isFrontend := flag.Bool("frontend", true, "if server is frontend")
 	serializer := flag.String("serializer", "json", "json or protobuf")
-	sdPrefix := flag.String("sdprefix", "pitaya/", "prefix to discover other servers")
+	sdPrefix := flag.String("sdprefix", "nano/", "prefix to discover other servers")
 	debug := flag.Bool("debug", false, "turn on debug logging")
 	grpc := flag.Bool("grpc", false, "turn on grpc")
 	grpcPort := flag.Int("grpcport", 3434, "the grpc server port")
@@ -259,8 +259,8 @@ func main() {
 	flag.Parse()
 
 	cfg := viper.New()
-	cfg.Set("pitaya.cluster.sd.etcd.prefix", *sdPrefix)
-	cfg.Set("pitaya.cluster.rpc.server.grpc.port", *grpcPort)
+	cfg.Set("nano.cluster.sd.etcd.prefix", *sdPrefix)
+	cfg.Set("nano.cluster.rpc.server.grpc.port", *grpcPort)
 
 	l := logrus.New()
 	l.Formatter = &logrus.TextFormatter{}
@@ -269,9 +269,9 @@ func main() {
 		l.SetLevel(logrus.DebugLevel)
 	}
 
-	pitaya.SetLogger(logruswrapper.NewWithFieldLogger(l))
+	nano.SetLogger(logruswrapper.NewWithFieldLogger(l))
 
-	app, bs, sessionPool := createApp(*serializer, *port, *grpc, *isFrontend, *svType, pitaya.Cluster, map[string]string{
+	app, bs, sessionPool := createApp(*serializer, *port, *grpc, *isFrontend, *svType, nano.Cluster, map[string]string{
 		constants.GRPCHostKey: "127.0.0.1",
 		constants.GRPCPortKey: fmt.Sprintf("%d", *grpcPort),
 	}, cfg)
@@ -298,9 +298,9 @@ func main() {
 	app.Start()
 }
 
-func createApp(serializer string, port int, grpc bool, isFrontend bool, svType string, serverMode pitaya.ServerMode, metadata map[string]string, cfg ...*viper.Viper) (pitaya.Pitaya, *modules.ETCDBindingStorage, session.SessionPool) {
+func createApp(serializer string, port int, grpc bool, isFrontend bool, svType string, serverMode nano.ServerMode, metadata map[string]string, cfg ...*viper.Viper) (nano.Nano, *modules.ETCDBindingStorage, session.SessionPool) {
 	conf := config.NewConfig(cfg...)
-	builder := pitaya.NewBuilderWithConfigs(isFrontend, svType, serverMode, metadata, conf)
+	builder := nano.NewBuilderWithConfigs(isFrontend, svType, serverMode, metadata, conf)
 
 	if isFrontend {
 		tcp := acceptor.NewTCPAcceptor(fmt.Sprintf(":%d", port))
@@ -317,23 +317,23 @@ func createApp(serializer string, port int, grpc bool, isFrontend bool, svType s
 		panic("serializer should be either json or protobuf")
 	}
 
-	pitayaConfig := config.NewPitayaConfig(conf)
+	nanoConfig := config.NewNanoConfig(conf)
 
 	var bs *modules.ETCDBindingStorage
 	if grpc {
-		gs, err := cluster.NewGRPCServer(pitayaConfig.Cluster.RPC.Server.Grpc, builder.Server, builder.MetricsReporters)
+		gs, err := cluster.NewGRPCServer(nanoConfig.Cluster.RPC.Server.Grpc, builder.Server, builder.MetricsReporters)
 		if err != nil {
 			panic(err)
 		}
 
-		bs = modules.NewETCDBindingStorage(builder.Server, builder.SessionPool, pitayaConfig.Modules.BindingStorage.Etcd)
+		bs = modules.NewETCDBindingStorage(builder.Server, builder.SessionPool, nanoConfig.Modules.BindingStorage.Etcd)
 
 		gc, err := cluster.NewGRPCClient(
-			pitayaConfig.Cluster.RPC.Client.Grpc,
+			nanoConfig.Cluster.RPC.Client.Grpc,
 			builder.Server,
 			builder.MetricsReporters,
 			bs,
-			cluster.NewInfoRetriever(pitayaConfig.Cluster.Info),
+			cluster.NewInfoRetriever(nanoConfig.Cluster.Info),
 		)
 		if err != nil {
 			panic(err)

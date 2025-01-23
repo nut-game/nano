@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package pitaya
+package nano
 
 import (
 	"errors"
@@ -44,7 +44,7 @@ func TestSendPushToUsersFailsIfErrSerializing(t *testing.T) {
 	defer ctrl.Finish()
 	mockSerializer := serializemocks.NewMockSerializer(ctrl)
 
-	config := config.NewDefaultPitayaConfig()
+	config := config.NewDefaultNanoConfig()
 	builder := NewDefaultBuilder(true, "testtype", Cluster, map[string]string{}, *config)
 	builder.Serializer = mockSerializer
 	app := builder.Build()
@@ -94,7 +94,7 @@ func TestSendToUsersLocalSession(t *testing.T) {
 			mockSessionPool.EXPECT().GetSessionByUID(uid1).Return(s1).Times(1)
 			mockSessionPool.EXPECT().GetSessionByUID(uid2).Return(s2).Times(1)
 
-			config := config.NewDefaultPitayaConfig()
+			config := config.NewDefaultNanoConfig()
 			builder := NewDefaultBuilder(true, "testtype", Standalone, map[string]string{}, *config)
 			builder.SessionPool = mockSessionPool
 			app := builder.Build().(*App)
@@ -149,7 +149,7 @@ func TestSendToUsersRemoteSession(t *testing.T) {
 			mockSessionPool.EXPECT().GetSessionByUID(uid1).Return(nil).Times(1)
 			mockSessionPool.EXPECT().GetSessionByUID(uid2).Return(nil).Times(1)
 
-			config := config.NewDefaultPitayaConfig()
+			config := config.NewDefaultNanoConfig()
 			builder := NewDefaultBuilder(true, "testtype", Cluster, map[string]string{}, *config)
 			builder.SessionPool = mockSessionPool
 			builder.RPCClient = mockRPCClient
