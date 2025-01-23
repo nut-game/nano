@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package protos;
+option go_package = ".;protos";
+
+import "error.proto";
+
+message Response {
+  bytes data = 1;
+  Error error = 2;
+}

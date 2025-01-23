@@ -24,8 +24,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/nut-game/nano/helpers"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/helpers"
 )
 
 type alwaysRunCondition struct{}

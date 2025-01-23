@@ -23,8 +23,8 @@ package serialize
 import (
 	"errors"
 
-	"github.com/topfreegames/pitaya/v2/serialize/json"
-	"github.com/topfreegames/pitaya/v2/serialize/protobuf"
+	"github.com/nut-game/nano/serialize/json"
+	"github.com/nut-game/nano/serialize/protobuf"
 )
 
 const (

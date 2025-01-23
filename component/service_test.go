@@ -24,9 +24,9 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/constants"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/constants"
 )
 
 type unexportedTestType struct {

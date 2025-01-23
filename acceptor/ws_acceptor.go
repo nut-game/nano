@@ -28,10 +28,10 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/topfreegames/pitaya/v2/conn/codec"
-	"github.com/topfreegames/pitaya/v2/conn/packet"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/logger"
+	"github.com/nut-game/nano/conn/codec"
+	"github.com/nut-game/nano/conn/packet"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/logger"
 )
 
 // WSAcceptor struct
@@ -66,11 +66,11 @@ func NewWSAcceptor(addr string, certs ...string) *WSAcceptor {
 }
 
 func (w *WSAcceptor) IsRunning() bool {
-        return w.running
+	return w.running
 }
 
 func (w *WSAcceptor) GetConfiguredAddress() string {
-        return w.addr
+	return w.addr
 }
 
 // GetAddr returns the addr the acceptor will listen on

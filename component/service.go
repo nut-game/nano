@@ -24,8 +24,8 @@ import (
 	"errors"
 	"reflect"
 
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/constants"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/constants"
 )
 
 type (

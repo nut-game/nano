@@ -10,13 +10,13 @@ import (
 
 	"strings"
 
-	"github.com/topfreegames/pitaya/v2"
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/groups"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/timer"
+	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/groups"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/timer"
 )
 
 type (

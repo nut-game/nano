@@ -21,9 +21,9 @@
 package logger
 
 import (
+	"github.com/nut-game/nano/logger/interfaces"
+	logruswrapper "github.com/nut-game/nano/logger/logrus"
 	"github.com/sirupsen/logrus"
-	"github.com/topfreegames/pitaya/v2/logger/interfaces"
-	logruswrapper "github.com/topfreegames/pitaya/v2/logger/logrus"
 )
 
 // Log is the default logger

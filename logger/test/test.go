@@ -1,10 +1,11 @@
 package test
 
 import (
-	tests "github.com/sirupsen/logrus/hooks/test"
-	"github.com/topfreegames/pitaya/v2/logger/interfaces"
-	lwrapper "github.com/topfreegames/pitaya/v2/logger/logrus"
 	"io"
+
+	"github.com/nut-game/nano/logger/interfaces"
+	lwrapper "github.com/nut-game/nano/logger/logrus"
+	tests "github.com/sirupsen/logrus/hooks/test"
 )
 
 // NewNullLogger creates a discarding logger and installs the test hook.

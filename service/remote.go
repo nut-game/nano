@@ -27,45 +27,46 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 
-	"github.com/topfreegames/pitaya/v2/agent"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/conn/codec"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/constants"
-	pcontext "github.com/topfreegames/pitaya/v2/context"
-	"github.com/topfreegames/pitaya/v2/docgenerator"
-	e "github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/pipeline"
-	"github.com/topfreegames/pitaya/v2/protos"
-	"github.com/topfreegames/pitaya/v2/route"
-	"github.com/topfreegames/pitaya/v2/router"
-	"github.com/topfreegames/pitaya/v2/serialize"
-	"github.com/topfreegames/pitaya/v2/session"
-	"github.com/topfreegames/pitaya/v2/tracing"
-	"github.com/topfreegames/pitaya/v2/util"
+	"github.com/nut-game/nano/agent"
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/conn/codec"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/constants"
+	pcontext "github.com/nut-game/nano/context"
+	"github.com/nut-game/nano/docgenerator"
+	e "github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/pipeline"
+	"github.com/nut-game/nano/protos"
+	"github.com/nut-game/nano/route"
+	"github.com/nut-game/nano/router"
+	"github.com/nut-game/nano/serialize"
+	"github.com/nut-game/nano/session"
+	"github.com/nut-game/nano/tracing"
+	"github.com/nut-game/nano/util"
 )
 
 // RemoteService struct
 type RemoteService struct {
 	baseService
-	rpcServer              cluster.RPCServer
-	serviceDiscovery       cluster.ServiceDiscovery
-	serializer             serialize.Serializer
-	encoder                codec.PacketEncoder
-	rpcClient              cluster.RPCClient
-	services               map[string]*component.Service // all registered service
-	router                 *router.Router
-	messageEncoder         message.Encoder
-	server                 *cluster.Server // server obj
-	remoteBindingListeners []cluster.RemoteBindingListener
-	remoteHooks            *pipeline.RemoteHooks
-	sessionPool            session.SessionPool
-	handlerPool            *HandlerPool
-	remotes                map[string]*component.Remote // all remote method
+	protos.UnimplementedPitayaServer // 嵌入 UnimplementedPitayaServer
+	rpcServer                        cluster.RPCServer
+	serviceDiscovery                 cluster.ServiceDiscovery
+	serializer                       serialize.Serializer
+	encoder                          codec.PacketEncoder
+	rpcClient                        cluster.RPCClient
+	services                         map[string]*component.Service // all registered service
+	router                           *router.Router
+	messageEncoder                   message.Encoder
+	server                           *cluster.Server // server obj
+	remoteBindingListeners           []cluster.RemoteBindingListener
+	remoteHooks                      *pipeline.RemoteHooks
+	sessionPool                      session.SessionPool
+	handlerPool                      *HandlerPool
+	remotes                          map[string]*component.Remote // all remote method
 }
 
 // NewRemoteService creates and return a new RemoteService

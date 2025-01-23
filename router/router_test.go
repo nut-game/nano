@@ -6,13 +6,13 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/cluster/mocks"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/protos"
+	"github.com/nut-game/nano/route"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/cluster/mocks"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/protos"
-	"github.com/topfreegames/pitaya/v2/route"
 )
 
 var (

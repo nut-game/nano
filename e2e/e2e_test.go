@@ -29,11 +29,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/nut-game/nano/client"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/helpers"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/client"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/helpers"
 )
 
 var update = flag.Bool("update", false, "update server binary")

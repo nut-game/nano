@@ -3,8 +3,8 @@ package codec
 import (
 	"testing"
 
+	"github.com/nut-game/nano/conn/packet"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/conn/packet"
 )
 
 func helperConcatBytes(packetType packet.Type, length, data []byte) []byte {

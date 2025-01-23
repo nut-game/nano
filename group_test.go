@@ -25,10 +25,10 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/session/mocks"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/session/mocks"
 )
 
 func createGroupTestApp() Pitaya {

@@ -23,16 +23,16 @@ package metrics
 import (
 	"fmt"
 
-	"github.com/topfreegames/pitaya/v2/logger"
+	"github.com/nut-game/nano/logger"
 
 	"net/http"
 	"sync"
 
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/metrics/models"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/metrics/models"
 )
 
 var (

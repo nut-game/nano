@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/mailgun/proxyproto"
-	"github.com/topfreegames/pitaya/v2/logger"
+	"github.com/nut-game/nano/logger"
 )
 
 // Listener is used to wrap an underlying listener,

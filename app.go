@@ -30,31 +30,31 @@ import (
 
 	"time"
 
-	"github.com/golang/protobuf/proto"
-	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/constants"
-	pcontext "github.com/topfreegames/pitaya/v2/context"
-	"github.com/topfreegames/pitaya/v2/docgenerator"
-	"github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/groups"
-	"github.com/topfreegames/pitaya/v2/interfaces"
-	"github.com/topfreegames/pitaya/v2/logger"
-	logging "github.com/topfreegames/pitaya/v2/logger/interfaces"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	mods "github.com/topfreegames/pitaya/v2/modules"
-	"github.com/topfreegames/pitaya/v2/remote"
-	"github.com/topfreegames/pitaya/v2/router"
-	"github.com/topfreegames/pitaya/v2/serialize"
-	"github.com/topfreegames/pitaya/v2/service"
-	"github.com/topfreegames/pitaya/v2/session"
-	"github.com/topfreegames/pitaya/v2/timer"
-	"github.com/topfreegames/pitaya/v2/tracing"
-	"github.com/topfreegames/pitaya/v2/worker"
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/constants"
+	pcontext "github.com/nut-game/nano/context"
+	"github.com/nut-game/nano/docgenerator"
+	"github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/groups"
+	"github.com/nut-game/nano/interfaces"
+	"github.com/nut-game/nano/logger"
+	logging "github.com/nut-game/nano/logger/interfaces"
+	"github.com/nut-game/nano/metrics"
+	mods "github.com/nut-game/nano/modules"
+	"github.com/nut-game/nano/remote"
+	"github.com/nut-game/nano/router"
+	"github.com/nut-game/nano/serialize"
+	"github.com/nut-game/nano/service"
+	"github.com/nut-game/nano/session"
+	"github.com/nut-game/nano/timer"
+	"github.com/nut-game/nano/tracing"
+	"github.com/nut-game/nano/worker"
+	"go.opentelemetry.io/otel/trace"
+	"google.golang.org/protobuf/proto"
 )
 
 // ServerMode represents a server mode
@@ -502,9 +502,9 @@ func GetFromPropagateCtx(ctx context.Context, key string) interface{} {
 	return pcontext.GetFromPropagateCtx(ctx, key)
 }
 
-// ExtractSpan retrieves an opentracing span context from the given context
+// ExtractSpan retrieves an OpenTelemetry span context from the given context
 // The span context can be received directly or via an RPC call
-func ExtractSpan(ctx context.Context) (opentracing.SpanContext, error) {
+func ExtractSpan(ctx context.Context) (trace.SpanContext, error) {
 	return tracing.ExtractSpan(ctx)
 }
 

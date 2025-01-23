@@ -23,7 +23,7 @@ package codec
 import (
 	"bytes"
 
-	"github.com/topfreegames/pitaya/v2/conn/packet"
+	"github.com/nut-game/nano/conn/packet"
 )
 
 // PomeloPacketDecoder reads and decodes network data slice following pomelo's protocol

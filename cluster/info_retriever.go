@@ -1,6 +1,6 @@
 package cluster
 
-import "github.com/topfreegames/pitaya/v2/config"
+import "github.com/nut-game/nano/config"
 
 // infoRetriever gets cluster info from config
 // Implements InfoRetriever interface

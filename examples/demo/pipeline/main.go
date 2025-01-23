@@ -5,10 +5,10 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/topfreegames/pitaya/v2"
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/config"
+	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/config"
 )
 
 // MetagameServer ...

@@ -27,16 +27,16 @@ import (
 	"math"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	nats "github.com/nats-io/nats.go"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	e "github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	"github.com/topfreegames/pitaya/v2/protos"
-	"github.com/topfreegames/pitaya/v2/session"
-	"github.com/topfreegames/pitaya/v2/util"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	e "github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/metrics"
+	"github.com/nut-game/nano/protos"
+	"github.com/nut-game/nano/session"
+	"github.com/nut-game/nano/util"
+	"google.golang.org/protobuf/proto"
 )
 
 // NatsRPCServer struct
@@ -342,7 +342,6 @@ func (ns *NatsRPCServer) Init() error {
 	conn, err := setupNatsConn(
 		ns.connString,
 		ns.appDieChan,
-		nats.RetryOnFailedConnect(true),
 		nats.MaxReconnects(ns.maxReconnectionRetries),
 		nats.Timeout(ns.connectionTimeout),
 		nats.Compression(ns.websocketCompression),

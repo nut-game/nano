@@ -23,9 +23,9 @@ package pitaya
 import (
 	"testing"
 
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/config"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/config"
 )
 
 func TestPostBuildHooks(t *testing.T) {

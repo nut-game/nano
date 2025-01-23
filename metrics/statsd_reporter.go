@@ -23,11 +23,11 @@ package metrics
 import (
 	"fmt"
 
-	"github.com/topfreegames/pitaya/v2/constants"
+	"github.com/nut-game/nano/constants"
 
 	"github.com/DataDog/datadog-go/statsd"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/logger"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/logger"
 )
 
 // Client is the interface to required dogstatsd functions

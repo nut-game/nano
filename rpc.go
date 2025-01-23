@@ -24,10 +24,10 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/route"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/route"
+	"google.golang.org/protobuf/proto"
 )
 
 // RPC calls a method in a different server

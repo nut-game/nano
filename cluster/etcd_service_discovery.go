@@ -28,10 +28,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/util"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/util"
 	logutil "go.etcd.io/etcd/client/pkg/v3/logutil"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"go.etcd.io/etcd/client/v3/namespace"
@@ -616,15 +616,16 @@ func (sd *etcdServiceDiscovery) revoke() error {
 	go func() {
 		defer close(c)
 		logger.Log.Debug("waiting for etcd revoke")
-		ctx, cancel := context.WithTimeout(context.Background(), sd.revokeTimeout)
-		_, err := sd.cli.Revoke(ctx, sd.leaseID)
-		cancel()
+		_, err := sd.cli.Revoke(context.TODO(), sd.leaseID)
 		c <- err
 		logger.Log.Debug("finished waiting for etcd revoke")
 	}()
 	select {
 	case err := <-c:
 		return err // completed normally
+	case <-time.After(sd.revokeTimeout):
+		logger.Log.Warn("timed out waiting for etcd revoke")
+		return nil // timed out
 	}
 }
 

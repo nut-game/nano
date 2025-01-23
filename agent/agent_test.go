@@ -34,24 +34,24 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
+	"github.com/nut-game/nano/conn/codec"
+	codecmocks "github.com/nut-game/nano/conn/codec/mocks"
+	"github.com/nut-game/nano/conn/message"
+	messagemocks "github.com/nut-game/nano/conn/message/mocks"
+	"github.com/nut-game/nano/conn/packet"
+	"github.com/nut-game/nano/constants"
+	pcontext "github.com/nut-game/nano/context"
+	e "github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/helpers"
+	"github.com/nut-game/nano/metrics"
+	metricsmocks "github.com/nut-game/nano/metrics/mocks"
+	"github.com/nut-game/nano/mocks"
+	"github.com/nut-game/nano/protos"
+	"github.com/nut-game/nano/serialize"
+	serializemocks "github.com/nut-game/nano/serialize/mocks"
+	"github.com/nut-game/nano/session"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/topfreegames/pitaya/v2/conn/codec"
-	codecmocks "github.com/topfreegames/pitaya/v2/conn/codec/mocks"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	messagemocks "github.com/topfreegames/pitaya/v2/conn/message/mocks"
-	"github.com/topfreegames/pitaya/v2/conn/packet"
-	"github.com/topfreegames/pitaya/v2/constants"
-	pcontext "github.com/topfreegames/pitaya/v2/context"
-	e "github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/helpers"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	metricsmocks "github.com/topfreegames/pitaya/v2/metrics/mocks"
-	"github.com/topfreegames/pitaya/v2/mocks"
-	"github.com/topfreegames/pitaya/v2/protos"
-	"github.com/topfreegames/pitaya/v2/serialize"
-	serializemocks "github.com/topfreegames/pitaya/v2/serialize/mocks"
-	"github.com/topfreegames/pitaya/v2/session"
 )
 
 type mockAddr struct{}
@@ -1168,7 +1168,7 @@ func TestAgentHandle(t *testing.T) {
 	})
 
 	// ag.Close on method exit
-	mockConn.EXPECT().RemoteAddr().MaxTimes(1)
+	mockConn.EXPECT().RemoteAddr().MaxTimes(2)
 	mockConn.EXPECT().Close().MaxTimes(1)
 
 	ag.chSend <- pendingWrite{ctx: nil, data: expectedBytes, err: nil}

@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	"github.com/topfreegames/pitaya/v2/metrics/mocks"
+	"github.com/nut-game/nano/metrics"
+	"github.com/nut-game/nano/metrics/mocks"
 )
 
 func TestReportJobsRetry(t *testing.T) {

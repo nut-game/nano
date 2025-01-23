@@ -26,10 +26,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/helpers"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/helpers"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 

@@ -26,8 +26,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/nut-game/nano/protos/test"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/protos/test"
 )
 
 type TestType struct {

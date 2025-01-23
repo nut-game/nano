@@ -4,21 +4,22 @@ build
 *.dll
 *.so
 *.dylib
+*.PID
 
 # Test binary, build with `go test -c`
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+.DS_Store
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
 .idea/
-.vscode/
-
-# macos
-.DS_Store
+vendor
+debug
+.vscode
 
 # vim temp files
 *.swp

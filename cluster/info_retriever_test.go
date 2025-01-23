@@ -3,9 +3,9 @@ package cluster
 import (
 	"testing"
 
+	"github.com/nut-game/nano/config"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/config"
 )
 
 func TestInfoRetrieverRegion(t *testing.T) {

@@ -23,9 +23,9 @@ package pitaya
 import (
 	"context"
 
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/protos"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/protos"
 )
 
 // SendKickToUsers sends kick to an user array

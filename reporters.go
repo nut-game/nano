@@ -1,10 +1,10 @@
 package pitaya
 
 import (
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	"github.com/topfreegames/pitaya/v2/metrics/models"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/metrics"
+	"github.com/nut-game/nano/metrics/models"
 )
 
 // CreatePrometheusReporter create a Prometheus reporter instance

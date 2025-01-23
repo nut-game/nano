@@ -25,13 +25,13 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/session"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"go.etcd.io/etcd/client/v3/namespace"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/session"
 )
 
 // ETCDBindingStorage module that uses etcd to keep in which frontend server each user is bound

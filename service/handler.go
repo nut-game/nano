@@ -30,28 +30,29 @@ import (
 	"time"
 
 	"github.com/nats-io/nuid"
+	"go.opentelemetry.io/otel/attribute"
 
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/pipeline"
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/pipeline"
 
-	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/topfreegames/pitaya/v2/agent"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/conn/codec"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/conn/packet"
-	"github.com/topfreegames/pitaya/v2/constants"
-	pcontext "github.com/topfreegames/pitaya/v2/context"
-	"github.com/topfreegames/pitaya/v2/docgenerator"
-	e "github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	"github.com/topfreegames/pitaya/v2/route"
-	"github.com/topfreegames/pitaya/v2/serialize"
-	"github.com/topfreegames/pitaya/v2/session"
-	"github.com/topfreegames/pitaya/v2/timer"
-	"github.com/topfreegames/pitaya/v2/tracing"
+	"github.com/nut-game/nano/agent"
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/conn/codec"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/conn/packet"
+	"github.com/nut-game/nano/constants"
+	pcontext "github.com/nut-game/nano/context"
+	"github.com/nut-game/nano/docgenerator"
+	e "github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/metrics"
+	"github.com/nut-game/nano/route"
+	"github.com/nut-game/nano/serialize"
+	"github.com/nut-game/nano/session"
+	"github.com/nut-game/nano/timer"
+	"github.com/nut-game/nano/tracing"
+
 )
 
 var (
@@ -294,14 +295,15 @@ func (h *HandlerService) processMessage(a agent.Agent, msg *message.Message) {
 	ctx := pcontext.AddToPropagateCtx(context.Background(), constants.StartTimeKey, time.Now().UnixNano())
 	ctx = pcontext.AddToPropagateCtx(ctx, constants.RouteKey, msg.Route)
 	ctx = pcontext.AddToPropagateCtx(ctx, constants.RequestIDKey, requestID)
-	tags := opentracing.Tags{
-		"local.id":   h.server.ID,
-		"span.kind":  "server",
-		"msg.type":   strings.ToLower(msg.Type.String()),
-		"user.id":    a.GetSession().UID(),
-		"request.id": requestID,
+
+	attributes := []attribute.KeyValue{
+		attribute.String("local.id", h.server.ID),
+		attribute.String("span.kind", "server"),
+		attribute.String("msg.type", strings.ToLower(msg.Type.String())),
+		attribute.String("user.id", a.GetSession().UID()),
+		attribute.String("request.id", requestID),
 	}
-	ctx = tracing.StartSpan(ctx, msg.Route, tags)
+	ctx, _ = tracing.StartSpan(ctx, msg.Route, attributes...)
 	ctx = context.WithValue(ctx, constants.SessionCtxKey, a.GetSession())
 
 	r, err := route.Decode(msg.Route)

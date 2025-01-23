@@ -20,7 +20,7 @@
 
 package codec
 
-import "github.com/topfreegames/pitaya/v2/conn/packet"
+import "github.com/nut-game/nano/conn/packet"
 
 // PacketEncoder interface
 type PacketEncoder interface {

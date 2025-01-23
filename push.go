@@ -21,11 +21,11 @@
 package pitaya
 
 import (
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/protos"
-	"github.com/topfreegames/pitaya/v2/util"
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/protos"
+	"github.com/nut-game/nano/util"
 )
 
 // SendPushToUsers sends a message to the given list of users

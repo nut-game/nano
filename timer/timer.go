@@ -25,7 +25,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/topfreegames/pitaya/v2/logger"
+	"github.com/nut-game/nano/logger"
 )
 
 var timerBacklog int

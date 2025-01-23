@@ -24,17 +24,17 @@ import (
 	"context"
 	"time"
 
-	"github.com/golang/protobuf/proto"
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/interfaces"
+	"github.com/nut-game/nano/metrics"
+	"github.com/nut-game/nano/router"
+	"github.com/nut-game/nano/session"
+	"github.com/nut-game/nano/worker"
 	"github.com/spf13/viper"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/interfaces"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	"github.com/topfreegames/pitaya/v2/router"
-	"github.com/topfreegames/pitaya/v2/session"
-	"github.com/topfreegames/pitaya/v2/worker"
+	"google.golang.org/protobuf/proto"
 )
 
 var DefaultApp Pitaya

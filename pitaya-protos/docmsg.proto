@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package protos;
+option go_package = ".;protos";
+
+message DocMsg {
+    bool getProtos = 1;
+}

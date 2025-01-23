@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/nut-game/nano/conn/packet"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/helpers"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/conn/packet"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/helpers"
 )
 
 var wsAcceptorTables = []struct {

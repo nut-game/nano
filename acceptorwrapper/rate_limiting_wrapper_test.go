@@ -24,9 +24,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/metrics"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/metrics"
 )
 
 func TestNewRateLimitingWrapper(t *testing.T) {

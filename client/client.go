@@ -32,18 +32,18 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/topfreegames/pitaya/v2/acceptor"
+	"github.com/nut-game/nano/acceptor"
 
 	"github.com/gorilla/websocket"
+	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano/conn/codec"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/conn/packet"
+	"github.com/nut-game/nano/logger"
+	logruswrapper "github.com/nut-game/nano/logger/logrus"
+	"github.com/nut-game/nano/session"
+	"github.com/nut-game/nano/util/compression"
 	"github.com/sirupsen/logrus"
-	"github.com/topfreegames/pitaya/v2"
-	"github.com/topfreegames/pitaya/v2/conn/codec"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/conn/packet"
-	"github.com/topfreegames/pitaya/v2/logger"
-	logruswrapper "github.com/topfreegames/pitaya/v2/logger/logrus"
-	"github.com/topfreegames/pitaya/v2/session"
-	"github.com/topfreegames/pitaya/v2/util/compression"
 )
 
 // HandshakeSys struct

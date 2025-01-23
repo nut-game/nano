@@ -8,16 +8,16 @@ import (
 
 	"strings"
 
-	"github.com/topfreegames/pitaya/v2"
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/examples/demo/cluster_grpc/services"
-	"github.com/topfreegames/pitaya/v2/groups"
-	"github.com/topfreegames/pitaya/v2/modules"
-	"github.com/topfreegames/pitaya/v2/route"
+	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/examples/demo/cluster_grpc/services"
+	"github.com/nut-game/nano/groups"
+	"github.com/nut-game/nano/modules"
+	"github.com/nut-game/nano/route"
 )
 
 var app pitaya.Pitaya

@@ -32,22 +32,22 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
-	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/constants"
+	e "github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/helpers"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/logger/logrus"
+	"github.com/nut-game/nano/route"
+	"github.com/nut-game/nano/router"
+	"github.com/nut-game/nano/session/mocks"
+	"github.com/nut-game/nano/timer"
+	"github.com/nut-game/nano/tracing"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/constants"
-	e "github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/helpers"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/logger/logrus"
-	"github.com/topfreegames/pitaya/v2/route"
-	"github.com/topfreegames/pitaya/v2/router"
-	"github.com/topfreegames/pitaya/v2/session/mocks"
-	"github.com/topfreegames/pitaya/v2/timer"
 )
 
 var (
@@ -406,11 +406,10 @@ func TestGetFromPropagateCtx(t *testing.T) {
 }
 
 func TestExtractSpan(t *testing.T) {
-	span := opentracing.StartSpan("op", opentracing.ChildOf(nil))
-	ctx := opentracing.ContextWithSpan(context.Background(), span)
+	ctx, span := tracing.StartSpan(context.TODO(), "op")
 	spanCtx, err := ExtractSpan(ctx)
 	assert.NoError(t, err)
-	assert.Equal(t, span.Context(), spanCtx)
+	assert.Equal(t, span.SpanContext(), spanCtx)
 }
 
 func TestDescriptor(t *testing.T) {

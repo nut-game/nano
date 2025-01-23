@@ -8,7 +8,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	protos "github.com/topfreegames/pitaya/v2/protos"
+	protos "github.com/topfreegames/pitaya/v3/pkg/protos"
 	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 )
@@ -118,6 +118,7 @@ func (mr *MockPitayaClientMockRecorder) SessionBindRemote(ctx, in interface{}, o
 
 // MockPitayaServer is a mock of PitayaServer interface.
 type MockPitayaServer struct {
+	protos.UnimplementedPitayaServer // 嵌入 UnimplementedPitayaServer
 	ctrl     *gomock.Controller
 	recorder *MockPitayaServerMockRecorder
 }

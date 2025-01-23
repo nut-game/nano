@@ -23,8 +23,8 @@ package client
 import (
 	"crypto/tls"
 
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/session"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/session"
 )
 
 // PitayaClient iface

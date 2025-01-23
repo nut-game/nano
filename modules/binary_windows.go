@@ -1,4 +1,5 @@
 //go:build windows
+
 // Copyright (c) TFG Co. All Rights Reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,8 +29,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/logger"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/logger"
 )
 
 // Binary is a pitaya module that starts a binary as a child process and

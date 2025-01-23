@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"strings"
 
+	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/examples/demo/custom_metrics/services"
 	"github.com/spf13/viper"
-	"github.com/topfreegames/pitaya/v2"
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/examples/demo/custom_metrics/services"
 )
 
 var app pitaya.Pitaya

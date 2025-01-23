@@ -25,7 +25,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/topfreegames/pitaya/v2/config"
+	"github.com/nut-game/nano/config"
 )
 
 var memoryGroupService *MemoryGroupService

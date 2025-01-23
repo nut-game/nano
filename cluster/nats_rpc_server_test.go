@@ -28,17 +28,17 @@ import (
 	"time"
 
 	"github.com/golang/mock/gomock"
-	"github.com/golang/protobuf/proto"
 	nats "github.com/nats-io/nats.go"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/helpers"
+	"github.com/nut-game/nano/metrics"
+	metricsmocks "github.com/nut-game/nano/metrics/mocks"
+	"github.com/nut-game/nano/protos"
+	protosmocks "github.com/nut-game/nano/protos/mocks"
+	sessionmocks "github.com/nut-game/nano/session/mocks"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/helpers"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	metricsmocks "github.com/topfreegames/pitaya/v2/metrics/mocks"
-	"github.com/topfreegames/pitaya/v2/protos"
-	protosmocks "github.com/topfreegames/pitaya/v2/protos/mocks"
-	sessionmocks "github.com/topfreegames/pitaya/v2/session/mocks"
+	"google.golang.org/protobuf/proto"
 )
 
 type funcPtrMatcher struct {

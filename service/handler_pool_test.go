@@ -29,16 +29,16 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/constants"
+	e "github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/pipeline"
+	"github.com/nut-game/nano/protos/test"
+	"github.com/nut-game/nano/route"
+	"github.com/nut-game/nano/serialize/mocks"
+	session_mocks "github.com/nut-game/nano/session/mocks"
 	"github.com/stretchr/testify/assert"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/constants"
-	e "github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/pipeline"
-	"github.com/topfreegames/pitaya/v2/protos/test"
-	"github.com/topfreegames/pitaya/v2/route"
-	"github.com/topfreegames/pitaya/v2/serialize/mocks"
-	session_mocks "github.com/topfreegames/pitaya/v2/session/mocks"
 )
 
 func TestGetHandlerExists(t *testing.T) {

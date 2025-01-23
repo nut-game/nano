@@ -6,14 +6,14 @@ import (
 	"strings"
 	"time"
 
+	pitaya "github.com/nut-game/nano"
+	"github.com/nut-game/nano/acceptor"
+	"github.com/nut-game/nano/acceptorwrapper"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/examples/demo/rate_limiting/services"
+	"github.com/nut-game/nano/metrics"
 	"github.com/spf13/viper"
-	"github.com/topfreegames/pitaya/v2"
-	"github.com/topfreegames/pitaya/v2/acceptor"
-	"github.com/topfreegames/pitaya/v2/acceptorwrapper"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/examples/demo/rate_limiting/services"
-	"github.com/topfreegames/pitaya/v2/metrics"
 )
 
 func createAcceptor(port int, reporters []metrics.Reporter) acceptor.Acceptor {

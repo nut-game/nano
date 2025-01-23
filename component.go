@@ -21,8 +21,8 @@
 package pitaya
 
 import (
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/logger"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/logger"
 )
 
 type regComp struct {

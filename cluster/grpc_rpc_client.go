@@ -27,19 +27,20 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/constants"
-	pcontext "github.com/topfreegames/pitaya/v2/context"
-	pitErrors "github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/interfaces"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	"github.com/topfreegames/pitaya/v2/protos"
-	"github.com/topfreegames/pitaya/v2/route"
-	"github.com/topfreegames/pitaya/v2/session"
-	"github.com/topfreegames/pitaya/v2/tracing"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/constants"
+	pcontext "github.com/nut-game/nano/context"
+	pitErrors "github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/interfaces"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/metrics"
+	"github.com/nut-game/nano/protos"
+	"github.com/nut-game/nano/route"
+	"github.com/nut-game/nano/session"
+	"github.com/nut-game/nano/tracing"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"google.golang.org/grpc"
 )
 
@@ -108,13 +109,15 @@ func (gs *GRPCClient) Call(
 	if err != nil {
 		logger.Log.Warnf("[grpc client] failed to retrieve parent span: %s", err.Error())
 	}
-	tags := opentracing.Tags{
-		"span.kind":       "client",
-		"local.id":        gs.server.ID,
-		"peer.serverType": server.Type,
-		"peer.id":         server.ID,
+	ctx = trace.ContextWithRemoteSpanContext(ctx, parent)
+
+	attributes := []attribute.KeyValue{
+		attribute.String("span.kind", "client"),
+		attribute.String("local.id", gs.server.ID),
+		attribute.String("peer.serverType", server.Type),
+		attribute.String("peer.id", server.ID),
 	}
-	ctx = tracing.StartSpan(ctx, "GRPC RPC Call", tags, parent)
+	ctx, _ = tracing.StartSpan(ctx, "GRPC RPC Call", attributes...)
 	defer tracing.FinishSpan(ctx, err)
 
 	if session != nil {

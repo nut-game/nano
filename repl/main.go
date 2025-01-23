@@ -18,21 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package jaeger
+package repl
 
 import (
-	"testing"
+	"sync"
 
-	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/stretchr/testify/assert"
-	j "github.com/uber/jaeger-client-go"
+	"github.com/topfreegames/pitaya/v3/pkg/client"
+	"github.com/topfreegames/pitaya/v3/pkg/session"
 )
 
-func TestConfigure(t *testing.T) {
-	closer, err := Configure(Options{ServiceName: "test-svc"})
-	assert.NoError(t, err)
-	tracer := opentracing.GlobalTracer()
-	assert.NotNil(t, tracer)
-	assert.IsType(t, &j.Tracer{}, tracer)
-	defer closer.Close()
+var (
+	pClient        client.PitayaClient
+	disconnectedCh chan bool
+	docsString     string
+	fileName       string
+	pushInfo       map[string]string
+	wait           sync.WaitGroup
+	prettyJSON     bool
+	handshake      *session.HandshakeData
+)
+
+func Start(docs, filename string, prettyJSON bool) {
+	docsString = docs
+	fileName = filename
+	prettyJSON = prettyJSON
+	handshake = &session.HandshakeData{
+		Sys: session.HandshakeClientData{
+			Platform:    "repl",
+			LibVersion:  "0.3.5-release",
+			BuildNumber: "20",
+			Version:     "1.0.0",
+		},
+		User: map[string]interface{}{
+			"client": "repl",
+		},
+	}
+
+	switch {
+	case fileName != "":
+		executeFromFile(fileName)
+	default:
+		repl()
+	}
 }

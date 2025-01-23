@@ -32,22 +32,25 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/topfreegames/pitaya/v2/config"
-	"github.com/topfreegames/pitaya/v2/conn/codec"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	"github.com/topfreegames/pitaya/v2/conn/packet"
-	"github.com/topfreegames/pitaya/v2/constants"
-	"github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/logger"
-	"github.com/topfreegames/pitaya/v2/metrics"
-	"github.com/topfreegames/pitaya/v2/protos"
-	"github.com/topfreegames/pitaya/v2/serialize"
-	"github.com/topfreegames/pitaya/v2/session"
-	"github.com/topfreegames/pitaya/v2/tracing"
-	"github.com/topfreegames/pitaya/v2/util"
-	"github.com/topfreegames/pitaya/v2/util/compression"
+	"github.com/nut-game/nano/config"
+	"github.com/nut-game/nano/conn/codec"
+	"github.com/nut-game/nano/conn/message"
+	"github.com/nut-game/nano/conn/packet"
+	"github.com/nut-game/nano/constants"
+	"github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/logger"
+	"github.com/nut-game/nano/metrics"
+	"github.com/nut-game/nano/protos"
+	"github.com/nut-game/nano/serialize"
+	"github.com/nut-game/nano/session"
+	"github.com/nut-game/nano/tracing"
+	"github.com/nut-game/nano/util"
+	"github.com/nut-game/nano/util/compression"
 
-	opentracing "github.com/opentracing/opentracing-go"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
+	"go.opentelemetry.io/otel/trace/noop"
 )
 
 var (
@@ -58,8 +61,6 @@ var (
 	// herd contains the handshake error response data
 	herd []byte
 	once sync.Once
-
-	noOpTracer = opentracing.NoopTracer{}
 )
 
 const handlerType = "handler"
@@ -558,38 +559,39 @@ func (a *agentImpl) write() {
 
 func (a *agentImpl) writeToConnection(ctx context.Context, data []byte) error {
 	span := createConnectionSpan(ctx, a.conn, "conn write")
-	defer span.Finish()
 
-	a.conn.SetWriteDeadline(time.Now().Add(a.writeTimeout))
-	_, writeErr := a.conn.Write(data)
-	if writeErr != nil {
-		tracing.LogError(span, writeErr.Error())
-		return writeErr
+        a.conn.SetWriteDeadline(time.Now().Add(a.writeTimeout))
+        _, writeErr := a.conn.Write(data)
+
+	if span != nil {
+		defer span.End()
+
+		if writeErr != nil {
+			span.RecordError(writeErr)
+			span.SetStatus(codes.Error, writeErr.Error())
+		}
 	}
+
 	return writeErr
 }
 
-func createConnectionSpan(ctx context.Context, conn net.Conn, op string) opentracing.Span {
+func createConnectionSpan(ctx context.Context, conn net.Conn, op string) trace.Span {
 	if ctx == nil {
-		return noOpTracer.StartSpan(op)
+		_, span := noop.NewTracerProvider().Tracer("noop").Start(context.TODO(), op)
+		return span
 	}
-
 	remoteAddress := ""
 	if conn.RemoteAddr() != nil {
 		remoteAddress = conn.RemoteAddr().String()
 	}
 
-	tags := opentracing.Tags{
-		"span.kind": "connection",
-		"addr":      remoteAddress,
+	attrs := []attribute.KeyValue{
+		attribute.String("span.kind", "connection"),
+		attribute.String("addr", remoteAddress),
 	}
 
-	var parent opentracing.SpanContext
-	if span := opentracing.SpanFromContext(ctx); span != nil {
-		parent = span.Context()
-	}
-
-	return opentracing.StartSpan(op, opentracing.ChildOf(parent), tags)
+	_, span := tracing.StartSpan(ctx, op, attrs...)
+	return span
 }
 
 // SendRequest sends a request to a server
@@ -607,9 +609,10 @@ func (a *agentImpl) AnswerWithError(ctx context.Context, mid uint, err error) {
 		}
 	}()
 	if ctx != nil && err != nil {
-		s := opentracing.SpanFromContext(ctx)
-		if s != nil {
-			tracing.LogError(s, err.Error())
+		span := trace.SpanFromContext(ctx)
+		if span.IsRecording() {
+			span.SetStatus(codes.Error, err.Error())
+			span.RecordError(err)
 		}
 	}
 	p, e := util.GetErrorPayload(a.serializer, err)

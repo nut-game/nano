@@ -29,26 +29,26 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/golang/protobuf/proto"
 	"github.com/google/uuid"
+	agentmocks "github.com/nut-game/nano/agent/mocks"
+	"github.com/nut-game/nano/cluster"
+	clustermocks "github.com/nut-game/nano/cluster/mocks"
+	"github.com/nut-game/nano/component"
+	"github.com/nut-game/nano/conn/codec"
+	"github.com/nut-game/nano/conn/message"
+	messagemocks "github.com/nut-game/nano/conn/message/mocks"
+	"github.com/nut-game/nano/constants"
+	e "github.com/nut-game/nano/errors"
+	"github.com/nut-game/nano/pipeline"
+	"github.com/nut-game/nano/protos"
+	"github.com/nut-game/nano/protos/test"
+	"github.com/nut-game/nano/route"
+	"github.com/nut-game/nano/router"
+	serializemocks "github.com/nut-game/nano/serialize/mocks"
+	"github.com/nut-game/nano/session"
+	sessionmocks "github.com/nut-game/nano/session/mocks"
 	"github.com/stretchr/testify/assert"
-	agentmocks "github.com/topfreegames/pitaya/v2/agent/mocks"
-	"github.com/topfreegames/pitaya/v2/cluster"
-	clustermocks "github.com/topfreegames/pitaya/v2/cluster/mocks"
-	"github.com/topfreegames/pitaya/v2/component"
-	"github.com/topfreegames/pitaya/v2/conn/codec"
-	"github.com/topfreegames/pitaya/v2/conn/message"
-	messagemocks "github.com/topfreegames/pitaya/v2/conn/message/mocks"
-	"github.com/topfreegames/pitaya/v2/constants"
-	e "github.com/topfreegames/pitaya/v2/errors"
-	"github.com/topfreegames/pitaya/v2/pipeline"
-	"github.com/topfreegames/pitaya/v2/protos"
-	"github.com/topfreegames/pitaya/v2/protos/test"
-	"github.com/topfreegames/pitaya/v2/route"
-	"github.com/topfreegames/pitaya/v2/router"
-	serializemocks "github.com/topfreegames/pitaya/v2/serialize/mocks"
-	"github.com/topfreegames/pitaya/v2/session"
-	sessionmocks "github.com/topfreegames/pitaya/v2/session/mocks"
+	"google.golang.org/protobuf/proto"
 )
 
 const ctxModifiedResponse = "response"
@@ -809,6 +809,8 @@ func TestRemoteServiceRPC(t *testing.T) {
 			err := svc.RPC(ctx, table.serverID, rt, table.reply, table.arg)
 			assert.Equal(t, table.err, err)
 			if table.reply != nil {
+				// We should consider dropping XXX_NoUnkeyedLiteral, XXX_unrecognized and XXX_sizecache from generated protobufs as this is unuseful overhead
+				//expected.XXX_sizecache = 0
 				assert.Equal(t, table.reply, expected)
 			}
 		})

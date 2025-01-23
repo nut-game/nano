@@ -23,8 +23,8 @@ package pitaya
 import (
 	"fmt"
 
-	"github.com/topfreegames/pitaya/v2/interfaces"
-	"github.com/topfreegames/pitaya/v2/logger"
+	"github.com/nut-game/nano/interfaces"
+	"github.com/nut-game/nano/logger"
 )
 
 type moduleWrapper struct {
