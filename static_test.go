@@ -39,8 +39,6 @@ import (
 	"github.com/nut-game/nano/mocks"
 	"github.com/nut-game/nano/session"
 	sessionmocks "github.com/nut-game/nano/session/mocks"
-	"github.com/nut-game/nano/worker"
-	workermocks "github.com/nut-game/nano/worker/mocks"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"

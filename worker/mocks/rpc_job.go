@@ -10,7 +10,7 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
-		protos "github.com/topfreegames/pitaya/v3/pkg/protos"
+	protos "github.com/nut-game/nano/protos"
 )
 
 // MockRPCJob is a mock of RPCJob interface.
