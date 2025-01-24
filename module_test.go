@@ -76,7 +76,7 @@ func TestGetModule(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, b, m)
 
-	m, err = app.GetModule("mmm")
+	_, err = app.GetModule("mmm")
 	assert.Error(t, err)
 }
 

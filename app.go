@@ -131,12 +131,12 @@ type Nano interface {
 
 // App is the base app struct
 type App struct {
-	acceptors         []acceptor.Acceptor
-	config            config.NanoConfig
-	debug             bool
-	dieChan           chan bool
-	heartbeat         time.Duration
-	onSessionBind     func(session.Session)
+	acceptors []acceptor.Acceptor
+	config    config.NanoConfig
+	debug     bool
+	dieChan   chan bool
+	heartbeat time.Duration
+	// onSessionBind     func(session.Session)
 	router            *router.Router
 	rpcClient         cluster.RPCClient
 	rpcServer         cluster.RPCServer
@@ -324,8 +324,8 @@ func (app *App) Start() {
 		app.running = false
 	}()
 
-	sg := make(chan os.Signal)
-	signal.Notify(sg, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGKILL, syscall.SIGTERM)
+	sg := make(chan os.Signal, 1)
+	signal.Notify(sg, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 
 	maxSessionCount := func() int64 {
 		count := app.sessionPool.GetSessionCount()
