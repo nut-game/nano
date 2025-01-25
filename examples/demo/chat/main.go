@@ -106,7 +106,7 @@ var app nano.Nano
 
 func main() {
 	conf := configApp()
-	builder := nano.NewDefaultBuilder(true, "chat", nano.Standalone, map[string]string{}, *conf)
+	builder := nano.NewDefaultBuilder(true, "chat", nano.Cluster, map[string]string{}, *conf)
 	builder.AddAcceptor(acceptor.NewWSAcceptor(":3250"))
 	builder.Groups = groups.NewMemoryGroupService(builder.Config.Groups.Memory)
 	app = builder.Build()
