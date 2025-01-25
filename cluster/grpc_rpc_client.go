@@ -80,7 +80,7 @@ func NewGRPCClient(
 
 type grpcClient struct {
 	address   string
-	cli       protos.PitayaClient
+	cli       protos.NanoClient
 	conn      *grpc.ClientConn
 	connected bool
 	lock      sync.Mutex
@@ -328,7 +328,7 @@ func (gc *grpcClient) connect() error {
 	if err != nil {
 		return err
 	}
-	c := protos.NewPitayaClient(conn)
+	c := protos.NewNanoClient(conn)
 	gc.cli = c
 	gc.conn = conn
 	gc.connected = true

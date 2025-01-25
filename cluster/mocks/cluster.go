@@ -77,17 +77,17 @@ func (mr *MockRPCServerMockRecorder) Init() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Init", reflect.TypeOf((*MockRPCServer)(nil).Init))
 }
 
-// SetPitayaServer mocks base method.
-func (m *MockRPCServer) SetPitayaServer(arg0 protos.PitayaServer) {
+// SetNanoServer mocks base method.
+func (m *MockRPCServer) SetNanoServer(arg0 protos.NanoServer) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetPitayaServer", arg0)
+	m.ctrl.Call(m, "SetNanoServer", arg0)
 }
 
-// SetPitayaServer indicates an expected call of SetPitayaServer.
-func (mr *MockRPCServerMockRecorder) SetPitayaServer(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetPitayaServer", reflect.TypeOf((*MockRPCServer)(nil).SetPitayaServer), arg0)
-}
+// SetNanoServer indicates an expected call of SetNanoServer.
+// func (mr *MockRPCServerMockRecorder) SetNanoServer(arg0 interface{}) *gomock.Call {
+// 	mr.mock.ctrl.T.Helper()
+// 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetNanoServer", reflect.TypeOf((*MockRPCServer)(nil).SetNanoServer), arg0)
+// }
 
 // Shutdown mocks base method.
 func (m *MockRPCServer) Shutdown() error {

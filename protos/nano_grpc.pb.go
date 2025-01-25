@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.3
-// source: pitaya.proto
+// source: nano.proto
 
 package protos
 
@@ -19,217 +19,217 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Pitaya_Call_FullMethodName              = "/protos.Pitaya/Call"
-	Pitaya_PushToUser_FullMethodName        = "/protos.Pitaya/PushToUser"
-	Pitaya_SessionBindRemote_FullMethodName = "/protos.Pitaya/SessionBindRemote"
-	Pitaya_KickUser_FullMethodName          = "/protos.Pitaya/KickUser"
+	Nano_Call_FullMethodName              = "/protos.Nano/Call"
+	Nano_PushToUser_FullMethodName        = "/protos.Nano/PushToUser"
+	Nano_SessionBindRemote_FullMethodName = "/protos.Nano/SessionBindRemote"
+	Nano_KickUser_FullMethodName          = "/protos.Nano/KickUser"
 )
 
-// PitayaClient is the client API for Pitaya service.
+// NanoClient is the client API for Nano service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type PitayaClient interface {
+type NanoClient interface {
 	Call(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 	PushToUser(ctx context.Context, in *Push, opts ...grpc.CallOption) (*Response, error)
 	SessionBindRemote(ctx context.Context, in *BindMsg, opts ...grpc.CallOption) (*Response, error)
 	KickUser(ctx context.Context, in *KickMsg, opts ...grpc.CallOption) (*KickAnswer, error)
 }
 
-type pitayaClient struct {
+type nanoClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewPitayaClient(cc grpc.ClientConnInterface) PitayaClient {
-	return &pitayaClient{cc}
+func NewNanoClient(cc grpc.ClientConnInterface) NanoClient {
+	return &nanoClient{cc}
 }
 
-func (c *pitayaClient) Call(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *nanoClient) Call(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, Pitaya_Call_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Nano_Call_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *pitayaClient) PushToUser(ctx context.Context, in *Push, opts ...grpc.CallOption) (*Response, error) {
+func (c *nanoClient) PushToUser(ctx context.Context, in *Push, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, Pitaya_PushToUser_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Nano_PushToUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *pitayaClient) SessionBindRemote(ctx context.Context, in *BindMsg, opts ...grpc.CallOption) (*Response, error) {
+func (c *nanoClient) SessionBindRemote(ctx context.Context, in *BindMsg, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, Pitaya_SessionBindRemote_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Nano_SessionBindRemote_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *pitayaClient) KickUser(ctx context.Context, in *KickMsg, opts ...grpc.CallOption) (*KickAnswer, error) {
+func (c *nanoClient) KickUser(ctx context.Context, in *KickMsg, opts ...grpc.CallOption) (*KickAnswer, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(KickAnswer)
-	err := c.cc.Invoke(ctx, Pitaya_KickUser_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Nano_KickUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// PitayaServer is the server API for Pitaya service.
-// All implementations must embed UnimplementedPitayaServer
+// NanoServer is the server API for Nano service.
+// All implementations must embed UnimplementedNanoServer
 // for forward compatibility.
-type PitayaServer interface {
+type NanoServer interface {
 	Call(context.Context, *Request) (*Response, error)
 	PushToUser(context.Context, *Push) (*Response, error)
 	SessionBindRemote(context.Context, *BindMsg) (*Response, error)
 	KickUser(context.Context, *KickMsg) (*KickAnswer, error)
-	mustEmbedUnimplementedPitayaServer()
+	mustEmbedUnimplementedNanoServer()
 }
 
-// UnimplementedPitayaServer must be embedded to have
+// UnimplementedNanoServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedPitayaServer struct{}
+type UnimplementedNanoServer struct{}
 
-func (UnimplementedPitayaServer) Call(context.Context, *Request) (*Response, error) {
+func (UnimplementedNanoServer) Call(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Call not implemented")
 }
-func (UnimplementedPitayaServer) PushToUser(context.Context, *Push) (*Response, error) {
+func (UnimplementedNanoServer) PushToUser(context.Context, *Push) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PushToUser not implemented")
 }
-func (UnimplementedPitayaServer) SessionBindRemote(context.Context, *BindMsg) (*Response, error) {
+func (UnimplementedNanoServer) SessionBindRemote(context.Context, *BindMsg) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SessionBindRemote not implemented")
 }
-func (UnimplementedPitayaServer) KickUser(context.Context, *KickMsg) (*KickAnswer, error) {
+func (UnimplementedNanoServer) KickUser(context.Context, *KickMsg) (*KickAnswer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method KickUser not implemented")
 }
-func (UnimplementedPitayaServer) mustEmbedUnimplementedPitayaServer() {}
-func (UnimplementedPitayaServer) testEmbeddedByValue()                {}
+func (UnimplementedNanoServer) mustEmbedUnimplementedNanoServer() {}
+func (UnimplementedNanoServer) testEmbeddedByValue()              {}
 
-// UnsafePitayaServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to PitayaServer will
+// UnsafeNanoServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to NanoServer will
 // result in compilation errors.
-type UnsafePitayaServer interface {
-	mustEmbedUnimplementedPitayaServer()
+type UnsafeNanoServer interface {
+	mustEmbedUnimplementedNanoServer()
 }
 
-func RegisterPitayaServer(s grpc.ServiceRegistrar, srv PitayaServer) {
-	// If the following call pancis, it indicates UnimplementedPitayaServer was
+func RegisterNanoServer(s grpc.ServiceRegistrar, srv NanoServer) {
+	// If the following call pancis, it indicates UnimplementedNanoServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Pitaya_ServiceDesc, srv)
+	s.RegisterService(&Nano_ServiceDesc, srv)
 }
 
-func _Pitaya_Call_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Nano_Call_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PitayaServer).Call(ctx, in)
+		return srv.(NanoServer).Call(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Pitaya_Call_FullMethodName,
+		FullMethod: Nano_Call_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PitayaServer).Call(ctx, req.(*Request))
+		return srv.(NanoServer).Call(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Pitaya_PushToUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Nano_PushToUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Push)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PitayaServer).PushToUser(ctx, in)
+		return srv.(NanoServer).PushToUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Pitaya_PushToUser_FullMethodName,
+		FullMethod: Nano_PushToUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PitayaServer).PushToUser(ctx, req.(*Push))
+		return srv.(NanoServer).PushToUser(ctx, req.(*Push))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Pitaya_SessionBindRemote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Nano_SessionBindRemote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BindMsg)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PitayaServer).SessionBindRemote(ctx, in)
+		return srv.(NanoServer).SessionBindRemote(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Pitaya_SessionBindRemote_FullMethodName,
+		FullMethod: Nano_SessionBindRemote_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PitayaServer).SessionBindRemote(ctx, req.(*BindMsg))
+		return srv.(NanoServer).SessionBindRemote(ctx, req.(*BindMsg))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Pitaya_KickUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Nano_KickUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(KickMsg)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PitayaServer).KickUser(ctx, in)
+		return srv.(NanoServer).KickUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Pitaya_KickUser_FullMethodName,
+		FullMethod: Nano_KickUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PitayaServer).KickUser(ctx, req.(*KickMsg))
+		return srv.(NanoServer).KickUser(ctx, req.(*KickMsg))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Pitaya_ServiceDesc is the grpc.ServiceDesc for Pitaya service.
+// Nano_ServiceDesc is the grpc.ServiceDesc for Nano service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Pitaya_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "protos.Pitaya",
-	HandlerType: (*PitayaServer)(nil),
+var Nano_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "protos.Nano",
+	HandlerType: (*NanoServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Call",
-			Handler:    _Pitaya_Call_Handler,
+			Handler:    _Nano_Call_Handler,
 		},
 		{
 			MethodName: "PushToUser",
-			Handler:    _Pitaya_PushToUser_Handler,
+			Handler:    _Nano_PushToUser_Handler,
 		},
 		{
 			MethodName: "SessionBindRemote",
-			Handler:    _Pitaya_SessionBindRemote_Handler,
+			Handler:    _Nano_SessionBindRemote_Handler,
 		},
 		{
 			MethodName: "KickUser",
-			Handler:    _Pitaya_KickUser_Handler,
+			Handler:    _Nano_KickUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "pitaya.proto",
+	Metadata: "nano.proto",
 }

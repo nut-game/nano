@@ -52,21 +52,21 @@ import (
 // RemoteService struct
 type RemoteService struct {
 	baseService
-	protos.UnimplementedPitayaServer // 嵌入 UnimplementedPitayaServer
-	rpcServer                        cluster.RPCServer
-	serviceDiscovery                 cluster.ServiceDiscovery
-	serializer                       serialize.Serializer
-	encoder                          codec.PacketEncoder
-	rpcClient                        cluster.RPCClient
-	services                         map[string]*component.Service // all registered service
-	router                           *router.Router
-	messageEncoder                   message.Encoder
-	server                           *cluster.Server // server obj
-	remoteBindingListeners           []cluster.RemoteBindingListener
-	remoteHooks                      *pipeline.RemoteHooks
-	sessionPool                      session.SessionPool
-	handlerPool                      *HandlerPool
-	remotes                          map[string]*component.Remote // all remote method
+	protos.UnimplementedNanoServer // 嵌入 UnimplementedNanoServer
+	rpcServer                      cluster.RPCServer
+	serviceDiscovery               cluster.ServiceDiscovery
+	serializer                     serialize.Serializer
+	encoder                        codec.PacketEncoder
+	rpcClient                      cluster.RPCClient
+	services                       map[string]*component.Service // all registered service
+	router                         *router.Router
+	messageEncoder                 message.Encoder
+	server                         *cluster.Server // server obj
+	remoteBindingListeners         []cluster.RemoteBindingListener
+	remoteHooks                    *pipeline.RemoteHooks
+	sessionPool                    session.SessionPool
+	handlerPool                    *HandlerPool
+	remotes                        map[string]*component.Remote // all remote method
 }
 
 // NewRemoteService creates and return a new RemoteService

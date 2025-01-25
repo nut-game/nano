@@ -118,7 +118,7 @@ func (mr *MockPitayaClientMockRecorder) SessionBindRemote(ctx, in interface{}, o
 
 // MockPitayaServer is a mock of PitayaServer interface.
 type MockPitayaServer struct {
-	protos.UnimplementedPitayaServer // 嵌入 UnimplementedPitayaServer
+	protos.UnimplementedNanoServer // 嵌入 UnimplementedPitayaServer
 	ctrl     *gomock.Controller
 	recorder *MockPitayaServerMockRecorder
 }

@@ -37,7 +37,7 @@ type GRPCServer struct {
 	port             int
 	metricsReporters []metrics.Reporter
 	grpcSv           *grpc.Server
-	nanoServer       protos.PitayaServer
+	nanoServer       protos.NanoServer
 }
 
 // NewGRPCServer constructor
@@ -58,13 +58,13 @@ func (gs *GRPCServer) Init() error {
 		return err
 	}
 	gs.grpcSv = grpc.NewServer()
-	protos.RegisterPitayaServer(gs.grpcSv, gs.nanoServer)
+	protos.RegisterNanoServer(gs.grpcSv, gs.nanoServer)
 	go gs.grpcSv.Serve(lis)
 	return nil
 }
 
 // SetNanoServer sets the nano server
-func (gs *GRPCServer) SetNanoServer(ps protos.PitayaServer) {
+func (gs *GRPCServer) SetNanoServer(ps protos.NanoServer) {
 	gs.nanoServer = ps
 }
 

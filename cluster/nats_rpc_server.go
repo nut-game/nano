@@ -59,7 +59,7 @@ type NatsRPCServer struct {
 	userKickCh             chan *protos.KickMsg
 	sub                    *nats.Subscription
 	dropped                int
-	nanoServer             protos.PitayaServer
+	nanoServer             protos.NanoServer
 	metricsReporters       []metrics.Reporter
 	sessionPool            session.SessionPool
 	appDieChan             chan bool
@@ -166,7 +166,7 @@ func (ns *NatsRPCServer) onSessionBind(ctx context.Context, s session.Session) e
 }
 
 // SetNanoServer sets the nano server
-func (ns *NatsRPCServer) SetNanoServer(ps protos.PitayaServer) {
+func (ns *NatsRPCServer) SetNanoServer(ps protos.NanoServer) {
 	ns.nanoServer = ps
 }
 

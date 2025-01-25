@@ -15,7 +15,7 @@ import (
 
 // MockRPCJob is a mock of RPCJob interface.
 type MockRPCJob struct {
-	protos.UnimplementedPitayaServer // 嵌入 UnimplementedPitayaServer
+	protos.UnimplementedNanoServer // 嵌入 UnimplementedNanoServer
 	ctrl     *gomock.Controller
 	recorder *MockRPCJobMockRecorder
 }

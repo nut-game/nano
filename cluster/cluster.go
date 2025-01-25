@@ -36,7 +36,7 @@ import (
 
 // RPCServer interface
 type RPCServer interface {
-	SetNanoServer(protos.PitayaServer)
+	SetNanoServer(protos.NanoServer)
 	interfaces.Module
 }
 
