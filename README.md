@@ -46,6 +46,7 @@ make setup
 Here's one example of running nano:
 
 Start etcd (This command requires docker-compose and will run an etcd container locally. An etcd may be run without docker if preferred.)
+
 ```
 cd ./examples/testing && docker compose up -d etcd
 ```
@@ -60,9 +61,9 @@ make run-cluster-grpc-example-room
 
 Now there should be 2 nano servers running, a frontend connector and a backend room. To send requests, use a REPL client for nano [pitaya-cli](https://github.com/topfreegames/pitaya/tree/main/pitaya-cli).
 
-```
-$ pitaya-cli
-Pitaya REPL Client
+```bash
+$ nano-cli
+Nano REPL Client
 >>> connect localhost:3250
 connected!
 >>> request room.room.entry
@@ -70,41 +71,39 @@ connected!
 ```
 
 ## Running the tests
-```
+
+```bash
 make test
 ```
+
 This command will run both unit and e2e tests.
 
-## Contributing
-#TODO
 
 ## Authors
+
 * **TFG Co** - Initial work
 
 ## License
+
 [MIT License](./LICENSE)
 
 ## Acknowledgements
+
 * [nano](https://github.com/lonnng/nano) authors for building the framework pitaya is based on.
 * [pomelo](https://github.com/NetEase/pomelo) authors for the inspiration on the distributed design and protocol
 
 ## Security
+
 If you have found a security vulnerability, please email security@tfgco.com
 
 ## Resources
-- Other pitaya-related projects
-  + [libpitaya-cluster](https://github.com/topfreegames/libpitaya-cluster)
-  + [libpitaya](https://github.com/topfreegames/libpitaya)
-  + [pitaya-admin](https://github.com/topfreegames/pitaya-admin)
-  + [pitaya-bot](https://github.com/topfreegames/pitaya-bot)
-  + [pitaya-cli](https://github.com/topfreegames/pitaya/tree/main/pitaya-cli)
-  + [pitaya-protos](https://github.com/topfreegames/pitaya-protos)
+
+- Other nano-related projects
+  + [nano-admin](https://github.com/topfreegames/pitaya-admin)
+  + [nano-cli](https://github.com/nut-game/nano-cli)
 
 - Documents
-  + [API Reference](https://godoc.org/github.com/topfreegames/pitaya)
-  + [In-depth documentation](https://pitaya.readthedocs.io/en/latest/)
+  + [API Reference](https://godoc.org/github.com/nut-game/nano)
 
 - Demo
-  + [Implement a chat room in ~100 lines with pitaya and WebSocket](./examples/demo/chat) (adapted from [nano](https://github.com/lonnng/nano)'s example)
-  + [Pitaya cluster mode example](./examples/demo/cluster)
-  + [Pitaya cluster mode with protobuf protocol example](./examples/demo/cluster_protobuf)
+  + [nano cluster mode example](./examples/demo/cluster)

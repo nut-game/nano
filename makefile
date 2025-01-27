@@ -39,23 +39,11 @@ run-jaeger-aio:
 run-chat-example:
 	@cd examples/testing && docker compose up -d etcd nats && cd ../demo/chat/ && go run main.go
 
-run-cluster-example-frontend-tracing:
-	@NANO_METRICS_PROMETHEUS_PORT=9090 OTEL_SDK_DISABLED=false OTEL_SERVICE_NAME=example-frontend OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 OTEL_EXPORTER_OTLP_PROTOCOL=grpc OTEL_TRACES_SAMPLER=parentbased_traceidratio OTEL_TRACES_SAMPLER_ARG="1" go run examples/demo/cluster/main.go
+run-cluster-demo-frontend:
+	@go run examples/demo/cluster/main.go
 
-run-cluster-example-backend-tracing:
-	@NANO_METRICS_PROMETHEUS_PORT=9091 OTEL_SDK_DISABLED=false OTEL_SERVICE_NAME=example-backend OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 OTEL_EXPORTER_OTLP_PROTOCOL=grpc OTEL_TRACES_SAMPLER=parentbased_traceidratio OTEL_TRACES_SAMPLER_ARG="1" go run examples/demo/cluster/main.go --port 3251 --type room --frontend=false
-
-run-cluster-example-frontend:
-	@NANO_METRICS_PROMETHEUS_PORT=9090 go run examples/demo/cluster/main.go
-
-run-cluster-protobuf-frontend-example:
-	@cd examples/demo/cluster_protobuf && go run main.go
-
-run-cluster-protobuf-backend-example:
-	@cd examples/demo/cluster_protobuf && go run main.go --port 3251 --type room --frontend=false
-
-run-cluster-example-backend:
-	@NANO_METRICS_PROMETHEUS_PORT=9091 go run examples/demo/cluster/main.go --port 3251 --type room --frontend=false
+run-cluster-demo-backend:
+	@go run examples/demo/cluster/main.go --port 3251 --type room --frontend=false
 
 run-cluster-grpc-example-connector:
 	@cd examples/demo/cluster_grpc && go run main.go
