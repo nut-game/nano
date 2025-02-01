@@ -172,13 +172,12 @@ func CtxWithDefaultLogger(ctx context.Context, route, userID string) context.Con
 	} else {
 		requestID = nuid.New()
 	}
-	defaultLogger := logger.Log.WithFields(
-		map[string]interface{}{
-			"route":     route,
-			"requestId": requestID,
-			"userId":    userID,
-		},
-	)
+	defaultLogger := logger.Log
+
+	// log with fields
+	// "route":     route,
+	// "requestId": requestID,
+	// "userId":    userID,
 
 	return context.WithValue(ctx, constants.LoggerCtxKey, defaultLogger)
 }

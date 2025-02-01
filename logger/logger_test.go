@@ -28,7 +28,6 @@ import (
 )
 
 func TestInitLogger(t *testing.T) {
-	initLogger()
 	assert.NotNil(t, Log)
 }
 

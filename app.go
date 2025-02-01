@@ -419,7 +419,7 @@ func (app *App) listen() {
 
 	app.startModules()
 
-	logger.Log.Info("all modules started!")
+	logger.Info("all modules started!")
 
 	app.running = true
 }
