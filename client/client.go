@@ -210,7 +210,7 @@ func (c *Client) pendingRequestsReaper() {
 			toDelete := make([]*pendingRequest, 0)
 			c.pendingReqMutex.Lock()
 			for _, v := range c.pendingRequests {
-				if time.Now().Sub(v.sentAt) > c.requestTimeout {
+				if time.Since(v.sentAt) > c.requestTimeout {
 					toDelete = append(toDelete, v)
 				}
 			}
