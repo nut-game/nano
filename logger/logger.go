@@ -22,27 +22,66 @@ package logger
 
 import (
 	"github.com/nut-game/nano/logger/interfaces"
-	logruswrapper "github.com/nut-game/nano/logger/logrus"
-	"github.com/sirupsen/logrus"
+	"github.com/nut-game/nano/logger/slog"
+)
+
+var (
+	Fatal   func(v ...interface{})
+	Fatalf  func(format string, v ...interface{})
+	Fatalln func(v ...interface{})
+
+	Debug   func(v ...interface{})
+	Debugf  func(format string, v ...interface{})
+	Debugln func(v ...interface{})
+
+	Error   func(v ...interface{})
+	Errorf  func(format string, v ...interface{})
+	Errorln func(v ...interface{})
+
+	Info   func(v ...interface{})
+	Infof  func(format string, v ...interface{})
+	Infoln func(v ...interface{})
+
+	Warn   func(v ...interface{})
+	Warnf  func(format string, v ...interface{})
+	Warnln func(v ...interface{})
 )
 
 // Log is the default logger
-var Log = initLogger()
+var Log interfaces.Logger
 
-func initLogger() interfaces.Logger {
-	plog := logrus.New()
-	plog.Formatter = new(logrus.TextFormatter)
-	plog.Level = logrus.DebugLevel
+func init() {
+	logger := slog.New()
 
-	log := plog.WithFields(logrus.Fields{
-		"source": "nano",
-	})
-	return logruswrapper.NewWithFieldLogger(log)
+	SetLogger(logger)
 }
 
 // SetLogger rewrites the default logger
-func SetLogger(l interfaces.Logger) {
-	if l != nil {
-		Log = l
+func SetLogger(logger interfaces.Logger) {
+	if logger == nil {
+		return
 	}
+
+	Log = logger
+
+	Fatal = logger.Fatal
+	Fatalf = logger.Fatalf
+	Fatalln = logger.Fatal
+
+	Debug = logger.Debug
+	Debugf = logger.Debugf
+	Debugln = logger.Debug
+
+	Error = logger.Error
+	Errorf = logger.Errorf
+	Errorln = logger.Error
+
+	Info = logger.Info
+	Infof = logger.Infof
+	Infoln = logger.Info
+
+	Warn = logger.Warn
+	Warnf = logger.Warnf
+	Warnln = logger.Warn
+
 }

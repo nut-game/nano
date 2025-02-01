@@ -39,10 +39,10 @@ run-jaeger-aio:
 run-chat-example:
 	@cd examples/testing && docker compose up -d etcd nats && cd ../demo/chat/ && go run main.go
 
-run-cluster-demo-frontend:
+run-demo-cluster-frontend:
 	@go run examples/demo/cluster/main.go
 
-run-cluster-demo-backend:
+run-demo-cluster-backend:
 	@go run examples/demo/cluster/main.go --port 3251 --type room --frontend=false
 
 run-cluster-grpc-example-connector:

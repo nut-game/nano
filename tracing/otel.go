@@ -69,5 +69,5 @@ func printOtelConfig() {
 		config = append(config, fmt.Sprintf("%s=%s", v, value))
 	}
 
-	logger.Log.Info(fmt.Sprintf("OpenTelemetry Configuration: %s", strings.Join(config, ", ")))
+	logger.Info(fmt.Sprintf("OpenTelemetry Configuration: %s", strings.Join(config, ", ")))
 }
