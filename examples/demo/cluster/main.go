@@ -34,7 +34,7 @@ func configureBackend() {
 	)
 }
 
-func configureFrontend(port int) {
+func configureFrontend() {
 	app.Register(services.NewConnector(app),
 		component.WithName("connector"),
 		component.WithNameFunc(strings.ToLower),
@@ -104,7 +104,7 @@ func main() {
 	if !*isFrontend {
 		configureBackend()
 	} else {
-		configureFrontend(*port)
+		configureFrontend()
 	}
 
 	app.Start()

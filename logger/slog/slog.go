@@ -40,7 +40,7 @@ func (l *slogImpl) Warnln(args ...interface{}) {
 func New() interfaces.Logger {
 	level := slog.LevelInfo
 	// todo 目前没有处理With相关的，加了也没有用。
-	logger := slog.New(NewPrettyHandler(os.Stdout, level)).With("a", "b")
+	logger := slog.New(NewPrettyHandler(os.Stdout, level))
 	return &slogImpl{Logger: logger}
 }
 

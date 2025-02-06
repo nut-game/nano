@@ -10,12 +10,12 @@ import (
 )
 
 type PrettyHandler struct {
-	h slog.Handler
+	slog.Handler
 	o io.Writer
 }
 
 func (h *PrettyHandler) Enabled(ctx context.Context, level slog.Level) bool {
-	return h.h.Enabled(ctx, level)
+	return h.Handler.Enabled(ctx, level)
 }
 
 func (h *PrettyHandler) Handle(ctx context.Context, r slog.Record) error {
@@ -75,7 +75,7 @@ func (h *PrettyHandler) WithGroup(name string) slog.Handler {
 
 func NewPrettyHandler(out io.Writer, level slog.Level) *PrettyHandler {
 	return &PrettyHandler{
-		o: out,
-		h: slog.NewTextHandler(out, &slog.HandlerOptions{Level: level}),
+		Handler: slog.NewTextHandler(out, &slog.HandlerOptions{Level: level}),
+		o:       out,
 	}
 }

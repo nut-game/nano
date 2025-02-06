@@ -103,7 +103,7 @@ func (s *Service) ExtractHandler() error {
 	if len(s.Handlers) == 0 {
 		str := ""
 		// To help the user, see if a pointer receiver would work.
-		method := suitableHandlerMethods(reflect.PtrTo(s.Type), s.Options.nameFunc)
+		method := suitableHandlerMethods(reflect.PointerTo(s.Type), s.Options.nameFunc)
 		if len(method) != 0 {
 			str = "type " + s.Name + " has no exported methods of handler type (hint: pass a pointer to value of that type)"
 		} else {
@@ -140,7 +140,7 @@ func (s *Service) ExtractRemote() error {
 	if len(s.Remotes) == 0 {
 		str := ""
 		// To help the user, see if a pointer receiver would work.
-		method := suitableRemoteMethods(reflect.PtrTo(s.Type), s.Options.nameFunc)
+		method := suitableRemoteMethods(reflect.PointerTo(s.Type), s.Options.nameFunc)
 		if len(method) != 0 {
 			str = "type " + s.Name + " has no exported methods of remote type (hint: pass a pointer to value of that type)"
 		} else {
