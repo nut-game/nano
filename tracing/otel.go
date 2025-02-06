@@ -45,7 +45,7 @@ func InitializeOtel() error {
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
-	logger.Log.Info("OpenTelemetry initialized using environment variables")
+	logger.Info("OpenTelemetry initialized using environment variables")
 	return nil
 }
 

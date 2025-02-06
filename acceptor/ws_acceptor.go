@@ -98,13 +98,13 @@ type connHandler struct {
 func (h *connHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	conn, err := h.upgrader.Upgrade(rw, r, nil)
 	if err != nil {
-		logger.Log.Errorf("Upgrade failure, URI=%s, Error=%s", r.RequestURI, err.Error())
+		logger.Errorf("Upgrade failure, URI=%s, Error=%s", r.RequestURI, err.Error())
 		return
 	}
 
 	c, err := NewWSConn(conn)
 	if err != nil {
-		logger.Log.Errorf("Failed to create new ws connection: %s", err.Error())
+		logger.Errorf("Failed to create new ws connection: %s", err.Error())
 		return
 	}
 	h.connChan <- c
@@ -131,7 +131,7 @@ func (w *WSAcceptor) ListenAndServe() {
 
 	listener, err := net.Listen("tcp", w.addr)
 	if err != nil {
-		logger.Log.Fatalf("Failed to listen: %s", err.Error())
+		logger.Fatalf("Failed to listen: %s", err.Error())
 	}
 	w.listener = listener
 	w.running = true
@@ -147,13 +147,13 @@ func (w *WSAcceptor) ListenAndServeTLS(cert, key string) {
 
 	crt, err := tls.LoadX509KeyPair(cert, key)
 	if err != nil {
-		logger.Log.Fatalf("Failed to load x509: %s", err.Error())
+		logger.Fatalf("Failed to load x509: %s", err.Error())
 	}
 
 	tlsCfg := &tls.Config{Certificates: []tls.Certificate{crt}}
 	listener, err := tls.Listen("tcp", w.addr, tlsCfg)
 	if err != nil {
-		logger.Log.Fatalf("Failed to listen: %s", err.Error())
+		logger.Fatalf("Failed to listen: %s", err.Error())
 	}
 	w.listener = listener
 	w.serve(&upgrader)
@@ -173,7 +173,7 @@ func (w *WSAcceptor) Stop() {
 	w.running = false
 	err := w.listener.Close()
 	if err != nil {
-		logger.Log.Errorf("Failed to stop: %s", err.Error())
+		logger.Errorf("Failed to stop: %s", err.Error())
 	}
 }
 

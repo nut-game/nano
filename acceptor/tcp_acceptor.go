@@ -143,7 +143,7 @@ func (a *TCPAcceptor) ListenAndServeTLS(cert, key string) {
 
 	crt, err := tls.LoadX509KeyPair(cert, key)
 	if err != nil {
-		logger.Log.Fatalf("Failed to listen: %s", err.Error())
+		logger.Fatalf("Failed to listen: %s", err.Error())
 	}
 
 	a.certs = append(a.certs, crt)
@@ -158,7 +158,7 @@ func (a *TCPAcceptor) createBaseListener() net.Listener {
 	// Create raw listener
 	baseListener, err := net.Listen("tcp", a.addr)
 	if err != nil {
-		logger.Log.Fatalf("Failed to listen: %s", err.Error())
+		logger.Fatalf("Failed to listen: %s", err.Error())
 	}
 
 	// Wrap listener in ProxyProto
@@ -185,7 +185,7 @@ func (a *TCPAcceptor) serve() {
 	for a.running {
 		conn, err := a.listener.Accept()
 		if err != nil {
-			logger.Log.Errorf("Failed to accept TCP connection: %s", err.Error())
+			logger.Errorf("Failed to accept TCP connection: %s", err.Error())
 			continue
 		}
 

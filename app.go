@@ -289,11 +289,11 @@ func (app *App) periodicMetrics() {
 // Start starts the app
 func (app *App) Start() {
 	if !app.server.Frontend && len(app.acceptors) > 0 {
-		logger.Log.Fatal("acceptors are not allowed on backend servers")
+		logger.Fatal("acceptors are not allowed on backend servers")
 	}
 
 	if app.server.Frontend && len(app.acceptors) == 0 {
-		logger.Log.Fatal("frontend servers should have at least one configured acceptor")
+		logger.Fatal("frontend servers should have at least one configured acceptor")
 	}
 
 	if app.serverMode == Cluster {
@@ -302,16 +302,16 @@ func (app *App) Start() {
 		}
 
 		if err := app.RegisterModuleBefore(app.rpcServer, "rpcServer"); err != nil {
-			logger.Log.Fatal("failed to register rpc server module: %s", err.Error())
+			logger.Fatal("failed to register rpc server module: %s", err.Error())
 		}
 		if err := app.RegisterModuleBefore(app.rpcClient, "rpcClient"); err != nil {
-			logger.Log.Fatal("failed to register rpc client module: %s", err.Error())
+			logger.Fatal("failed to register rpc client module: %s", err.Error())
 		}
 		// set the service discovery as the last module to be started to ensure
 		// all modules have been properly initialized before the server starts
 		// receiving requests from other nano servers
 		if err := app.RegisterModuleAfter(app.serviceDiscovery, "serviceDiscovery"); err != nil {
-			logger.Log.Fatal("failed to register service discovery module: %s", err.Error())
+			logger.Fatal("failed to register service discovery module: %s", err.Error())
 		}
 	}
 
@@ -339,38 +339,38 @@ func (app *App) Start() {
 	// stop server
 	select {
 	case <-app.dieChan:
-		logger.Log.Warn("the app will shutdown in a few seconds")
+		logger.Warn("the app will shutdown in a few seconds")
 	case s := <-sg:
-		logger.Log.Warn("got signal: ", s, ", shutting down...")
+		logger.Warn("got signal: ", s, ", shutting down...")
 		if app.config.Session.Drain.Enabled && s == syscall.SIGTERM {
-			logger.Log.Info("Session drain is enabled, draining all sessions before shutting down")
+			logger.Info("Session drain is enabled, draining all sessions before shutting down")
 			timeoutTimer := time.NewTimer(app.config.Session.Drain.Timeout)
 			app.startModuleSessionDraining()
 		loop:
 			for {
 				if maxSessionCount() == 0 {
-					logger.Log.Info("All sessions drained")
+					logger.Info("All sessions drained")
 					break loop
 				}
 				select {
 				case s := <-sg:
-					logger.Log.Warn("got signal: ", s)
+					logger.Warn("got signal: ", s)
 					if s == syscall.SIGINT {
-						logger.Log.Warnf("Bypassing session draing due to SIGINT. %d sessions will be immediately terminated", maxSessionCount())
+						logger.Warnf("Bypassing session draing due to SIGINT. %d sessions will be immediately terminated", maxSessionCount())
 					}
 					break loop
 				case <-timeoutTimer.C:
-					logger.Log.Warnf("Session drain has reached maximum timeout. %d sessions will be immediately terminated", maxSessionCount())
+					logger.Warnf("Session drain has reached maximum timeout. %d sessions will be immediately terminated", maxSessionCount())
 					break loop
 				case <-time.After(app.config.Session.Drain.Period):
-					logger.Log.Infof("Waiting for all sessions to finish: %d sessions remaining...", maxSessionCount())
+					logger.Infof("Waiting for all sessions to finish: %d sessions remaining...", maxSessionCount())
 				}
 			}
 		}
 		close(app.dieChan)
 	}
 
-	logger.Log.Warn("server is stopping...")
+	logger.Warn("server is stopping...")
 
 	app.sessionPool.CloseAll()
 	app.shutdownModules()
@@ -383,7 +383,7 @@ func (app *App) listen() {
 	// by SetTimerPrecision
 	timer.GlobalTicker = time.NewTicker(timer.Precision)
 
-	logger.Log.Infof("starting server %s:%s", app.server.Type, app.server.ID)
+	logger.Infof("starting server %s:%s", app.server.Type, app.server.ID)
 	for i := 0; i < app.config.Concurrency.Handler.Dispatch; i++ {
 		go app.handlerService.Dispatch(i)
 	}
@@ -395,20 +395,20 @@ func (app *App) listen() {
 			}
 		}()
 		if app.config.Acceptor.ProxyProtocol {
-			logger.Log.Info("Enabling PROXY protocol for inbound connections")
+			logger.Info("Enabling PROXY protocol for inbound connections")
 			a.EnableProxyProtocol()
 		} else {
-			logger.Log.Debug("PROXY protocol is disabled for inbound connections")
+			logger.Debug("PROXY protocol is disabled for inbound connections")
 		}
 		go func() {
 			a.ListenAndServe()
 		}()
-		logger.Log.Infof("Waiting for Acceptor %s to start on addr %s", reflect.TypeOf(a), a.GetConfiguredAddress())
+		logger.Infof("Waiting for Acceptor %s to start on addr %s", reflect.TypeOf(a), a.GetConfiguredAddress())
 
 		for !a.IsRunning() {
 		}
 
-		logger.Log.Infof("Acceptor %s on addr %s is now accepting connections", reflect.TypeOf(a), a.GetAddr())
+		logger.Infof("Acceptor %s on addr %s is now accepting connections", reflect.TypeOf(a), a.GetAddr())
 	}
 
 	if app.serverMode == Cluster && app.server.Frontend && app.config.Session.Unique {
@@ -466,7 +466,7 @@ func Error(err error, code string, metadata ...map[string]string) *errors.Error 
 func (app *App) GetSessionFromCtx(ctx context.Context) session.Session {
 	sessionVal := ctx.Value(constants.SessionCtxKey)
 	if sessionVal == nil {
-		logger.Log.Debug("ctx doesn't contain a session, are you calling GetSessionFromCtx from inside a remote?")
+		logger.Debug("ctx doesn't contain a session, are you calling GetSessionFromCtx from inside a remote?")
 		return nil
 	}
 	return sessionVal.(session.Session)

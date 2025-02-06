@@ -280,7 +280,7 @@ func (pool *sessionPoolImpl) OnSessionClose(f func(s Session)) {
 
 // CloseAll calls Close on all sessions
 func (pool *sessionPoolImpl) CloseAll() {
-	logger.Log.Infof("closing all sessions, %d sessions", pool.SessionCount)
+	logger.Infof("closing all sessions, %d sessions", pool.SessionCount)
 	for pool.SessionCount > 0 {
 		pool.sessionsByID.Range(func(_, value interface{}) bool {
 			s := value.(Session)
@@ -288,7 +288,7 @@ func (pool *sessionPoolImpl) CloseAll() {
 				reqsInFlight := s.GetRequestsInFlight()
 				reqsInFlight.mu.RLock()
 				for _, route := range reqsInFlight.m {
-					logger.Log.Debugf("Session for user %s is waiting on a response for route %s from a remote server. Delaying session close.", s.UID(), route)
+					logger.Debugf("Session for user %s is waiting on a response for route %s from a remote server. Delaying session close.", s.UID(), route)
 				}
 				reqsInFlight.mu.RUnlock()
 				return false
@@ -297,12 +297,12 @@ func (pool *sessionPoolImpl) CloseAll() {
 				return true
 			}
 		})
-		logger.Log.Debugf("%d sessions remaining", pool.SessionCount)
+		logger.Debugf("%d sessions remaining", pool.SessionCount)
 		if pool.SessionCount > 0 {
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
-	logger.Log.Info("finished closing sessions")
+	logger.Info("finished closing sessions")
 }
 
 // AddHandshakeValidator allows adds validation functions that will run when
@@ -449,7 +449,7 @@ func (s *sessionImpl) Bind(ctx context.Context, uid string) error {
 		// is not the frontend server that received the user request
 		err := s.bindInFront(ctx)
 		if err != nil {
-			logger.Log.Error("error while trying to push session to front: ", err)
+			logger.Error("error while trying to push session to front: ", err)
 			s.uid = ""
 			return err
 		}
@@ -503,9 +503,9 @@ func (s *sessionImpl) Close() {
 		for _, sub := range s.Subscriptions {
 			err := sub.Drain()
 			if err != nil {
-				logger.Log.Errorf("error unsubscribing to user's messages channel: %s, this can cause performance and leak issues", err.Error())
+				logger.Errorf("error unsubscribing to user's messages channel: %s, this can cause performance and leak issues", err.Error())
 			} else {
-				logger.Log.Debugf("successfully unsubscribed to user's %s messages channel", s.UID())
+				logger.Debugf("successfully unsubscribed to user's %s messages channel", s.UID())
 			}
 		}
 	}
@@ -851,7 +851,7 @@ func (s *sessionImpl) sendRequestToFront(ctx context.Context, route string, incl
 	if err != nil {
 		return err
 	}
-	logger.Log.Debugf("%s Got response: %+v", route, res)
+	logger.Debugf("%s Got response: %+v", route, res)
 	return nil
 }
 

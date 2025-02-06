@@ -331,7 +331,7 @@ func getPrometheusReporter(
 		go (func() {
 			err := http.ListenAndServe(fmt.Sprintf(":%d", config.Prometheus.Port), nil)
 			if err != nil {
-				logger.Log.Error("prometheus reporter serve start failed, err: ", err)
+				logger.Error("prometheus reporter serve start failed, err: ", err)
 			}
 		})()
 	})

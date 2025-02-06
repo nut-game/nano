@@ -43,7 +43,7 @@ func NewAPIDocsGen(basePath string, services []*component.Service) *APIDocsGen {
 // Init is called on init method
 func (a *APIDocsGen) Init() error {
 	for _, s := range a.services {
-		logger.Log.Infof("loaded svc: %s", s.Name)
+		logger.Infof("loaded svc: %s", s.Name)
 	}
 	return nil
 }

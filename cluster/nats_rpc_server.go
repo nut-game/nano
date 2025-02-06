@@ -180,7 +180,7 @@ func (ns *NatsRPCServer) subscribeToUserKickChannel(uid string, svType string) (
 		kick := &protos.KickMsg{}
 		err := proto.Unmarshal(msg.Data, kick)
 		if err != nil {
-			logger.Log.Error("error unrmarshalling push: ", err.Error())
+			logger.Error("error unrmarshalling push: ", err.Error())
 		}
 		ns.userKickCh <- kick
 	})
@@ -192,7 +192,7 @@ func (ns *NatsRPCServer) subscribeToUserMessages(uid string, svType string) (*na
 		push := &protos.Push{}
 		err := proto.Unmarshal(msg.Data, push)
 		if err != nil {
-			logger.Log.Error("error unmarshalling push:", err.Error())
+			logger.Error("error unmarshalling push:", err.Error())
 		}
 		ns.userPushCh <- push
 	})
@@ -216,21 +216,21 @@ func (ns *NatsRPCServer) handleMessages() {
 			ns.reportMetrics()
 			dropped, err := ns.sub.Dropped()
 			if err != nil {
-				logger.Log.Errorf("error getting number of dropped messages: %s", err.Error())
+				logger.Errorf("error getting number of dropped messages: %s", err.Error())
 			}
 			if dropped > ns.dropped {
-				logger.Log.Warnf("[rpc server] some messages were dropped! numDropped: %d", dropped)
+				logger.Warnf("[rpc server] some messages were dropped! numDropped: %d", dropped)
 				ns.dropped = dropped
 			}
 			subsChanLen := float64(len(ns.subChan))
 			maxPending = math.Max(float64(maxPending), subsChanLen)
-			logger.Log.Debugf("subs channel size: %v, max: %v, dropped: %v", subsChanLen, maxPending, dropped)
+			logger.Debugf("subs channel size: %v, max: %v, dropped: %v", subsChanLen, maxPending, dropped)
 			req := &protos.Request{}
 			// TODO: Add tracing here to report delay to start processing message in spans
 			err = proto.Unmarshal(msg.Data, req)
 			if err != nil {
 				// should answer rpc with an error
-				logger.Log.Error("error unmarshalling rpc message:", err.Error())
+				logger.Error("error unmarshalling rpc message:", err.Error())
 				continue
 			}
 			req.Msg.Reply = msg.Reply
@@ -257,7 +257,7 @@ func (ns *NatsRPCServer) getUserKickChannel() chan *protos.KickMsg {
 func (ns *NatsRPCServer) marshalResponse(res *protos.Response) ([]byte, error) {
 	p, err := proto.Marshal(res)
 	if err != nil {
-		logger.Log.Errorf("error marshaling response: %s", err.Error())
+		logger.Errorf("error marshaling response: %s", err.Error())
 
 		res := &protos.Response{
 			Error: &protos.Error{
@@ -276,7 +276,7 @@ func (ns *NatsRPCServer) marshalResponse(res *protos.Response) ([]byte, error) {
 
 func (ns *NatsRPCServer) processMessages(threadID int) {
 	for ns.requests[threadID] = range ns.GetUnhandledRequestsChannel() {
-		logger.Log.Debugf("(%d) processing message %v", threadID, ns.requests[threadID].GetMsg().GetId())
+		logger.Debugf("(%d) processing message %v", threadID, ns.requests[threadID].GetMsg().GetId())
 		ctx, err := util.GetContextFromRequest(ns.requests[threadID], ns.server.ID)
 		if err != nil {
 			ns.responses[threadID] = &protos.Response{
@@ -286,17 +286,21 @@ func (ns *NatsRPCServer) processMessages(threadID int) {
 				},
 			}
 
-			logger.Log.Errorf("error getting context from request: %s", err)
+			logger.Errorf("error getting context from request: %s", err)
 		} else {
 			ns.responses[threadID], err = ns.nanoServer.Call(ctx, ns.requests[threadID])
 			if err != nil {
-				logger.Log.Errorf("error processing route %s: %s", ns.requests[threadID].GetMsg().GetRoute(), err)
+				logger.Errorf("error processing route %s: %s", ns.requests[threadID].GetMsg().GetRoute(), err)
 			}
 		}
 		p, err := ns.marshalResponse(ns.responses[threadID])
+		if err != nil {
+			logger.Errorf("error sending message response: %s", err.Error())
+		}
+
 		err = ns.conn.Publish(ns.requests[threadID].GetMsg().GetReply(), p)
 		if err != nil {
-			logger.Log.Errorf("error sending message response: %s", err.Error())
+			logger.Errorf("error sending message response: %s", err.Error())
 		}
 	}
 }
@@ -306,7 +310,7 @@ func (ns *NatsRPCServer) processSessionBindings() {
 		b := &protos.BindMsg{}
 		err := proto.Unmarshal(bind.Data, b)
 		if err != nil {
-			logger.Log.Errorf("error processing binding msg: %v", err)
+			logger.Errorf("error processing binding msg: %v", err)
 			continue
 		}
 		ns.nanoServer.SessionBindRemote(context.Background(), b)
@@ -315,20 +319,20 @@ func (ns *NatsRPCServer) processSessionBindings() {
 
 func (ns *NatsRPCServer) processPushes() {
 	for push := range ns.getUserPushChannel() {
-		logger.Log.Debugf("sending push to user %s: %v", push.GetUid(), string(push.Data))
+		logger.Debugf("sending push to user %s: %v", push.GetUid(), string(push.Data))
 		_, err := ns.nanoServer.PushToUser(context.Background(), push)
 		if err != nil {
-			logger.Log.Errorf("error sending push to user: %v", err)
+			logger.Errorf("error sending push to user: %v", err)
 		}
 	}
 }
 
 func (ns *NatsRPCServer) processKick() {
 	for kick := range ns.getUserKickChannel() {
-		logger.Log.Debugf("Sending kick to user %s: %v", kick.GetUserId())
+		logger.Debugf("Sending kick to user %s: %v", kick.GetUserId())
 		_, err := ns.nanoServer.KickUser(context.Background(), kick)
 		if err != nil {
-			logger.Log.Errorf("error sending kick to user: %v", err)
+			logger.Errorf("error sending kick to user: %v", err)
 		}
 	}
 }
@@ -338,7 +342,7 @@ func (ns *NatsRPCServer) Init() error {
 	// TODO should we have concurrency here? it feels like we should
 	go ns.handleMessages()
 
-	logger.Log.Debugf("connecting to nats (server) with timeout of %s", ns.connectionTimeout)
+	logger.Debugf("connecting to nats (server) with timeout of %s", ns.connectionTimeout)
 	conn, err := setupNatsConn(
 		ns.connString,
 		ns.appDieChan,
@@ -400,34 +404,34 @@ func (ns *NatsRPCServer) reportMetrics() {
 	if ns.metricsReporters != nil {
 		for _, mr := range ns.metricsReporters {
 			if err := mr.ReportGauge(metrics.DroppedMessages, map[string]string{}, float64(ns.dropped)); err != nil {
-				logger.Log.Warnf("failed to report dropped message: %s", err.Error())
+				logger.Warnf("failed to report dropped message: %s", err.Error())
 			}
 
 			// subchan
 			subChanCapacity := ns.messagesBufferSize - len(ns.subChan)
 			if subChanCapacity == 0 {
-				logger.Log.Warn("subChan is at maximum capacity")
+				logger.Warn("subChan is at maximum capacity")
 			}
 			if err := mr.ReportGauge(metrics.ChannelCapacity, map[string]string{"channel": "rpc_server_subchan"}, float64(subChanCapacity)); err != nil {
-				logger.Log.Warnf("failed to report subChan queue capacity: %s", err.Error())
+				logger.Warnf("failed to report subChan queue capacity: %s", err.Error())
 			}
 
 			// bindingschan
 			bindingsChanCapacity := ns.messagesBufferSize - len(ns.bindingsChan)
 			if bindingsChanCapacity == 0 {
-				logger.Log.Warn("bindingsChan is at maximum capacity")
+				logger.Warn("bindingsChan is at maximum capacity")
 			}
 			if err := mr.ReportGauge(metrics.ChannelCapacity, map[string]string{"channel": "rpc_server_bindingschan"}, float64(bindingsChanCapacity)); err != nil {
-				logger.Log.Warnf("failed to report bindingsChan capacity: %s", err.Error())
+				logger.Warnf("failed to report bindingsChan capacity: %s", err.Error())
 			}
 
 			// userpushch
 			userPushChanCapacity := ns.pushBufferSize - len(ns.userPushCh)
 			if userPushChanCapacity == 0 {
-				logger.Log.Warn("userPushChan is at maximum capacity")
+				logger.Warn("userPushChan is at maximum capacity")
 			}
 			if err := mr.ReportGauge(metrics.ChannelCapacity, map[string]string{"channel": "rpc_server_userpushchan"}, float64(userPushChanCapacity)); err != nil {
-				logger.Log.Warnf("failed to report userPushCh capacity: %s", err.Error())
+				logger.Warnf("failed to report userPushCh capacity: %s", err.Error())
 			}
 		}
 	}

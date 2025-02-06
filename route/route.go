@@ -74,7 +74,7 @@ func Decode(route string) (*Route, error) {
 	case 2:
 		return NewRoute("", r[0], r[1]), nil
 	default:
-		logger.Log.Errorf("invalid route: " + route)
+		logger.Errorf("invalid route: " + route)
 		return nil, ErrInvalidRoute
 	}
 }

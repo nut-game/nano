@@ -15,7 +15,7 @@ func TestInfoRetrieverRegion(t *testing.T) {
 	c.Set("nano.cluster.info.region", "us")
 	conf := config.NewConfig(c)
 
-	infoRetriever := NewInfoRetriever(*&config.NewNanoConfig(conf).Cluster.Info)
+	infoRetriever := NewInfoRetriever(config.NewNanoConfig(conf).Cluster.Info)
 
 	assert.Equal(t, "us", infoRetriever.Region())
 }

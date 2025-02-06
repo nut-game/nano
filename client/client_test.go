@@ -8,12 +8,11 @@ import (
 	"github.com/nut-game/nano/conn/message"
 	"github.com/nut-game/nano/helpers"
 	"github.com/nut-game/nano/mocks"
-	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSendRequestShouldTimeout(t *testing.T) {
-	c := New(logrus.InfoLevel, 100*time.Millisecond)
+	c := New(100 * time.Millisecond)
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 

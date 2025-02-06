@@ -128,17 +128,17 @@ func (w *Worker) RegisterRPCJob(rpcJob RPCJob) error {
 
 func (w *Worker) parsedRPCJob(rpcJob RPCJob) func(*workers.Msg) {
 	return func(jobArg *workers.Msg) {
-		logger.Log.Debug("executing rpc job")
+		logger.Debug("executing rpc job")
 		bts, rpcRoute, err := w.unmarshalRouteMetadata(jobArg)
 		if err != nil {
-			logger.Log.Errorf("failed to get job arg: %q", err)
+			logger.Errorf("failed to get job arg: %q", err)
 			panic(err)
 		}
 
-		logger.Log.Debug("getting route arg and reply")
+		logger.Debug("getting route arg and reply")
 		arg, reply, err := rpcJob.GetArgReply(rpcRoute.Route)
 		if err != nil {
-			logger.Log.Errorf("failed to get methods arg and reply: %q", err)
+			logger.Errorf("failed to get methods arg and reply: %q", err)
 			panic(err)
 		}
 		rpcInfo := &rpcInfo{
@@ -146,30 +146,30 @@ func (w *Worker) parsedRPCJob(rpcJob RPCJob) func(*workers.Msg) {
 			Reply: reply,
 		}
 
-		logger.Log.Debug("unmarshalling rpc info")
+		logger.Debug("unmarshalling rpc info")
 		err = json.Unmarshal(bts, rpcInfo)
 		if err != nil {
-			logger.Log.Errorf("failed to unmarshal rpc info: %q", err)
+			logger.Errorf("failed to unmarshal rpc info: %q", err)
 			panic(err)
 		}
 
-		logger.Log.Debug("choosing server to make rpc")
+		logger.Debug("choosing server to make rpc")
 		serverID, err := rpcJob.ServerDiscovery(rpcInfo.Route, rpcInfo.Metadata)
 		if err != nil {
-			logger.Log.Errorf("failed get server: %q", err)
+			logger.Errorf("failed get server: %q", err)
 			panic(err)
 		}
 
 		ctx := context.Background()
 
-		logger.Log.Debugf("executing rpc func to %s", rpcInfo.Route)
+		logger.Debugf("executing rpc func to %s", rpcInfo.Route)
 		err = rpcJob.RPC(ctx, serverID, rpcInfo.Route, reply, arg)
 		if err != nil {
-			logger.Log.Errorf("failed make rpc: %q", err)
+			logger.Errorf("failed make rpc: %q", err)
 			panic(err)
 		}
 
-		logger.Log.Debug("finished executing rpc job")
+		logger.Debug("finished executing rpc job")
 	}
 }
 

@@ -289,9 +289,9 @@ func (pc *ProtoClient) getDescriptors(data string) error {
 }
 
 // Return the basic structure for the ProtoClient struct.
-func newProto(docslogLevel logrus.Level, requestTimeout ...time.Duration) *ProtoClient {
+func newProto(requestTimeout ...time.Duration) *ProtoClient {
 	return &ProtoClient{
-		Client:           *New(docslogLevel, requestTimeout...),
+		Client:           *New(requestTimeout...),
 		descriptorsNames: make(map[string]bool),
 		info: ProtoBufferInfo{
 			Commands: make(map[string]*Command),
@@ -304,8 +304,8 @@ func newProto(docslogLevel logrus.Level, requestTimeout ...time.Duration) *Proto
 }
 
 // NewProto returns a new protoclient with the auto documentation route.
-func NewProto(docsRoute string, docslogLevel logrus.Level, requestTimeout ...time.Duration) *ProtoClient {
-	newclient := newProto(docslogLevel, requestTimeout...)
+func NewProto(docsRoute string, requestTimeout ...time.Duration) *ProtoClient {
+	newclient := newProto(requestTimeout...)
 	newclient.docsRoute = docsRoute
 	return newclient
 }
@@ -313,7 +313,7 @@ func NewProto(docsRoute string, docslogLevel logrus.Level, requestTimeout ...tim
 // NewWithDescriptor returns a new protoclient with the descriptors route and
 // auto documentation route.
 func NewWithDescriptor(descriptorsRoute string, docsRoute string, docslogLevel logrus.Level, requestTimeout ...time.Duration) *ProtoClient {
-	newclient := newProto(docslogLevel, requestTimeout...)
+	newclient := newProto(requestTimeout...)
 	newclient.docsRoute = docsRoute
 	newclient.descriptorsRoute = descriptorsRoute
 	return newclient
@@ -388,12 +388,12 @@ func (pc *ProtoClient) waitForData() {
 				errMsg := &protos.Error{}
 				err := proto.Unmarshal(response.Data, errMsg)
 				if err != nil {
-					logger.Log.Errorf("Erro decode error data: %s", string(response.Data))
+					logger.Errorf("Erro decode error data: %s", string(response.Data))
 					continue
 				}
 				response.Data, err = json.Marshal(errMsg)
 				if err != nil {
-					logger.Log.Errorf("error encode error to json: %s", string(response.Data))
+					logger.Errorf("error encode error to json: %s", string(response.Data))
 					continue
 				}
 				pc.IncomingMsgChan <- response
@@ -401,19 +401,19 @@ func (pc *ProtoClient) waitForData() {
 			}
 
 			if inputMsg == nil {
-				logger.Log.Errorf("not expected data: %s", string(response.Data))
+				logger.Errorf("not expected data: %s", string(response.Data))
 				continue
 			}
 
 			err := inputMsg.Unmarshal(response.Data)
 			if err != nil {
-				logger.Log.Errorf("error decode data: %s", string(response.Data))
+				logger.Errorf("error decode data: %s", string(response.Data))
 				continue
 			}
 
 			data, err2 := inputMsg.MarshalJSON()
 			if err2 != nil {
-				logger.Log.Errorf("error encode data to json: %s", string(response.Data))
+				logger.Errorf("error encode data to json: %s", string(response.Data))
 				continue
 			}
 
@@ -483,7 +483,7 @@ func (pc *ProtoClient) SendRequest(route string, data []byte) (uint, error) {
 	}
 
 	if cmd, ok := pc.info.Commands[route]; ok {
-		if len(data) < 0 || string(data) == "{}" || cmd.inputMsgDescriptor == nil {
+		if len(data) == 0 || string(data) == "{}" || cmd.inputMsgDescriptor == nil {
 			pc.expectedInputDescriptor = cmd.outputMsgDescriptor
 			data = data[:0]
 			return pc.Client.SendRequest(route, data)
@@ -500,7 +500,7 @@ func (pc *ProtoClient) SendRequest(route string, data []byte) (uint, error) {
 		return pc.Client.SendRequest(route, realdata)
 	}
 
-	return 0, errors.New("Invalid Route: " + route)
+	return 0, fmt.Errorf("invalid route: %s", route)
 }
 
 // SendNotify sends a notify to the server

@@ -117,13 +117,13 @@ func (r *RemoteService) remoteProcess(
 	switch msg.Type {
 	case message.Request:
 		if err != nil {
-			logger.Log.Errorf("Failed to process remote server: %s", err.Error())
+			logger.Errorf("Failed to process remote server: %s", err.Error())
 			a.AnswerWithError(ctx, msg.ID, err)
 			return
 		}
 		err := a.GetSession().ResponseMID(ctx, msg.ID, res.Data)
 		if err != nil {
-			logger.Log.Errorf("Failed to respond to remote server: %s", err.Error())
+			logger.Errorf("Failed to respond to remote server: %s", err.Error())
 			a.AnswerWithError(ctx, msg.ID, err)
 		}
 	case message.Notify:
@@ -132,7 +132,7 @@ func (r *RemoteService) remoteProcess(
 			err = errors.New(res.Error.GetMsg())
 		}
 		if err != nil {
-			logger.Log.Errorf("error while sending a notify to server: %s", err.Error())
+			logger.Errorf("error while sending a notify to server: %s", err.Error())
 		}
 	}
 }
@@ -201,7 +201,7 @@ func (r *RemoteService) SessionBindRemote(ctx context.Context, msg *protos.BindM
 
 // PushToUser sends a push to user
 func (r *RemoteService) PushToUser(ctx context.Context, push *protos.Push) (*protos.Response, error) {
-	logger.Log.Debugf("sending push to user %s: %v", push.GetUid(), string(push.Data))
+	logger.Debugf("sending push to user %s: %v", push.GetUid(), string(push.Data))
 	s := r.sessionPool.GetSessionByUID(push.GetUid())
 	if s != nil {
 		err := s.Push(push.Route, push.Data)
@@ -217,7 +217,7 @@ func (r *RemoteService) PushToUser(ctx context.Context, push *protos.Push) (*pro
 
 // KickUser sends a kick to user
 func (r *RemoteService) KickUser(ctx context.Context, kick *protos.KickMsg) (*protos.KickAnswer, error) {
-	logger.Log.Debugf("sending kick to user %s", kick.GetUserId())
+	logger.Debugf("sending kick to user %s", kick.GetUserId())
 	s := r.sessionPool.GetSessionByUID(kick.GetUserId())
 	if s != nil {
 		err := s.Kick(ctx)
@@ -340,7 +340,7 @@ func processRemoteMessage(ctx context.Context, req *protos.Request, r *RemoteSer
 func (r *RemoteService) handleRPCUser(ctx context.Context, req *protos.Request, rt *route.Route) *protos.Response {
 	remote, ok := r.remotes[rt.Short()]
 	if !ok {
-		logger.Log.Warnf("nano/remote: %s not found", rt.Short())
+		logger.Warnf("nano/remote: %s not found", rt.Short())
 		response := &protos.Response{
 			Error: &protos.Error{
 				Code: e.ErrNotFoundCode,
@@ -448,7 +448,7 @@ func (r *RemoteService) handleRPCSys(ctx context.Context, req *protos.Request, r
 		r.sessionPool,
 	)
 	if err != nil {
-		logger.Log.Warn("nano/handler: cannot instantiate remote agent")
+		logger.Warn("nano/handler: cannot instantiate remote agent")
 		response := &protos.Response{
 			Error: &protos.Error{
 				Code: e.ErrInternalCode,
@@ -460,7 +460,7 @@ func (r *RemoteService) handleRPCSys(ctx context.Context, req *protos.Request, r
 
 	ret, err := r.handlerPool.ProcessHandlerMessage(ctx, rt, r.serializer, r.handlerHooks, a.Session, req.GetMsg().GetData(), req.GetMsg().GetType(), true)
 	if err != nil {
-		logger.Log.Warnf(err.Error())
+		logger.Warnf(err.Error())
 		response = &protos.Response{
 			Error: &protos.Error{
 				Code: e.ErrUnknownCode,
@@ -495,14 +495,14 @@ func (r *RemoteService) remoteCall(
 	if target == nil {
 		target, err = r.router.Route(ctx, rpcType, svType, route, msg)
 		if err != nil {
-			logger.Log.Errorf("error making call for route %s: %w", route.String(), err)
+			logger.Errorf("error making call for route %s: %w", route.String(), err)
 			return nil, e.NewError(err, e.ErrInternalCode)
 		}
 	}
 
 	res, err := r.rpcClient.Call(ctx, rpcType, route, session, msg, target)
 	if err != nil {
-		logger.Log.Errorf("error making call to target with id %s, route %s and host %s: %w", target.ID, route.String(), target.Hostname, err)
+		logger.Errorf("error making call to target with id %s, route %s and host %s: %w", target.ID, route.String(), target.Hostname, err)
 		return nil, err
 	}
 	return res, err
@@ -511,7 +511,7 @@ func (r *RemoteService) remoteCall(
 // DumpServices outputs all registered services
 func (r *RemoteService) DumpServices() {
 	for name := range r.remotes {
-		logger.Log.Infof("registered remote %s", name)
+		logger.Infof("registered remote %s", name)
 	}
 }
 

@@ -134,7 +134,7 @@ func (t *Timer) Stop() {
 func pexec(id int64, fn Func) {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Log.Errorf("Call timer function error, TimerID=%d, Error=%v", id, err)
+			logger.Errorf("Call timer function error, TimerID=%d, Error=%v", id, err)
 		}
 	}()
 

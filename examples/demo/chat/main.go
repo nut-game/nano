@@ -62,7 +62,7 @@ func NewRoom(app nano.Nano) *Room {
 func (r *Room) AfterInit() {
 	r.timer = nano.NewTimer(time.Minute, func() {
 		count, err := r.app.GroupCountMembers(context.Background(), "room")
-		logger.Log.Debugf("UserCount: Time=> %s, Count=> %d, Error=> %v", time.Now().String(), count, err)
+		logger.Debugf("UserCount: Time=> %s, Count=> %d, Error=> %v", time.Now().String(), count, err)
 	})
 }
 

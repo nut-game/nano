@@ -98,7 +98,7 @@ func (p *Channel) ExecuteBeforePipeline(ctx context.Context, data interface{}) (
 		for _, h := range p.Handlers {
 			ctx, res, err = h(ctx, res)
 			if err != nil {
-				logger.Log.Debugf("nano/handler: broken pipeline: %s", err.Error())
+				logger.Debugf("nano/handler: broken pipeline: %s", err.Error())
 				return ctx, res, err
 			}
 		}

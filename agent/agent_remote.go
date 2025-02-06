@@ -110,10 +110,10 @@ func (a *Remote) Push(route string, v interface{}) error {
 	}
 	switch d := v.(type) {
 	case []byte:
-		logger.Log.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%dbytes",
+		logger.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), route, len(d))
 	default:
-		logger.Log.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
+		logger.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
 			a.Session.ID(), a.Session.UID(), route, v)
 	}
 
@@ -140,10 +140,10 @@ func (a *Remote) ResponseMID(ctx context.Context, mid uint, v interface{}, isErr
 
 	switch d := v.(type) {
 	case []byte:
-		logger.Log.Debugf("Type=Response, ID=%d, MID=%d, Data=%dbytes",
+		logger.Debugf("Type=Response, ID=%d, MID=%d, Data=%dbytes",
 			a.Session.ID(), mid, len(d))
 	default:
-		logger.Log.Infof("Type=Response, ID=%d, MID=%d, Data=%+v",
+		logger.Infof("Type=Response, ID=%d, MID=%d, Data=%+v",
 			a.Session.ID(), mid, v)
 	}
 

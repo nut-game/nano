@@ -93,7 +93,7 @@ func (r *Router) Route(
 	}
 	routeFunc, ok := r.routesMap[svType]
 	if !ok {
-		logger.Log.Debugf("no specific route for svType: %s, using default route", svType)
+		logger.Debugf("no specific route for svType: %s, using default route", svType)
 		server := r.defaultRoute(serversOfType)
 		return server, nil
 	}
@@ -106,7 +106,7 @@ func (r *Router) AddRoute(
 	routingFunction RoutingFunc,
 ) {
 	if _, ok := r.routesMap[serverType]; ok {
-		logger.Log.Warnf("overriding the route to svType %s", serverType)
+		logger.Warnf("overriding the route to svType %s", serverType)
 	}
 	r.routesMap[serverType] = routingFunction
 }

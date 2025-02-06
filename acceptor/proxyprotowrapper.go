@@ -70,7 +70,7 @@ func (p *Conn) checkPrefix() error {
 
 	h, err := proxyproto.ReadHeader(p)
 	if err != nil {
-		logger.Log.Errorf("Failed to read Proxy Protocol TCP header: %s", err.Error())
+		logger.Errorf("Failed to read Proxy Protocol TCP header: %s", err.Error())
 		p.Close()
 		return err
 

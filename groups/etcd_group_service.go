@@ -43,7 +43,7 @@ func initClientInstance(config config.EtcdGroupServiceConfig, clientOrNil *clien
 			clientInstance, err = createBaseClient(config)
 		}
 		if err != nil {
-			logger.Log.Fatalf("error initializing singleton etcd client in groups: %s", err.Error())
+			logger.Fatalf("error initializing singleton etcd client in groups: %s", err.Error())
 			return
 		}
 		transactionTimeout = config.TransactionTimeout

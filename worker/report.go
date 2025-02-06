@@ -34,7 +34,7 @@ func reportQueueSizes(r metrics.Reporter, queues map[string]string) {
 		tags := map[string]string{"queue": queue}
 		sizeFlt, err := strconv.ParseFloat(size, 64)
 		if err != nil {
-			logger.Log.Errorf("queue size is not int: queue=%s size=%s", queue, size)
+			logger.Errorf("queue size is not int: queue=%s size=%s", queue, size)
 			continue
 		}
 
@@ -59,6 +59,6 @@ func reportJobsTotal(r metrics.Reporter, failed, processed int) {
 
 func checkReportErr(metric string, err error) {
 	if err != nil {
-		logger.Log.Errorf("failed to report to %s: %q\n", metric, err)
+		logger.Errorf("failed to report to %s: %q\n", metric, err)
 	}
 }

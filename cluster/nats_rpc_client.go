@@ -154,7 +154,7 @@ func (ns *NatsRPCClient) Call(
 ) (*protos.Response, error) {
 	parent, err := tracing.ExtractSpan(ctx)
 	if err != nil {
-		logger.Log.Warnf("failed to retrieve parent span: %s", err.Error())
+		logger.Warnf("failed to retrieve parent span: %s", err.Error())
 	}
 	ctx = trace.ContextWithRemoteSpanContext(ctx, parent)
 	attributes := []attribute.KeyValue{
@@ -187,13 +187,13 @@ func (ns *NatsRPCClient) Call(
 		reqTimeout = ns.reqTimeout.String()
 		ctx = pcontext.AddToPropagateCtx(ctx, constants.RequestTimeout, reqTimeout)
 	}
-	logger.Log.Debugf("[rpc_client] sending remote nats request for route %s with timeout of %s", route, reqTimeout)
+	logger.Debugf("[rpc_client] sending remote nats request for route %s with timeout of %s", route, reqTimeout)
 
 	req, err := buildRequest(ctx, rpcType, route, session, msg, ns.server)
 	if err != nil {
 		return nil, err
 	}
-	marshalledData, err := proto.Marshal(&req)
+	marshalledData, err := proto.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
@@ -248,7 +248,7 @@ func (ns *NatsRPCClient) Call(
 // Init inits nats rpc client
 func (ns *NatsRPCClient) Init() error {
 	ns.running = true
-	logger.Log.Debugf("connecting to nats (client) with timeout of %s", ns.connectionTimeout)
+	logger.Debugf("connecting to nats (client) with timeout of %s", ns.connectionTimeout)
 	conn, err := setupNatsConn(
 		ns.connString,
 		ns.appDieChan,

@@ -172,12 +172,12 @@ func (h *HandlerService) Handle(conn acceptor.PlayerConn) {
 	// startup agent goroutine
 	go a.Handle()
 
-	logger.Log.Debugf("New session established: %s", a.String())
+	logger.Debugf("New session established: %s", a.String())
 
 	// guarantee agent related resource is destroyed
 	defer func() {
 		a.GetSession().Close()
-		logger.Log.Debugf("Session read goroutine exit, SessionID=%d, UID=%s", a.GetSession().ID(), a.GetSession().UID())
+		logger.Debugf("Session read goroutine exit, SessionID=%d, UID=%s", a.GetSession().ID(), a.GetSession().UID())
 	}()
 
 	for {
@@ -186,15 +186,15 @@ func (h *HandlerService) Handle(conn acceptor.PlayerConn) {
 		if err != nil {
 			// Check if this is an expected error due to connection being closed
 			if errors.Is(err, net.ErrClosed) {
-				logger.Log.Debugf("Connection no longer available while reading next available message: %s", err.Error())
+				logger.Debugf("Connection no longer available while reading next available message: %s", err.Error())
 			} else if err == constants.ErrConnectionClosed {
-				logger.Log.Debugf("Connection no longer available while reading next available message: %s", err.Error())
+				logger.Debugf("Connection no longer available while reading next available message: %s", err.Error())
 			} else {
 				// Differentiate errors for valid sessions, to avoid noise from load balancer healthchecks and other internet noise
 				if a.GetStatus() != constants.StatusStart {
-					logger.Log.Errorf("Error reading next available message for UID: %s, Build: %s, error: %s", a.GetSession().UID(), "a.GetSession().GetHandshakeData().Sys.BuildNumber", err.Error())
+					logger.Errorf("Error reading next available message for UID: %s, Build: %s, error: %s", a.GetSession().UID(), "a.GetSession().GetHandshakeData().Sys.BuildNumber", err.Error())
 				} else {
-					logger.Log.Debugf("Error reading next available message on initial connection: %s", err.Error())
+					logger.Debugf("Error reading next available message on initial connection: %s", err.Error())
 				}
 			}
 
@@ -203,19 +203,19 @@ func (h *HandlerService) Handle(conn acceptor.PlayerConn) {
 
 		packets, err := h.decoder.Decode(msg)
 		if err != nil {
-			logger.Log.Errorf("Failed to decode message: %s", err.Error())
+			logger.Errorf("Failed to decode message: %s", err.Error())
 			return
 		}
 
 		if len(packets) < 1 {
-			logger.Log.Warnf("Read no packets, data: %v", msg)
+			logger.Warnf("Read no packets, data: %v", msg)
 			continue
 		}
 
 		// process all packet
 		for i := range packets {
 			if err := h.processPacket(a, packets[i]); err != nil {
-				logger.Log.Errorf("Failed to process packet: %s", err.Error())
+				logger.Errorf("Failed to process packet: %s", err.Error())
 				return
 			}
 		}
@@ -225,15 +225,15 @@ func (h *HandlerService) Handle(conn acceptor.PlayerConn) {
 func (h *HandlerService) processPacket(a agent.Agent, p *packet.Packet) error {
 	switch p.Type {
 	case packet.Handshake:
-		logger.Log.Debug("Received handshake packet")
+		logger.Debug("Received handshake packet")
 
 		// Parse the json sent with the handshake by the client
 		handshakeData := &session.HandshakeData{}
 		if err := json.Unmarshal(p.Data, handshakeData); err != nil {
 			defer a.Close()
-			logger.Log.Errorf("Failed to unmarshal handshake data: %s", err.Error())
+			logger.Errorf("Failed to unmarshal handshake data: %s", err.Error())
 			if serr := a.SendHandshakeErrorResponse(); serr != nil {
-				logger.Log.Errorf("Error sending handshake error response: %s", err.Error())
+				logger.Errorf("Error sending handshake error response: %s", err.Error())
 				return err
 			}
 
@@ -242,9 +242,9 @@ func (h *HandlerService) processPacket(a agent.Agent, p *packet.Packet) error {
 
 		if err := a.GetSession().ValidateHandshake(handshakeData); err != nil {
 			defer a.Close()
-			logger.Log.Errorf("Handshake validation failed: %s", err.Error())
+			logger.Errorf("Handshake validation failed: %s", err.Error())
 			if serr := a.SendHandshakeErrorResponse(); serr != nil {
-				logger.Log.Errorf("Error sending handshake error response: %s", err.Error())
+				logger.Errorf("Error sending handshake error response: %s", err.Error())
 				return err
 			}
 
@@ -252,23 +252,23 @@ func (h *HandlerService) processPacket(a agent.Agent, p *packet.Packet) error {
 		}
 
 		if err := a.SendHandshakeResponse(); err != nil {
-			logger.Log.Errorf("Error sending handshake response: %s", err.Error())
+			logger.Errorf("Error sending handshake response: %s", err.Error())
 			return err
 		}
-		logger.Log.Debugf("Session handshake Id=%d, Remote=%s", a.GetSession().ID(), a.RemoteAddr())
+		logger.Debugf("Session handshake Id=%d, Remote=%s", a.GetSession().ID(), a.RemoteAddr())
 
 		a.GetSession().SetHandshakeData(handshakeData)
 		a.SetStatus(constants.StatusHandshake)
 		err := a.GetSession().Set(constants.IPVersionKey, a.IPVersion())
 		if err != nil {
-			logger.Log.Warnf("failed to save ip version on session: %q\n", err)
+			logger.Warnf("failed to save ip version on session: %q\n", err)
 		}
 
-		logger.Log.Debug("Successfully saved handshake data")
+		logger.Debug("Successfully saved handshake data")
 
 	case packet.HandshakeAck:
 		a.SetStatus(constants.StatusWorking)
-		logger.Log.Debugf("Receive handshake ACK Id=%d, Remote=%s", a.GetSession().ID(), a.RemoteAddr())
+		logger.Debugf("Receive handshake ACK Id=%d, Remote=%s", a.GetSession().ID(), a.RemoteAddr())
 
 	case packet.Data:
 		if a.GetStatus() < constants.StatusWorking {
@@ -308,7 +308,7 @@ func (h *HandlerService) processMessage(a agent.Agent, msg *message.Message) {
 
 	r, err := route.Decode(msg.Route)
 	if err != nil {
-		logger.Log.Errorf("Failed to decode route: %s", err.Error())
+		logger.Errorf("Failed to decode route: %s", err.Error())
 		a.AnswerWithError(ctx, msg.ID, e.NewError(err, e.ErrBadRequestCode))
 		return
 	}
@@ -329,7 +329,7 @@ func (h *HandlerService) processMessage(a agent.Agent, msg *message.Message) {
 		if h.remoteService != nil {
 			h.chRemoteProcess <- message
 		} else {
-			logger.Log.Warnf("request made to another server type but no remoteService running")
+			logger.Warnf("request made to another server type but no remoteService running")
 		}
 	}
 }
@@ -346,12 +346,12 @@ func (h *HandlerService) localProcess(ctx context.Context, a agent.Agent, route 
 	ret, err := h.handlerPool.ProcessHandlerMessage(ctx, route, h.serializer, h.handlerHooks, a.GetSession(), msg.Data, msg.Type, false)
 	if msg.Type != message.Notify {
 		if err != nil {
-			logger.Log.Errorf("Failed to process handler message: %s", err.Error())
+			logger.Errorf("Failed to process handler message: %s", err.Error())
 			a.AnswerWithError(ctx, mid, err)
 		} else {
 			err := a.GetSession().ResponseMID(ctx, mid, ret)
 			if err != nil {
-				logger.Log.Errorf("Failed to process handler message: %s", err.Error())
+				logger.Errorf("Failed to process handler message: %s", err.Error())
 				tracing.FinishSpan(ctx, err)
 				metrics.ReportTimingFromCtx(ctx, h.metricsReporters, handlerType, err)
 			}
@@ -360,7 +360,7 @@ func (h *HandlerService) localProcess(ctx context.Context, a agent.Agent, route 
 		metrics.ReportTimingFromCtx(ctx, h.metricsReporters, handlerType, err)
 		tracing.FinishSpan(ctx, err)
 		if err != nil {
-			logger.Log.Errorf("Failed to process notify message: %s", err.Error())
+			logger.Errorf("Failed to process notify message: %s", err.Error())
 		}
 	}
 }
@@ -369,7 +369,7 @@ func (h *HandlerService) localProcess(ctx context.Context, a agent.Agent, route 
 func (h *HandlerService) DumpServices() {
 	handlers := h.handlerPool.GetHandlers()
 	for name := range handlers {
-		logger.Log.Infof("registered handler %s, isRawArg: %v", name, handlers[name].IsRawArg)
+		logger.Infof("registered handler %s, isRawArg: %v", name, handlers[name].IsRawArg)
 	}
 }
 

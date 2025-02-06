@@ -44,7 +44,7 @@ func castValueToCarrier(val interface{}) (propagation.MapCarrier, error) {
 			if s, ok := v.(string); ok {
 				carrier[k] = s
 			} else {
-				logger.Log.Warnf("value from span carrier cannot be cast to string: %+v", v)
+				logger.Warnf("value from span carrier cannot be cast to string: %+v", v)
 			}
 		}
 		return carrier, nil

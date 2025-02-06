@@ -89,10 +89,10 @@ func getMsgType(msgTypeIface interface{}) (message.Type, error) {
 func serializeReturn(ser serialize.Serializer, ret interface{}) ([]byte, error) {
 	res, err := util.SerializeOrRaw(ser, ret)
 	if err != nil {
-		logger.Log.Errorf("Failed to serialize return: %s", err.Error())
+		logger.Errorf("Failed to serialize return: %s", err.Error())
 		res, err = util.GetErrorPayload(ser, err)
 		if err != nil {
-			logger.Log.Error("cannot serialize message and respond to the client ", err.Error())
+			logger.Error("cannot serialize message and respond to the client ", err.Error())
 			return nil, err
 		}
 	}

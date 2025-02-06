@@ -25,16 +25,15 @@ import (
 	"os"
 	"testing"
 
-	"github.com/sirupsen/logrus"
 	"github.com/nut-game/nano/client"
 )
 
-var clients []*client.Client
+// var clients []*client.Client
 
 func getClients(n, port int) []*client.Client {
 	c := make([]*client.Client, n)
 	for i := 0; i < n; i++ {
-		c[i] = client.New(logrus.FatalLevel)
+		c[i] = client.New()
 		err := c[i].ConnectTo(fmt.Sprintf("%s:%d", "localhost", port))
 		if err != nil {
 			panic(err)
@@ -53,7 +52,7 @@ func BenchmarkCreateManyClients(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		g := client.New(logrus.FatalLevel)
+		g := client.New()
 		err := g.ConnectTo(fmt.Sprintf("%s:%d", "localhost", 32222))
 		defer g.Disconnect()
 		if err != nil {

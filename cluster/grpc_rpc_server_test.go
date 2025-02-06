@@ -31,9 +31,9 @@ func TestGRPCServerInit(t *testing.T) {
 	mockNanoServer := protosmocks.NewMockNanoServer(ctrl)
 
 	sv := getServer()
-	gs, err := NewGRPCServer(c, sv, []metrics.Reporter{})
+	gs, _ := NewGRPCServer(c, sv, []metrics.Reporter{})
 	gs.SetNanoServer(mockNanoServer)
-	err = gs.Init()
+	err := gs.Init()
 	assert.NoError(t, err)
 	assert.NotNil(t, gs)
 

@@ -26,10 +26,10 @@ func (r *Room) CallLog(ctx context.Context, arg *protos.Arg) (*protos.Response, 
 	reply := &protos.Response{}
 	jid, err := r.app.ReliableRPC(route, nil, reply, arg)
 	if err != nil {
-		logger.Log.Infof("failed to enqueue rpc: %q", err)
+		logger.Infof("failed to enqueue rpc: %q", err)
 		return nil, err
 	}
 
-	logger.Log.Infof("enqueue rpc job: %d", jid)
+	logger.Infof("enqueue rpc job: %d", jid)
 	return &protos.Response{Code: 200, Msg: "ok"}, nil
 }

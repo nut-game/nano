@@ -15,6 +15,6 @@ type Metagame struct {
 
 // LogRemote logs argument when called
 func (m *Metagame) LogRemote(ctx context.Context, arg *protos.Arg) (*protos.Response, error) {
-	logger.Log.Infof("argument %+v\n", arg)
+	logger.Infof("argument %+v\n", arg)
 	return &protos.Response{Code: 200, Msg: "ok"}, nil
 }

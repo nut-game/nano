@@ -269,14 +269,14 @@ func (a *agentImpl) send(pendingMsg pendingMessage) (err error) {
 				fmt.Errorf("%s: %s", constants.ErrBrokenPipe.Error(), panicErr),
 				errors.ErrClientClosedRequest,
 			)
-			logger.Log.Error("agent send panicked: ", err)
+			logger.Error("agent send panicked: ", err)
 		}
 	}()
 	a.reportChannelSize()
 
 	m, err := a.getMessageFromPendingMessage(pendingMsg)
 	if err != nil {
-		logger.Log.Errorf(
+		logger.Errorf(
 			"agent send failed when getting pending msg. route: %s, type: %s, err: %s",
 			pendingMsg.route, &pendingMsg.typ, err,
 		)
@@ -286,7 +286,7 @@ func (a *agentImpl) send(pendingMsg pendingMessage) (err error) {
 	// packet encode
 	p, err := a.packetEncodeMessage(m)
 	if err != nil {
-		logger.Log.Errorf(
+		logger.Errorf(
 			"agent send failed when encoding the msg. route: %s, type: %s, err: %s",
 			pendingMsg.route, &pendingMsg.typ, err,
 		)
@@ -323,10 +323,10 @@ func (a *agentImpl) Push(route string, v interface{}) error {
 
 	switch d := v.(type) {
 	case []byte:
-		logger.Log.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%dbytes",
+		logger.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), route, len(d))
 	default:
-		logger.Log.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
+		logger.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
 			a.Session.ID(), a.Session.UID(), route, v)
 	}
 	return a.send(pendingMessage{typ: message.Push, route: route, payload: v})
@@ -349,10 +349,10 @@ func (a *agentImpl) ResponseMID(ctx context.Context, mid uint, v interface{}, is
 
 	switch d := v.(type) {
 	case []byte:
-		logger.Log.Debugf("Type=Response, ID=%d, UID=%s, MID=%d, Data=%dbytes",
+		logger.Debugf("Type=Response, ID=%d, UID=%s, MID=%d, Data=%dbytes",
 			a.Session.ID(), a.Session.UID(), mid, len(d))
 	default:
-		logger.Log.Infof("Type=Response, ID=%d, UID=%s, MID=%d, Data=%+v",
+		logger.Infof("Type=Response, ID=%d, UID=%s, MID=%d, Data=%+v",
 			a.Session.ID(), a.Session.UID(), mid, v)
 	}
 
@@ -369,7 +369,7 @@ func (a *agentImpl) Close() error {
 	}
 	a.SetStatus(constants.StatusClosed)
 
-	logger.Log.Debugf("Session closed, ID=%d, UID=%s, IP=%s",
+	logger.Debugf("Session closed, ID=%d, UID=%s, IP=%s",
 		a.Session.ID(), a.Session.UID(), a.conn.RemoteAddr())
 
 	// prevent closing closed channel
@@ -429,7 +429,7 @@ func (a *agentImpl) SetStatus(state int32) {
 func (a *agentImpl) Handle() {
 	defer func() {
 		a.Close()
-		logger.Log.Debugf("Session handle goroutine exit, SessionID=%d, UID=%s", a.Session.ID(), a.Session.UID())
+		logger.Debugf("Session handle goroutine exit, SessionID=%d, UID=%s", a.Session.ID(), a.Session.UID())
 	}()
 
 	go a.write()
@@ -467,7 +467,7 @@ func (a *agentImpl) heartbeat() {
 		case <-ticker.C:
 			deadline := time.Now().Add(-2 * a.heartbeatTimeout).Unix()
 			if atomic.LoadInt64(&a.lastAt) < deadline {
-				logger.Log.Debugf("Session heartbeat timeout, LastTime=%d, Deadline=%d", atomic.LoadInt64(&a.lastAt), deadline)
+				logger.Debugf("Session heartbeat timeout, LastTime=%d, Deadline=%d", atomic.LoadInt64(&a.lastAt), deadline)
 				return
 			}
 
@@ -490,7 +490,7 @@ func (a *agentImpl) heartbeat() {
 func (a *agentImpl) onSessionClosed(s session.Session) {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Log.Errorf("nano/onSessionClosed: %v", err)
+			logger.Errorf("nano/onSessionClosed: %v", err)
 		}
 	}()
 
@@ -534,13 +534,13 @@ func (a *agentImpl) write() {
 			if writeErr != nil {
 				if e.Is(writeErr, os.ErrDeadlineExceeded) {
 					// Log the timeout error but continue processing
-					logger.Log.Warnf(
+					logger.Warnf(
 						"Context deadline exceeded for write in conn (%s) | session (%s): %s",
 						a.conn.RemoteAddr(), a.Session.UID(), writeErr.Error(),
 					)
 				} else {
 					err = errors.NewError(writeErr, errors.ErrClosedRequest)
-					logger.Log.Errorf(
+					logger.Errorf(
 						"Failed to write in conn (%s) | session (%s): %s, agent will close",
 						a.conn.RemoteAddr(), a.Session.UID(), writeErr.Error(),
 					)
@@ -617,12 +617,12 @@ func (a *agentImpl) AnswerWithError(ctx context.Context, mid uint, err error) {
 	}
 	p, e := util.GetErrorPayload(a.serializer, err)
 	if e != nil {
-		logger.Log.Errorf("error answering the user with an error: %s", e.Error())
+		logger.Errorf("error answering the user with an error: %s", e.Error())
 		return
 	}
 	e = a.Session.ResponseMID(ctx, mid, p, true)
 	if e != nil {
-		logger.Log.Errorf("error answering the user with an error: %s", e.Error())
+		logger.Errorf("error answering the user with an error: %s", e.Error())
 	}
 }
 
@@ -695,11 +695,11 @@ func encodeAndCompress(data interface{}, dataCompression bool) ([]byte, error) {
 func (a *agentImpl) reportChannelSize() {
 	chSendCapacity := a.messagesBufferSize - len(a.chSend)
 	if chSendCapacity == 0 {
-		logger.Log.Warnf("chSend is at maximum capacity")
+		logger.Warnf("chSend is at maximum capacity")
 	}
 	for _, mr := range a.metricsReporters {
 		if err := mr.ReportGauge(metrics.ChannelCapacity, map[string]string{"channel": "agent_chsend"}, float64(chSendCapacity)); err != nil {
-			logger.Log.Warnf("failed to report chSend channel capaacity: %s", err.Error())
+			logger.Warnf("failed to report chSend channel capaacity: %s", err.Error())
 		}
 	}
 }

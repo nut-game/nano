@@ -41,10 +41,8 @@ import (
 	"github.com/nut-game/nano/conn/message"
 	"github.com/nut-game/nano/conn/packet"
 	"github.com/nut-game/nano/logger"
-	logruswrapper "github.com/nut-game/nano/logger/logrus"
 	"github.com/nut-game/nano/session"
 	"github.com/nut-game/nano/util/compression"
-	"github.com/sirupsen/logrus"
 )
 
 // HandshakeSys struct
@@ -94,12 +92,7 @@ func (c *Client) ConnectedStatus() bool {
 }
 
 // New returns a new client
-func New(logLevel logrus.Level, requestTimeout ...time.Duration) *Client {
-	l := logrus.New()
-	l.Formatter = &logrus.TextFormatter{}
-	l.SetLevel(logLevel)
-
-	logger.Log = logruswrapper.NewWithFieldLogger(l)
+func New(requestTimeout ...time.Duration) *Client {
 
 	reqTimeout := 5 * time.Second
 	if len(requestTimeout) > 0 {
@@ -176,7 +169,7 @@ func (c *Client) handleHandshakeResponse() error {
 		return err
 	}
 
-	logger.Log.Debug("got handshake from sv, data: %v", handshake)
+	logger.Debug("got handshake from sv, data: %v", handshake)
 
 	if handshake.Sys.Dict != nil {
 		message.SetDictionary(handshake.Sys.Dict)
@@ -243,10 +236,10 @@ func (c *Client) handlePackets() {
 			switch p.Type {
 			case packet.Data:
 				//handle data
-				logger.Log.Debug("got data: %s", string(p.Data))
+				logger.Debug("got data: %s", string(p.Data))
 				m, err := message.Decode(p.Data)
 				if err != nil {
-					logger.Log.Errorf("error decoding msg from sv: %s", string(m.Data))
+					logger.Errorf("error decoding msg from sv: %s", string(m.Data))
 				}
 				if m.Type == message.Response {
 					c.pendingReqMutex.Lock()
@@ -261,7 +254,7 @@ func (c *Client) handlePackets() {
 				}
 				c.IncomingMsgChan <- m
 			case packet.Kick:
-				logger.Log.Warn("got kick packet from the server! disconnecting...")
+				logger.Warn("got kick packet from the server! disconnecting...")
 				c.Disconnect()
 			}
 		case <-c.closeChan:
@@ -285,7 +278,7 @@ func (c *Client) readPackets(buf *bytes.Buffer) ([]*packet.Packet, error) {
 	}
 	packets, err := c.packetDecoder.Decode(buf.Bytes())
 	if err != nil {
-		logger.Log.Errorf("error decoding packet from server: %s", err.Error())
+		logger.Errorf("error decoding packet from server: %s", err.Error())
 	}
 	totalProcessed := 0
 	for _, p := range packets {
@@ -302,7 +295,7 @@ func (c *Client) handleServerMessages() {
 	for c.Connected {
 		packets, err := c.readPackets(buf)
 		if err != nil && c.Connected {
-			logger.Log.Error(err)
+			logger.Error(err)
 			break
 		}
 
@@ -324,7 +317,7 @@ func (c *Client) sendHeartbeats(interval int) {
 			p, _ := c.packetEncoder.Encode(packet.Heartbeat, []byte{})
 			_, err := c.conn.Write(p)
 			if err != nil {
-				logger.Log.Errorf("error sending heartbeat to server: %s", err.Error())
+				logger.Errorf("error sending heartbeat to server: %s", err.Error())
 				return
 			}
 		case <-c.closeChan:

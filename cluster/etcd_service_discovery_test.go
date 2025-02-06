@@ -259,8 +259,7 @@ func TestEtcdSDGetServers(t *testing.T) {
 			e.bootstrapServer(server)
 		}
 		serverList := e.GetServers()
-		var checkList []*Server
-		checkList = append(table.servers, &Server{})
+		checkList := append(table.servers, &Server{})
 		assert.ElementsMatch(t, checkList, serverList)
 	}
 }

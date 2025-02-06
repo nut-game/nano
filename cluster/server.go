@@ -41,7 +41,7 @@ func NewServer(id, serverType string, frontend bool, metadata ...map[string]stri
 	d := make(map[string]string)
 	h, err := os.Hostname()
 	if err != nil {
-		logger.Log.Errorf("failed to get hostname: %s", err.Error())
+		logger.Errorf("failed to get hostname: %s", err.Error())
 	}
 	if len(metadata) > 0 {
 		d = metadata[0]
@@ -59,7 +59,7 @@ func NewServer(id, serverType string, frontend bool, metadata ...map[string]stri
 func (s *Server) AsJSONString() string {
 	str, err := json.Marshal(s)
 	if err != nil {
-		logger.Log.Errorf("error getting server as json: %s", err.Error())
+		logger.Errorf("error getting server as json: %s", err.Error())
 		return ""
 	}
 	return string(str)

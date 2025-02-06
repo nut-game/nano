@@ -14,7 +14,7 @@ func main() {
     // ...
     err := tracing.InitializeOtel()
     if err != nil {
-        logger.Log.Errorf("Failed to initialize OpenTelemetry: %v", err)
+        logger.Errorf("Failed to initialize OpenTelemetry: %v", err)
     }
     // ...
 }

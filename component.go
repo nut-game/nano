@@ -64,17 +64,17 @@ func (app *App) startupComponents() {
 	// register all components
 	for _, c := range app.handlerComp {
 		if err := app.handlerService.Register(c.comp, c.opts); err != nil {
-			logger.Log.Errorf("Failed to register handler: %s", err.Error())
+			logger.Errorf("Failed to register handler: %s", err.Error())
 		}
 	}
 
 	// register all remote components
 	for _, c := range app.remoteComp {
 		if app.remoteService == nil {
-			logger.Log.Warn("registered a remote component but remoteService is not running! skipping...")
+			logger.Warn("registered a remote component but remoteService is not running! skipping...")
 		} else {
 			if err := app.remoteService.Register(c.comp, c.opts); err != nil {
-				logger.Log.Errorf("Failed to register remote: %s", err.Error())
+				logger.Errorf("Failed to register remote: %s", err.Error())
 			}
 		}
 	}

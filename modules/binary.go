@@ -71,12 +71,12 @@ func (b *Binary) Init() error {
 	stdErrScanner := bufio.NewScanner(stderr)
 	go func() {
 		for stdOutScanner.Scan() {
-			logger.Log.Info(stdOutScanner.Text())
+			logger.Info(stdOutScanner.Text())
 		}
 	}()
 	go func() {
 		for stdErrScanner.Scan() {
-			logger.Log.Error(stdErrScanner.Text())
+			logger.Error(stdErrScanner.Text())
 		}
 	}()
 	err := b.cmd.Start()

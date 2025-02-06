@@ -96,7 +96,7 @@ func (b *ETCDBindingStorage) setupOnSessionCloseCB() {
 		if s.UID() != "" {
 			err := b.removeBinding(s.UID())
 			if err != nil {
-				logger.Log.Errorf("error removing binding info from storage: %v", err)
+				logger.Errorf("error removing binding info from storage: %v", err)
 			}
 		}
 	})
@@ -115,11 +115,11 @@ func (b *ETCDBindingStorage) watchLeaseChan(c <-chan *clientv3.LeaseKeepAliveRes
 			return
 		case kaRes := <-c:
 			if kaRes == nil {
-				logger.Log.Warn("[binding storage] sd: error renewing etcd lease, rebootstrapping")
+				logger.Warn("[binding storage] sd: error renewing etcd lease, rebootstrapping")
 				for {
 					err := b.bootstrapLease()
 					if err != nil {
-						logger.Log.Warn("[binding storage] sd: error rebootstrapping lease, will retry in 5 seconds")
+						logger.Warn("[binding storage] sd: error rebootstrapping lease, will retry in 5 seconds")
 						time.Sleep(5 * time.Second)
 						continue
 					} else {
@@ -138,7 +138,7 @@ func (b *ETCDBindingStorage) bootstrapLease() error {
 		return err
 	}
 	b.leaseID = l.ID
-	logger.Log.Debugf("[binding storage] sd: got leaseID: %x", l.ID)
+	logger.Debugf("[binding storage] sd: got leaseID: %x", l.ID)
 	// this will keep alive forever, when channel c is closed
 	// it means we probably have to rebootstrap the lease
 	c, err := b.cli.KeepAlive(context.TODO(), b.leaseID)

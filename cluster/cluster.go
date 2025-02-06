@@ -84,8 +84,8 @@ func buildRequest(
 	session session.Session,
 	msg *message.Message,
 	thisServer *Server,
-) (protos.Request, error) {
-	req := protos.Request{
+) (*protos.Request, error) {
+	req := &protos.Request{
 		Type: rpcType,
 		Msg: &protos.Msg{
 			Route: route.String(),
@@ -94,7 +94,7 @@ func buildRequest(
 	}
 	ctx, err := tracing.InjectSpan(ctx)
 	if err != nil {
-		logger.Log.Errorf("failed to inject span: %s", err)
+		logger.Errorf("failed to inject span: %s", err)
 	}
 	ctx = pcontext.AddToPropagateCtx(ctx, constants.PeerIDKey, thisServer.ID)
 	ctx = pcontext.AddToPropagateCtx(ctx, constants.PeerServiceKey, thisServer.Type)
