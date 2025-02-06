@@ -4,15 +4,18 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"log/slog"
 
 	"github.com/fatih/color"
 )
 
 type PrettyHandler struct {
-	slog.Handler
-	l *log.Logger
+	h slog.Handler
+	o io.Writer
+}
+
+func (h *PrettyHandler) Enabled(ctx context.Context, level slog.Level) bool {
+	return h.h.Enabled(ctx, level)
 }
 
 func (h *PrettyHandler) Handle(ctx context.Context, r slog.Record) error {
@@ -41,10 +44,10 @@ func (h *PrettyHandler) Handle(ctx context.Context, r slog.Record) error {
 	// 	return err
 	// }
 
-	h.l.Println(r.Time.Format("2006/01/02 15:04:05 -0700"),
+	io.WriteString(h.o, fmt.Sprintf("%s %s %s %s\n", r.Time.Format("2006/01/02 15:04:05 -0700"),
 		level,
 		color.WhiteString(r.Message),
-		color.CyanString(attrs))
+		color.CyanString(attrs)))
 
 	// _, err := os.Stdout.WriteString(fmt.Sprintf("%s %s %s %s\n",
 	// 	r.Time.Format("2006/01/02 15:04:05 -0700"),
@@ -57,9 +60,22 @@ func (h *PrettyHandler) Handle(ctx context.Context, r slog.Record) error {
 
 }
 
+func (h *PrettyHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	// for k, v := range attrs {
+	// 	fmt.Println(k, v)
+	// }
+	return h
+
+}
+
+func (h *PrettyHandler) WithGroup(name string) slog.Handler {
+	// fmt.Println(name)
+	return h
+}
+
 func NewPrettyHandler(out io.Writer, level slog.Level) *PrettyHandler {
 	return &PrettyHandler{
-		Handler: slog.NewTextHandler(out, &slog.HandlerOptions{Level: level}),
-		l:       log.New(out, "", 0),
+		o: out,
+		h: slog.NewTextHandler(out, &slog.HandlerOptions{Level: level}),
 	}
 }
