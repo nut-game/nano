@@ -45,14 +45,21 @@ func (h *PrettyHandler) Handle(ctx context.Context, r slog.Record) error {
 		level,
 		color.WhiteString(r.Message),
 		color.CyanString(attrs))
+
+	// _, err := os.Stdout.WriteString(fmt.Sprintf("%s %s %s %s\n",
+	// 	r.Time.Format("2006/01/02 15:04:05 -0700"),
+	// 	level,
+	// 	color.WhiteString(r.Message),
+	// 	color.CyanString(attrs),
+	// ))
+
 	return nil
 
 }
 
 func NewPrettyHandler(out io.Writer, level slog.Level) *PrettyHandler {
-	h := &PrettyHandler{
+	return &PrettyHandler{
 		Handler: slog.NewTextHandler(out, &slog.HandlerOptions{Level: level}),
 		l:       log.New(out, "", 0),
 	}
-	return h
 }
