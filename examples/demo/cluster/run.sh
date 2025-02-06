@@ -15,8 +15,8 @@ if [ $# -ne 1 ]; then
 fi
 
 # 定义服务命令
-FRONTEND_CMD="go run main.go -frontend=true -type=frontend -port=3250"
-BACKEND_CMD="go run main.go -frontend=false -type=backend -port=3351"
+FRONTEND_CMD="go run main.go -frontend=true -type=conn -port=3250"
+BACKEND_CMD="go run main.go -frontend=false -type=room -port=3351"
 
 
 # 根据参数执行对应服务
