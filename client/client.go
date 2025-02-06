@@ -208,7 +208,7 @@ func (c *Client) pendingRequestsReaper() {
 				}
 			}
 			for _, pendingReq := range toDelete {
-				err := e.NewError(errors.New("request timeout"), "PIT-504")
+				err := e.NewError(errors.New("request timeout"), "NANO-504")
 				errMarshalled, _ := json.Marshal(err)
 				// send a timeout to incoming msg chan
 				m := &message.Message{

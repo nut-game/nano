@@ -88,7 +88,7 @@ func (tr *TestRemoteSvc) RPCTestPtrReturnsPtr(ctx context.Context, req *test.Tes
 
 // RPCTestReturnsError remote for e2e tests
 func (tr *TestRemoteSvc) RPCTestReturnsError(ctx context.Context, data *test.TestRequest) (*test.TestResponse, error) {
-	return nil, nano.Error(errors.New("test error"), "PIT-433", map[string]string{"some": "meta"})
+	return nil, nano.Error(errors.New("test error"), "NANO-433", map[string]string{"some": "meta"})
 }
 
 // RPCTestNoArgs remote for e2e tests
@@ -111,7 +111,7 @@ func (t *TestSvc) Init() {
 func (t *TestSvc) TestRequestKickUser(ctx context.Context, userID []byte) (*test.TestResponse, error) {
 	s := t.sessionPool.GetSessionByUID(string(userID))
 	if s == nil {
-		return nil, nano.Error(constants.ErrSessionNotFound, "PIT-404")
+		return nil, nano.Error(constants.ErrSessionNotFound, "NANO-404")
 	}
 	err := s.Kick(ctx)
 	if err != nil {
@@ -127,7 +127,7 @@ func (t *TestSvc) TestRequestKickUser(ctx context.Context, userID []byte) (*test
 func (t *TestSvc) TestRequestKickMe(ctx context.Context) (*test.TestResponse, error) {
 	s := t.app.GetSessionFromCtx(ctx)
 	if s == nil {
-		return nil, nano.Error(constants.ErrSessionNotFound, "PIT-404")
+		return nil, nano.Error(constants.ErrSessionNotFound, "NANO-404")
 	}
 	err := s.Kick(ctx)
 	if err != nil {
@@ -177,7 +177,7 @@ func (t *TestSvc) TestRequestReceiveReturnsRaw(ctx context.Context, in []byte) (
 
 // TestRequestReturnsError handler for e2e tests
 func (t *TestSvc) TestRequestReturnsError(ctx context.Context, in []byte) ([]byte, error) {
-	return nil, nano.Error(errors.New("somerror"), "PIT-555")
+	return nil, nano.Error(errors.New("somerror"), "NANO-555")
 }
 
 // TestBind handler for e2e tests
@@ -186,11 +186,11 @@ func (t *TestSvc) TestBind(ctx context.Context) ([]byte, error) {
 	s := t.app.GetSessionFromCtx(ctx)
 	err := s.Bind(ctx, uid)
 	if err != nil {
-		return nil, nano.Error(err, "PIT-444")
+		return nil, nano.Error(err, "NANO-444")
 	}
 	err = t.app.GroupAddMember(ctx, "g1", s.UID())
 	if err != nil {
-		return nil, nano.Error(err, "PIT-441")
+		return nil, nano.Error(err, "NANO-441")
 	}
 	return []byte("ack"), nil
 }
@@ -200,11 +200,11 @@ func (t *TestSvc) TestBindID(ctx context.Context, byteUID []byte) ([]byte, error
 	s := t.app.GetSessionFromCtx(ctx)
 	err := s.Bind(ctx, string(byteUID))
 	if err != nil {
-		return nil, nano.Error(err, "PIT-444")
+		return nil, nano.Error(err, "NANO-444")
 	}
 	err = t.app.GroupAddMember(ctx, "g1", s.UID())
 	if err != nil {
-		return nil, nano.Error(err, "PIT-441")
+		return nil, nano.Error(err, "NANO-441")
 	}
 	return []byte("ack"), nil
 }
