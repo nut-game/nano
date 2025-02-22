@@ -151,10 +151,6 @@ func (c *Client) handleHandshakeResponse() error {
 		return err
 	}
 
-	if packets == nil {
-		return fmt.Errorf("packets is nil")
-	}
-
 	handshakePacket := packets[0]
 	if handshakePacket.Type != packet.Handshake {
 		return fmt.Errorf("got first packet from server that is not a handshake, aborting")
@@ -283,6 +279,7 @@ func (c *Client) readPackets(buf *bytes.Buffer) ([]*packet.Packet, error) {
 	packets, err := c.packetDecoder.Decode(buf.Bytes())
 	if err != nil {
 		logger.Errorf("error decoding packet from server: %s", err.Error())
+		return nil, err
 	}
 	totalProcessed := 0
 	for _, p := range packets {
