@@ -107,7 +107,7 @@ var app nano.Nano
 func main() {
 	conf := configApp()
 	builder := nano.NewDefaultBuilder(true, "chat", nano.Cluster, map[string]string{}, *conf)
-	builder.AddAcceptor(acceptor.NewWSAcceptor(":3250"))
+	builder.AddAcceptor(acceptor.NewWSAcceptor(":40001"))
 	builder.Groups = groups.NewMemoryGroupService(builder.Config.Groups.Memory)
 	app = builder.Build()
 
@@ -129,7 +129,7 @@ func main() {
 
 	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
 
-	go http.ListenAndServe(":3251", nil)
+	go http.ListenAndServe(":4000", nil)
 
 	app.Start()
 }

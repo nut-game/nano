@@ -15,23 +15,22 @@ if [ $# -ne 1 ]; then
 fi
 
 # 定义服务命令
-FRONTEND_CMD="go run main.go -frontend=true -type=conn -port=3250"
-BACKEND_CMD="go run main.go -frontend=false -type=room -port=3351"
-
+FRONTEND_CMD="go run main.go -frontend=true -type=connector -port=3250"
+BACKEND_CMD="go run main.go -frontend=false -type=room"
 
 # 根据参数执行对应服务
 case $1 in
-  1)
-    echo "🚀 启动前端服务..."
-    eval $FRONTEND_CMD
-    ;;
-  2)
-    echo "🔧 启动后端服务..."
-    eval $BACKEND_CMD
-    ;;
-  *)
-    echo "错误: 无效参数 '$1'"
-    echo "可用参数: 1 (前端) 或 2 (后端)"
-    exit 2
-    ;;
+1)
+  echo "🚀 启动前端服务..."
+  eval $FRONTEND_CMD
+  ;;
+2)
+  echo "🔧 启动后端服务..."
+  eval $BACKEND_CMD
+  ;;
+*)
+  echo "错误: 无效参数 '$1'"
+  echo "可用参数: 1 (前端) 或 2 (后端)"
+  exit 2
+  ;;
 esac
