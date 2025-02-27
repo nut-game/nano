@@ -137,6 +137,8 @@ func (c *Config) fillDefaultValues() {
 		"nano.worker.concurrency":                        config.Worker.Concurrency,
 		"nano.worker.redis.pool":                         config.Worker.Redis.Pool,
 		"nano.worker.redis.url":                          config.Worker.Redis.ServerURL,
+		"nano.worker.redis.password":                     config.Worker.Redis.Password,
+		"nano.worker.redis.database":                     config.Worker.Redis.Database,
 		"nano.worker.retry.enabled":                      config.Worker.Retry.Enabled,
 		"nano.worker.retry.exponential":                  config.Worker.Retry.Exponential,
 		"nano.worker.retry.max":                          config.Worker.Retry.Max,
