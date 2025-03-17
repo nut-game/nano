@@ -29,11 +29,11 @@ import (
 type (
 	// HandlerTempl is a function that has the same signature as a handler and will
 	// be called before or after handler methods
-	HandlerTempl func(ctx context.Context, in interface{}) (c context.Context, out interface{}, err error)
+	HandlerTempl func(ctx context.Context, in any) (c context.Context, out any, err error)
 
 	// AfterHandlerTempl is a function for the after handler, receives both the handler response
 	// and the error returned
-	AfterHandlerTempl func(ctx context.Context, out interface{}, err error) (interface{}, error)
+	AfterHandlerTempl func(ctx context.Context, out any, err error) (any, error)
 
 	// Channel contains the functions to be called before the handler method is executed
 	Channel struct {
@@ -91,7 +91,7 @@ func NewAfterChannel() *AfterChannel {
 }
 
 // ExecuteBeforePipeline calls registered handlers
-func (p *Channel) ExecuteBeforePipeline(ctx context.Context, data interface{}) (context.Context, interface{}, error) {
+func (p *Channel) ExecuteBeforePipeline(ctx context.Context, data any) (context.Context, any, error) {
 	var err error
 	res := data
 	if len(p.Handlers) > 0 {
@@ -107,7 +107,7 @@ func (p *Channel) ExecuteBeforePipeline(ctx context.Context, data interface{}) (
 }
 
 // ExecuteAfterPipeline calls registered handlers
-func (p *AfterChannel) ExecuteAfterPipeline(ctx context.Context, res interface{}, err error) (interface{}, error) {
+func (p *AfterChannel) ExecuteAfterPipeline(ctx context.Context, res any, err error) (any, error) {
 	ret := res
 	if len(p.Handlers) > 0 {
 		for _, h := range p.Handlers {

@@ -53,22 +53,22 @@ func (m *MockNano) AddRoute(arg0 string, arg1 router.RoutingFunc) error {
 }
 
 // AddRoute indicates an expected call of AddRoute.
-func (mr *MockNanoMockRecorder) AddRoute(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) AddRoute(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRoute", reflect.TypeOf((*MockNano)(nil).AddRoute), arg0, arg1)
 }
 
 // Documentation mocks base method.
-func (m *MockNano) Documentation(arg0 bool) (map[string]interface{}, error) {
+func (m *MockNano) Documentation(arg0 bool) (map[string]any, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Documentation", arg0)
-	ret0, _ := ret[0].(map[string]interface{})
+	ret0, _ := ret[0].(map[string]any)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Documentation indicates an expected call of Documentation.
-func (mr *MockNanoMockRecorder) Documentation(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) Documentation(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Documentation", reflect.TypeOf((*MockNano)(nil).Documentation), arg0)
 }
@@ -111,7 +111,7 @@ func (m *MockNano) GetModule(arg0 string) (interfaces.Module, error) {
 }
 
 // GetModule indicates an expected call of GetModule.
-func (mr *MockNanoMockRecorder) GetModule(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GetModule(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetModule", reflect.TypeOf((*MockNano)(nil).GetModule), arg0)
 }
@@ -154,7 +154,7 @@ func (m *MockNano) GetServerByID(arg0 string) (*cluster.Server, error) {
 }
 
 // GetServerByID indicates an expected call of GetServerByID.
-func (mr *MockNanoMockRecorder) GetServerByID(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GetServerByID(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetServerByID", reflect.TypeOf((*MockNano)(nil).GetServerByID), arg0)
 }
@@ -197,7 +197,7 @@ func (m *MockNano) GetServersByType(arg0 string) (map[string]*cluster.Server, er
 }
 
 // GetServersByType indicates an expected call of GetServersByType.
-func (mr *MockNanoMockRecorder) GetServersByType(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GetServersByType(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetServersByType", reflect.TypeOf((*MockNano)(nil).GetServersByType), arg0)
 }
@@ -211,7 +211,7 @@ func (m *MockNano) GetSessionFromCtx(arg0 context.Context) session.Session {
 }
 
 // GetSessionFromCtx indicates an expected call of GetSessionFromCtx.
-func (mr *MockNanoMockRecorder) GetSessionFromCtx(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GetSessionFromCtx(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSessionFromCtx", reflect.TypeOf((*MockNano)(nil).GetSessionFromCtx), arg0)
 }
@@ -225,13 +225,13 @@ func (m *MockNano) GroupAddMember(arg0 context.Context, arg1, arg2 string) error
 }
 
 // GroupAddMember indicates an expected call of GroupAddMember.
-func (mr *MockNanoMockRecorder) GroupAddMember(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupAddMember(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupAddMember", reflect.TypeOf((*MockNano)(nil).GroupAddMember), arg0, arg1, arg2)
 }
 
 // GroupBroadcast mocks base method.
-func (m *MockNano) GroupBroadcast(arg0 context.Context, arg1, arg2, arg3 string, arg4 interface{}) error {
+func (m *MockNano) GroupBroadcast(arg0 context.Context, arg1, arg2, arg3 string, arg4 any) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupBroadcast", arg0, arg1, arg2, arg3, arg4)
 	ret0, _ := ret[0].(error)
@@ -239,7 +239,7 @@ func (m *MockNano) GroupBroadcast(arg0 context.Context, arg1, arg2, arg3 string,
 }
 
 // GroupBroadcast indicates an expected call of GroupBroadcast.
-func (mr *MockNanoMockRecorder) GroupBroadcast(arg0, arg1, arg2, arg3, arg4 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupBroadcast(arg0, arg1, arg2, arg3, arg4 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupBroadcast", reflect.TypeOf((*MockNano)(nil).GroupBroadcast), arg0, arg1, arg2, arg3, arg4)
 }
@@ -254,7 +254,7 @@ func (m *MockNano) GroupContainsMember(arg0 context.Context, arg1, arg2 string) 
 }
 
 // GroupContainsMember indicates an expected call of GroupContainsMember.
-func (mr *MockNanoMockRecorder) GroupContainsMember(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupContainsMember(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupContainsMember", reflect.TypeOf((*MockNano)(nil).GroupContainsMember), arg0, arg1, arg2)
 }
@@ -269,7 +269,7 @@ func (m *MockNano) GroupCountMembers(arg0 context.Context, arg1 string) (int, er
 }
 
 // GroupCountMembers indicates an expected call of GroupCountMembers.
-func (mr *MockNanoMockRecorder) GroupCountMembers(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupCountMembers(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupCountMembers", reflect.TypeOf((*MockNano)(nil).GroupCountMembers), arg0, arg1)
 }
@@ -283,7 +283,7 @@ func (m *MockNano) GroupCreate(arg0 context.Context, arg1 string) error {
 }
 
 // GroupCreate indicates an expected call of GroupCreate.
-func (mr *MockNanoMockRecorder) GroupCreate(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupCreate(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupCreate", reflect.TypeOf((*MockNano)(nil).GroupCreate), arg0, arg1)
 }
@@ -297,7 +297,7 @@ func (m *MockNano) GroupCreateWithTTL(arg0 context.Context, arg1 string, arg2 ti
 }
 
 // GroupCreateWithTTL indicates an expected call of GroupCreateWithTTL.
-func (mr *MockNanoMockRecorder) GroupCreateWithTTL(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupCreateWithTTL(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupCreateWithTTL", reflect.TypeOf((*MockNano)(nil).GroupCreateWithTTL), arg0, arg1, arg2)
 }
@@ -311,7 +311,7 @@ func (m *MockNano) GroupDelete(arg0 context.Context, arg1 string) error {
 }
 
 // GroupDelete indicates an expected call of GroupDelete.
-func (mr *MockNanoMockRecorder) GroupDelete(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupDelete(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupDelete", reflect.TypeOf((*MockNano)(nil).GroupDelete), arg0, arg1)
 }
@@ -326,7 +326,7 @@ func (m *MockNano) GroupMembers(arg0 context.Context, arg1 string) ([]string, er
 }
 
 // GroupMembers indicates an expected call of GroupMembers.
-func (mr *MockNanoMockRecorder) GroupMembers(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupMembers(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupMembers", reflect.TypeOf((*MockNano)(nil).GroupMembers), arg0, arg1)
 }
@@ -340,7 +340,7 @@ func (m *MockNano) GroupRemoveAll(arg0 context.Context, arg1 string) error {
 }
 
 // GroupRemoveAll indicates an expected call of GroupRemoveAll.
-func (mr *MockNanoMockRecorder) GroupRemoveAll(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupRemoveAll(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupRemoveAll", reflect.TypeOf((*MockNano)(nil).GroupRemoveAll), arg0, arg1)
 }
@@ -354,7 +354,7 @@ func (m *MockNano) GroupRemoveMember(arg0 context.Context, arg1, arg2 string) er
 }
 
 // GroupRemoveMember indicates an expected call of GroupRemoveMember.
-func (mr *MockNanoMockRecorder) GroupRemoveMember(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupRemoveMember(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupRemoveMember", reflect.TypeOf((*MockNano)(nil).GroupRemoveMember), arg0, arg1, arg2)
 }
@@ -368,7 +368,7 @@ func (m *MockNano) GroupRenewTTL(arg0 context.Context, arg1 string) error {
 }
 
 // GroupRenewTTL indicates an expected call of GroupRenewTTL.
-func (mr *MockNanoMockRecorder) GroupRenewTTL(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) GroupRenewTTL(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupRenewTTL", reflect.TypeOf((*MockNano)(nil).GroupRenewTTL), arg0, arg1)
 }
@@ -396,7 +396,7 @@ func (m *MockNano) RPC(arg0 context.Context, arg1 string, arg2, arg3 protoiface.
 }
 
 // RPC indicates an expected call of RPC.
-func (mr *MockNanoMockRecorder) RPC(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) RPC(arg0, arg1, arg2, arg3 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RPC", reflect.TypeOf((*MockNano)(nil).RPC), arg0, arg1, arg2, arg3)
 }
@@ -410,7 +410,7 @@ func (m *MockNano) RPCTo(arg0 context.Context, arg1, arg2 string, arg3, arg4 pro
 }
 
 // RPCTo indicates an expected call of RPCTo.
-func (mr *MockNanoMockRecorder) RPCTo(arg0, arg1, arg2, arg3, arg4 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) RPCTo(arg0, arg1, arg2, arg3, arg4 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RPCTo", reflect.TypeOf((*MockNano)(nil).RPCTo), arg0, arg1, arg2, arg3, arg4)
 }
@@ -418,7 +418,7 @@ func (mr *MockNanoMockRecorder) RPCTo(arg0, arg1, arg2, arg3, arg4 interface{}) 
 // Register mocks base method.
 func (m *MockNano) Register(arg0 component.Component, arg1 ...component.Option) {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{arg0}
+	varargs := []any{arg0}
 	for _, a := range arg1 {
 		varargs = append(varargs, a)
 	}
@@ -426,9 +426,9 @@ func (m *MockNano) Register(arg0 component.Component, arg1 ...component.Option) 
 }
 
 // Register indicates an expected call of Register.
-func (mr *MockNanoMockRecorder) Register(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) Register(arg0 any, arg1 ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{arg0}, arg1...)
+	varargs := append([]any{arg0}, arg1...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockNano)(nil).Register), varargs...)
 }
 
@@ -441,7 +441,7 @@ func (m *MockNano) RegisterModule(arg0 interfaces.Module, arg1 string) error {
 }
 
 // RegisterModule indicates an expected call of RegisterModule.
-func (mr *MockNanoMockRecorder) RegisterModule(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) RegisterModule(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterModule", reflect.TypeOf((*MockNano)(nil).RegisterModule), arg0, arg1)
 }
@@ -455,7 +455,7 @@ func (m *MockNano) RegisterModuleAfter(arg0 interfaces.Module, arg1 string) erro
 }
 
 // RegisterModuleAfter indicates an expected call of RegisterModuleAfter.
-func (mr *MockNanoMockRecorder) RegisterModuleAfter(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) RegisterModuleAfter(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterModuleAfter", reflect.TypeOf((*MockNano)(nil).RegisterModuleAfter), arg0, arg1)
 }
@@ -469,7 +469,7 @@ func (m *MockNano) RegisterModuleBefore(arg0 interfaces.Module, arg1 string) err
 }
 
 // RegisterModuleBefore indicates an expected call of RegisterModuleBefore.
-func (mr *MockNanoMockRecorder) RegisterModuleBefore(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) RegisterModuleBefore(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterModuleBefore", reflect.TypeOf((*MockNano)(nil).RegisterModuleBefore), arg0, arg1)
 }
@@ -483,7 +483,7 @@ func (m *MockNano) RegisterRPCJob(arg0 worker.RPCJob) error {
 }
 
 // RegisterRPCJob indicates an expected call of RegisterRPCJob.
-func (mr *MockNanoMockRecorder) RegisterRPCJob(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) RegisterRPCJob(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterRPCJob", reflect.TypeOf((*MockNano)(nil).RegisterRPCJob), arg0)
 }
@@ -491,7 +491,7 @@ func (mr *MockNanoMockRecorder) RegisterRPCJob(arg0 interface{}) *gomock.Call {
 // RegisterRemote mocks base method.
 func (m *MockNano) RegisterRemote(arg0 component.Component, arg1 ...component.Option) {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{arg0}
+	varargs := []any{arg0}
 	for _, a := range arg1 {
 		varargs = append(varargs, a)
 	}
@@ -499,14 +499,14 @@ func (m *MockNano) RegisterRemote(arg0 component.Component, arg1 ...component.Op
 }
 
 // RegisterRemote indicates an expected call of RegisterRemote.
-func (mr *MockNanoMockRecorder) RegisterRemote(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) RegisterRemote(arg0 any, arg1 ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{arg0}, arg1...)
+	varargs := append([]any{arg0}, arg1...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterRemote", reflect.TypeOf((*MockNano)(nil).RegisterRemote), varargs...)
 }
 
 // ReliableRPC mocks base method.
-func (m *MockNano) ReliableRPC(arg0 string, arg1 map[string]interface{}, arg2, arg3 protoiface.MessageV1) (string, error) {
+func (m *MockNano) ReliableRPC(arg0 string, arg1 map[string]any, arg2, arg3 protoiface.MessageV1) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ReliableRPC", arg0, arg1, arg2, arg3)
 	ret0, _ := ret[0].(string)
@@ -515,13 +515,13 @@ func (m *MockNano) ReliableRPC(arg0 string, arg1 map[string]interface{}, arg2, a
 }
 
 // ReliableRPC indicates an expected call of ReliableRPC.
-func (mr *MockNanoMockRecorder) ReliableRPC(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) ReliableRPC(arg0, arg1, arg2, arg3 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReliableRPC", reflect.TypeOf((*MockNano)(nil).ReliableRPC), arg0, arg1, arg2, arg3)
 }
 
 // ReliableRPCWithOptions mocks base method.
-func (m *MockNano) ReliableRPCWithOptions(arg0 string, arg1 map[string]interface{}, arg2, arg3 protoiface.MessageV1, arg4 *config.EnqueueOpts) (string, error) {
+func (m *MockNano) ReliableRPCWithOptions(arg0 string, arg1 map[string]any, arg2, arg3 protoiface.MessageV1, arg4 *config.EnqueueOpts) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ReliableRPCWithOptions", arg0, arg1, arg2, arg3, arg4)
 	ret0, _ := ret[0].(string)
@@ -530,7 +530,7 @@ func (m *MockNano) ReliableRPCWithOptions(arg0 string, arg1 map[string]interface
 }
 
 // ReliableRPCWithOptions indicates an expected call of ReliableRPCWithOptions.
-func (mr *MockNanoMockRecorder) ReliableRPCWithOptions(arg0, arg1, arg2, arg3, arg4 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) ReliableRPCWithOptions(arg0, arg1, arg2, arg3, arg4 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReliableRPCWithOptions", reflect.TypeOf((*MockNano)(nil).ReliableRPCWithOptions), arg0, arg1, arg2, arg3, arg4)
 }
@@ -545,13 +545,13 @@ func (m *MockNano) SendKickToUsers(arg0 []string, arg1 string) ([]string, error)
 }
 
 // SendKickToUsers indicates an expected call of SendKickToUsers.
-func (mr *MockNanoMockRecorder) SendKickToUsers(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) SendKickToUsers(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendKickToUsers", reflect.TypeOf((*MockNano)(nil).SendKickToUsers), arg0, arg1)
 }
 
 // SendPushToUsers mocks base method.
-func (m *MockNano) SendPushToUsers(arg0 string, arg1 interface{}, arg2 []string, arg3 string) ([]string, error) {
+func (m *MockNano) SendPushToUsers(arg0 string, arg1 any, arg2 []string, arg3 string) ([]string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SendPushToUsers", arg0, arg1, arg2, arg3)
 	ret0, _ := ret[0].([]string)
@@ -560,7 +560,7 @@ func (m *MockNano) SendPushToUsers(arg0 string, arg1 interface{}, arg2 []string,
 }
 
 // SendPushToUsers indicates an expected call of SendPushToUsers.
-func (mr *MockNanoMockRecorder) SendPushToUsers(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) SendPushToUsers(arg0, arg1, arg2, arg3 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendPushToUsers", reflect.TypeOf((*MockNano)(nil).SendPushToUsers), arg0, arg1, arg2, arg3)
 }
@@ -572,7 +572,7 @@ func (m *MockNano) SetDebug(arg0 bool) {
 }
 
 // SetDebug indicates an expected call of SetDebug.
-func (mr *MockNanoMockRecorder) SetDebug(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) SetDebug(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetDebug", reflect.TypeOf((*MockNano)(nil).SetDebug), arg0)
 }
@@ -586,7 +586,7 @@ func (m *MockNano) SetDictionary(arg0 map[string]uint16) error {
 }
 
 // SetDictionary indicates an expected call of SetDictionary.
-func (mr *MockNanoMockRecorder) SetDictionary(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) SetDictionary(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetDictionary", reflect.TypeOf((*MockNano)(nil).SetDictionary), arg0)
 }
@@ -598,7 +598,7 @@ func (m *MockNano) SetHeartbeatTime(arg0 time.Duration) {
 }
 
 // SetHeartbeatTime indicates an expected call of SetHeartbeatTime.
-func (mr *MockNanoMockRecorder) SetHeartbeatTime(arg0 interface{}) *gomock.Call {
+func (mr *MockNanoMockRecorder) SetHeartbeatTime(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetHeartbeatTime", reflect.TypeOf((*MockNano)(nil).SetHeartbeatTime), arg0)
 }

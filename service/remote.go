@@ -353,8 +353,8 @@ func (r *RemoteService) handleRPCUser(ctx context.Context, req *protos.Request, 
 		return response
 	}
 
-	var ret interface{}
-	var arg interface{}
+	var ret any
+	var arg any
 	var err error
 
 	if remote.HasArgs {
@@ -516,9 +516,9 @@ func (r *RemoteService) DumpServices() {
 }
 
 // Docs returns documentation for remotes
-func (r *RemoteService) Docs(getPtrNames bool) (map[string]interface{}, error) {
+func (r *RemoteService) Docs(getPtrNames bool) (map[string]any, error) {
 	if r == nil {
-		return map[string]interface{}{}, nil
+		return map[string]any{}, nil
 	}
 	return docgenerator.RemotesDocs(r.server.Type, r.services, getPtrNames)
 }

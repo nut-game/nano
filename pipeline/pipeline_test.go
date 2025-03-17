@@ -29,10 +29,10 @@ import (
 )
 
 var (
-	handler1 = func(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+	handler1 = func(ctx context.Context, in any) (context.Context, any, error) {
 		return ctx, in, errors.New("ohno")
 	}
-	handler2 = func(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+	handler2 = func(ctx context.Context, in any) (context.Context, any, error) {
 		return ctx, nil, nil
 	}
 	p = &Channel{}

@@ -159,7 +159,7 @@ func TestHandlerServiceProcessMessage(t *testing.T) {
 	tables := []struct {
 		name  string
 		msg   *message.Message
-		err   interface{}
+		err   any
 		local bool
 	}{
 		{"failed_decode", &message.Message{ID: 1, Route: "k.k.k.k"}, &protos.Error{Msg: "invalid route", Code: "NANO-400"}, false},
@@ -215,7 +215,7 @@ func TestHandlerServiceLocalProcess(t *testing.T) {
 		name string
 		msg  *message.Message
 		rt   *route.Route
-		err  interface{}
+		err  any
 	}{
 		{"process_handler_msg_err", &message.Message{}, route.NewRoute("bla", "bla", "bla"), &protos.Error{Msg: "nano/handler: bla.bla.bla not found", Code: "NANO-404"}},
 		{"success", &message.Message{ID: 1, Data: []byte(`["ok"]`)}, rt, nil},

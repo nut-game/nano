@@ -93,7 +93,7 @@ type (
 		typ     message.Type // message type
 		route   string       // message route (push)
 		mid     uint         // response message id (response)
-		payload interface{}  // payload
+		payload any          // payload
 		err     bool         // if its an error message
 	}
 
@@ -106,8 +106,8 @@ type (
 	// Agent corresponds to a user and is used for storing raw Conn information
 	Agent interface {
 		GetSession() session.Session
-		Push(route string, v interface{}) error
-		ResponseMID(ctx context.Context, mid uint, v interface{}, isError ...bool) error
+		Push(route string, v any) error
+		ResponseMID(ctx context.Context, mid uint, v any, isError ...bool) error
 		Close() error
 		RemoteAddr() net.Addr
 		String() string
@@ -119,7 +119,7 @@ type (
 		IPVersion() string
 		SendHandshakeResponse() error
 		SendHandshakeErrorResponse() error
-		SendRequest(ctx context.Context, serverID, route string, v interface{}) (*protos.Response, error)
+		SendRequest(ctx context.Context, serverID, route string, v any) (*protos.Response, error)
 		AnswerWithError(ctx context.Context, mid uint, err error)
 	}
 
@@ -316,7 +316,7 @@ func (a *agentImpl) GetSession() session.Session {
 }
 
 // Push implementation for NetworkEntity interface
-func (a *agentImpl) Push(route string, v interface{}) error {
+func (a *agentImpl) Push(route string, v any) error {
 	if a.GetStatus() == constants.StatusClosed {
 		return errors.NewError(constants.ErrBrokenPipe, errors.ErrClientClosedRequest)
 	}
@@ -334,7 +334,7 @@ func (a *agentImpl) Push(route string, v interface{}) error {
 
 // ResponseMID implementation for NetworkEntity interface
 // Respond message to session
-func (a *agentImpl) ResponseMID(ctx context.Context, mid uint, v interface{}, isError ...bool) error {
+func (a *agentImpl) ResponseMID(ctx context.Context, mid uint, v any, isError ...bool) error {
 	err := false
 	if len(isError) > 0 {
 		err = isError[0]
@@ -595,7 +595,7 @@ func createConnectionSpan(ctx context.Context, conn net.Conn, op string) trace.S
 }
 
 // SendRequest sends a request to a server
-func (a *agentImpl) SendRequest(ctx context.Context, serverID, route string, v interface{}) (*protos.Response, error) {
+func (a *agentImpl) SendRequest(ctx context.Context, serverID, route string, v any) (*protos.Response, error) {
 	return nil, e.New("not implemented")
 }
 
@@ -627,9 +627,9 @@ func (a *agentImpl) AnswerWithError(ctx context.Context, mid uint, err error) {
 }
 
 func hbdEncode(heartbeatTimeout time.Duration, packetEncoder codec.PacketEncoder, dataCompression bool, serializerName string) {
-	hData := map[string]interface{}{
+	hData := map[string]any{
 		"code": 200,
-		"sys": map[string]interface{}{
+		"sys": map[string]any{
 			"heartbeat":  heartbeatTimeout.Seconds(),
 			"dict":       message.GetDictionary(),
 			"serializer": serializerName,
@@ -653,9 +653,9 @@ func hbdEncode(heartbeatTimeout time.Duration, packetEncoder codec.PacketEncoder
 }
 
 func herdEncode(heartbeatTimeout time.Duration, packetEncoder codec.PacketEncoder, dataCompression bool, serializerName string) {
-	hErrData := map[string]interface{}{
+	hErrData := map[string]any{
 		"code": 400,
-		"sys": map[string]interface{}{
+		"sys": map[string]any{
 			"heartbeat":  heartbeatTimeout.Seconds(),
 			"dict":       message.GetDictionary(),
 			"serializer": serializerName,
@@ -673,7 +673,7 @@ func herdEncode(heartbeatTimeout time.Duration, packetEncoder codec.PacketEncode
 	}
 }
 
-func encodeAndCompress(data interface{}, dataCompression bool) ([]byte, error) {
+func encodeAndCompress(data any, dataCompression bool) ([]byte, error) {
 	encData, err := gojson.Marshal(data)
 	if err != nil {
 		return nil, err

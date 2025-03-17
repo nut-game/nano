@@ -129,12 +129,12 @@ func (pc *ProtoClient) buildProtosFromDescriptor(descriptorArray []*protobuf.Fil
 
 // Receives each entry from the Unmarshal json from the Docs and read the inputs and
 // outputs associated with it. Return the output type, the input and the error.
-func getOutputInputNames(command map[string]interface{}) (string, string, error) {
+func getOutputInputNames(command map[string]any) (string, string, error) {
 	outputName := ""
 	inputName := ""
 
 	in := command["input"]
-	inputDocs, ok := in.(map[string]interface{})
+	inputDocs, ok := in.(map[string]any)
 	if ok {
 		for k := range inputDocs {
 			if strings.Contains(k, "proto") {
@@ -144,13 +144,13 @@ func getOutputInputNames(command map[string]interface{}) (string, string, error)
 	}
 
 	out := command["output"]
-	outputDocsArr := out.([]interface{})
+	outputDocsArr := out.([]any)
 	// we can have handlers that have no return specified.
 	if len(outputDocsArr) == 0 {
 		return inputName, "", nil
 	}
 
-	outputDocs, ok := outputDocsArr[0].(map[string]interface{})
+	outputDocs, ok := outputDocsArr[0].(map[string]any)
 	if ok {
 		for k := range outputDocs {
 			if strings.Contains(k, "proto") {
@@ -163,17 +163,17 @@ func getOutputInputNames(command map[string]interface{}) (string, string, error)
 }
 
 // Get recursively all protos needed in a Unmarshal json.
-func getKeys(info map[string]interface{}, keysSet map[string]bool) {
+func getKeys(info map[string]any, keysSet map[string]bool) {
 	for k, v := range info {
 		if strings.Contains(k, "*") {
 			kew := strings.Replace(k, "*", "", 1)
 			keysSet[kew] = true
 		}
 
-		listofouts, ok := v.([]interface{})
+		listofouts, ok := v.([]any)
 		if ok {
 			for i := range listofouts {
-				aux, ok := listofouts[i].(map[string]interface{})
+				aux, ok := listofouts[i].(map[string]any)
 				if !ok {
 					continue
 				}
@@ -181,7 +181,7 @@ func getKeys(info map[string]interface{}, keysSet map[string]bool) {
 			}
 		}
 
-		if aux, ok := v.(map[string]interface{}); ok {
+		if aux, ok := v.(map[string]any); ok {
 			getKeys(aux, keysSet)
 		}
 	}
@@ -193,11 +193,11 @@ func getKeys(info map[string]interface{}, keysSet map[string]bool) {
 // protobuf descriptors.
 func (pc *ProtoClient) getDescriptors(data string) error {
 	d := []byte(data)
-	var jsonmap interface{}
+	var jsonmap any
 	if err := json.Unmarshal(d, &jsonmap); err != nil {
 		return err
 	}
-	m := jsonmap.(map[string]interface{})
+	m := jsonmap.(map[string]any)
 	keysSet := make(map[string]bool)
 	getKeys(m, keysSet)
 
@@ -212,9 +212,9 @@ func (pc *ProtoClient) getDescriptors(data string) error {
 	}
 
 	// build commands reference
-	handlers := m["handlers"].(map[string]interface{})
+	handlers := m["handlers"].(map[string]any)
 	for k, v := range handlers {
-		cmdInfo := v.(map[string]interface{})
+		cmdInfo := v.(map[string]any)
 		in, out, err := getOutputInputNames(cmdInfo)
 		if err != nil {
 			return fmt.Errorf("failed to get output and input names for '%s' handler: %w", k, err)
@@ -230,9 +230,9 @@ func (pc *ProtoClient) getDescriptors(data string) error {
 		}
 	}
 
-	remotes := m["remotes"].(map[string]interface{})
+	remotes := m["remotes"].(map[string]any)
 	for k, v := range remotes {
-		cmdInfo := v.(map[string]interface{})
+		cmdInfo := v.(map[string]any)
 		in, out, err := getOutputInputNames(cmdInfo)
 		if err != nil {
 			return err

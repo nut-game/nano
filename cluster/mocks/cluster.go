@@ -84,7 +84,7 @@ func (m *MockRPCServer) SetNanoServer(arg0 protos.NanoServer) {
 }
 
 // SetNanoServer indicates an expected call of SetNanoServer.
-// func (mr *MockRPCServerMockRecorder) SetNanoServer(arg0 interface{}) *gomock.Call {
+// func (mr *MockRPCServerMockRecorder) SetNanoServer(arg0 any) *gomock.Call {
 // 	mr.mock.ctrl.T.Helper()
 // 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetNanoServer", reflect.TypeOf((*MockRPCServer)(nil).SetNanoServer), arg0)
 // }
@@ -159,7 +159,7 @@ func (m *MockRPCClient) BroadcastSessionBind(uid string) error {
 }
 
 // BroadcastSessionBind indicates an expected call of BroadcastSessionBind.
-func (mr *MockRPCClientMockRecorder) BroadcastSessionBind(uid interface{}) *gomock.Call {
+func (mr *MockRPCClientMockRecorder) BroadcastSessionBind(uid any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BroadcastSessionBind", reflect.TypeOf((*MockRPCClient)(nil).BroadcastSessionBind), uid)
 }
@@ -174,7 +174,7 @@ func (m *MockRPCClient) Call(ctx context.Context, rpcType protos.RPCType, route 
 }
 
 // Call indicates an expected call of Call.
-func (mr *MockRPCClientMockRecorder) Call(ctx, rpcType, route, session, msg, server interface{}) *gomock.Call {
+func (mr *MockRPCClientMockRecorder) Call(ctx, rpcType, route, session, msg, server any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockRPCClient)(nil).Call), ctx, rpcType, route, session, msg, server)
 }
@@ -202,7 +202,7 @@ func (m *MockRPCClient) Send(route string, data []byte) error {
 }
 
 // Send indicates an expected call of Send.
-func (mr *MockRPCClientMockRecorder) Send(route, data interface{}) *gomock.Call {
+func (mr *MockRPCClientMockRecorder) Send(route, data any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Send", reflect.TypeOf((*MockRPCClient)(nil).Send), route, data)
 }
@@ -216,7 +216,7 @@ func (m *MockRPCClient) SendKick(userID, serverType string, kick *protos.KickMsg
 }
 
 // SendKick indicates an expected call of SendKick.
-func (mr *MockRPCClientMockRecorder) SendKick(userID, serverType, kick interface{}) *gomock.Call {
+func (mr *MockRPCClientMockRecorder) SendKick(userID, serverType, kick any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendKick", reflect.TypeOf((*MockRPCClient)(nil).SendKick), userID, serverType, kick)
 }
@@ -230,7 +230,7 @@ func (m *MockRPCClient) SendPush(userID string, frontendSv *cluster.Server, push
 }
 
 // SendPush indicates an expected call of SendPush.
-func (mr *MockRPCClientMockRecorder) SendPush(userID, frontendSv, push interface{}) *gomock.Call {
+func (mr *MockRPCClientMockRecorder) SendPush(userID, frontendSv, push any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendPush", reflect.TypeOf((*MockRPCClient)(nil).SendPush), userID, frontendSv, push)
 }
@@ -279,7 +279,7 @@ func (m *MockSDListener) AddServer(arg0 *cluster.Server) {
 }
 
 // AddServer indicates an expected call of AddServer.
-func (mr *MockSDListenerMockRecorder) AddServer(arg0 interface{}) *gomock.Call {
+func (mr *MockSDListenerMockRecorder) AddServer(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddServer", reflect.TypeOf((*MockSDListener)(nil).AddServer), arg0)
 }
@@ -291,7 +291,7 @@ func (m *MockSDListener) RemoveServer(arg0 *cluster.Server) {
 }
 
 // RemoveServer indicates an expected call of RemoveServer.
-func (mr *MockSDListenerMockRecorder) RemoveServer(arg0 interface{}) *gomock.Call {
+func (mr *MockSDListenerMockRecorder) RemoveServer(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveServer", reflect.TypeOf((*MockSDListener)(nil).RemoveServer), arg0)
 }
@@ -326,7 +326,7 @@ func (m *MockRemoteBindingListener) OnUserBind(uid, fid string) {
 }
 
 // OnUserBind indicates an expected call of OnUserBind.
-func (mr *MockRemoteBindingListenerMockRecorder) OnUserBind(uid, fid interface{}) *gomock.Call {
+func (mr *MockRemoteBindingListenerMockRecorder) OnUserBind(uid, fid any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "OnUserBind", reflect.TypeOf((*MockRemoteBindingListener)(nil).OnUserBind), uid, fid)
 }

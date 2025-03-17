@@ -38,12 +38,12 @@ type docs struct {
 type docMap map[string]*doc
 
 type doc struct {
-	Input  interface{}   `json:"input"`
-	Output []interface{} `json:"output"`
+	Input  any   `json:"input"`
+	Output []any `json:"output"`
 }
 
 // HandlersDocs returns a map from route to input and output
-func HandlersDocs(serverType string, services map[string]*component.Service, getPtrNames bool) (map[string]interface{}, error) {
+func HandlersDocs(serverType string, services map[string]*component.Service, getPtrNames bool) (map[string]any, error) {
 	docs := &docs{
 		Handlers: map[string]*doc{},
 	}
@@ -59,7 +59,7 @@ func HandlersDocs(serverType string, services map[string]*component.Service, get
 }
 
 // RemotesDocs returns a map from route to input and output
-func RemotesDocs(serverType string, services map[string]*component.Service, getPtrNames bool) (map[string]interface{}, error) {
+func RemotesDocs(serverType string, services map[string]*component.Service, getPtrNames bool) (map[string]any, error) {
 	docs := &docs{
 		Remotes: map[string]*doc{},
 	}
@@ -74,8 +74,8 @@ func RemotesDocs(serverType string, services map[string]*component.Service, getP
 	return docs.Remotes.toMap()
 }
 
-func (d docMap) toMap() (map[string]interface{}, error) {
-	var m map[string]interface{}
+func (d docMap) toMap() (map[string]any, error) {
+	var m map[string]any
 	bts, err := json.Marshal(d)
 	if err != nil {
 		return nil, err
@@ -89,7 +89,7 @@ func (d docMap) toMap() (map[string]interface{}, error) {
 
 func docForMethod(method reflect.Method, getPtrNames bool) *doc {
 	doc := &doc{
-		Output: []interface{}{},
+		Output: []any{},
 	}
 
 	if method.Type.NumIn() > 2 {
@@ -114,9 +114,9 @@ func parseStruct(typ reflect.Type) reflect.Type {
 	}
 }
 
-func docForType(typ reflect.Type, isOutput bool, getPtrNames bool) interface{} {
+func docForType(typ reflect.Type, isOutput bool, getPtrNames bool) any {
 	if typ.Kind() == reflect.Ptr {
-		fields := map[string]interface{}{}
+		fields := map[string]any{}
 		elm := typ.Elem()
 		for i := 0; i < elm.NumField(); i++ {
 			if name, valid := getName(elm.Field(i), isOutput); valid {
@@ -124,7 +124,7 @@ func docForType(typ reflect.Type, isOutput bool, getPtrNames bool) interface{} {
 			}
 		}
 		if getPtrNames {
-			composite := map[string]interface{}{}
+			composite := map[string]any{}
 			composite[typ.String()] = fields
 			return composite
 		}
@@ -175,7 +175,7 @@ func getName(field reflect.StructField, isOutput bool) (name string, valid bool)
 	return strings.Split(name, ",")[0], true
 }
 
-func parseType(typ reflect.Type, isOutput bool, getPtrNames bool) interface{} {
+func parseType(typ reflect.Type, isOutput bool, getPtrNames bool) any {
 	var elm reflect.Type
 
 	switch typ.Kind() {
@@ -191,19 +191,19 @@ func parseType(typ reflect.Type, isOutput bool, getPtrNames bool) interface{} {
 		if parsed == "uint8" {
 			return "[]byte"
 		}
-		return []interface{}{parsed}
+		return []any{parsed}
 	default:
 		return typ.String()
 	}
 
-	fields := map[string]interface{}{}
+	fields := map[string]any{}
 	for i := 0; i < elm.NumField(); i++ {
 		if name, valid := getName(elm.Field(i), isOutput); valid {
 			fields[name] = parseType(elm.Field(i).Type, isOutput, getPtrNames)
 		}
 	}
 	if getPtrNames {
-		composite := map[string]interface{}{}
+		composite := map[string]any{}
 		composite[typ.String()] = fields
 		return composite
 	}

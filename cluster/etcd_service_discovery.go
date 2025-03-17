@@ -267,7 +267,7 @@ func (sd *etcdServiceDiscovery) deleteServer(serverID string) {
 }
 
 func (sd *etcdServiceDiscovery) deleteLocalInvalidServers(actualServers []string) {
-	sd.serverMapByID.Range(func(key interface{}, value interface{}) bool {
+	sd.serverMapByID.Range(func(key any, value any) bool {
 		k := key.(string)
 		if !util.SliceContainsString(actualServers, k) {
 			logger.Warnf("deleting invalid local server %s", k)
@@ -313,7 +313,7 @@ func (sd *etcdServiceDiscovery) GetServersByType(serverType string) (map[string]
 // GetServers returns a slice with all the servers
 func (sd *etcdServiceDiscovery) GetServers() []*Server {
 	ret := make([]*Server, 0)
-	sd.serverMapByID.Range(func(k, v interface{}) bool {
+	sd.serverMapByID.Range(func(k, v any) bool {
 		ret = append(ret, v.(*Server))
 		return true
 	})

@@ -47,7 +47,7 @@ func (app *App) GroupMembers(ctx context.Context, groupName string) ([]string, e
 }
 
 // GroupBroadcast pushes the message to all members inside group
-func (app *App) GroupBroadcast(ctx context.Context, frontendType, groupName, route string, v interface{}) error {
+func (app *App) GroupBroadcast(ctx context.Context, frontendType, groupName, route string, v any) error {
 	logger.Debugf("Type=Broadcast Route=%s, Data=%+v", route, v)
 
 	members, err := app.GroupMembers(ctx, groupName)
@@ -57,7 +57,7 @@ func (app *App) GroupBroadcast(ctx context.Context, frontendType, groupName, rou
 	return app.sendDataToMembers(members, frontendType, route, v)
 }
 
-func (app *App) sendDataToMembers(uids []string, frontendType, route string, v interface{}) error {
+func (app *App) sendDataToMembers(uids []string, frontendType, route string, v any) error {
 	errUids, err := app.SendPushToUsers(route, v, uids, frontendType)
 	if err != nil {
 		logger.Errorf("Group push message error, UID=%v, Error=%s", errUids, err.Error())

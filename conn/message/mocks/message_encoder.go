@@ -54,6 +54,6 @@ func (m *MockEncoder) Encode(message *message.Message) ([]byte, error) {
 }
 
 // Encode indicates an expected call of Encode
-func (mr *MockEncoderMockRecorder) Encode(message interface{}) *gomock.Call {
+func (mr *MockEncoderMockRecorder) Encode(message any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Encode", reflect.TypeOf((*MockEncoder)(nil).Encode), message)
 }

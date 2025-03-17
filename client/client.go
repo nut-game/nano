@@ -117,7 +117,7 @@ func New(requestTimeout ...time.Duration) *Client {
 				BuildNumber: "20",
 				Version:     "2.1",
 			},
-			User: map[string]interface{}{
+			User: map[string]any{
 				"age": 30,
 			},
 		},

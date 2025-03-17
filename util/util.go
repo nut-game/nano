@@ -62,7 +62,7 @@ func getLoggerFromArgs(args []reflect.Value) interfaces.Logger {
 }
 
 // Pcall calls a method that returns an interface and an error and recovers in case of panic
-func Pcall(method reflect.Method, args []reflect.Value) (rets interface{}, err error) {
+func Pcall(method reflect.Method, args []reflect.Value) (rets any, err error) {
 	defer func() {
 		if rec := recover(); rec != nil {
 			// Try to use logger from context here to help trace error cause
@@ -105,7 +105,7 @@ func SliceContainsString(slice []string, str string) bool {
 }
 
 // SerializeOrRaw serializes the interface if its not an array of bytes already
-func SerializeOrRaw(serializer serialize.Serializer, v interface{}) ([]byte, error) {
+func SerializeOrRaw(serializer serialize.Serializer, v any) ([]byte, error) {
 	if data, ok := v.([]byte); ok {
 		return data, nil
 	}

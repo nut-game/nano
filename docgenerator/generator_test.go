@@ -88,56 +88,56 @@ func TestHandlersDoc(t *testing.T) {
 
 	doc, err := HandlersDocs("metagame", handlerServices, false)
 	assert.NoError(t, err)
-	assert.Equal(t, map[string]interface{}{
-		"metagame.MyComp.HandlerEmpty": map[string]interface{}{
-			"output": []interface{}{},
-			"input":  interface{}(nil),
+	assert.Equal(t, map[string]any{
+		"metagame.MyComp.HandlerEmpty": map[string]any{
+			"output": []any{},
+			"input":  any(nil),
 		},
-		"metagame.MyComp.HandlerRaw": map[string]interface{}{
+		"metagame.MyComp.HandlerRaw": map[string]any{
 			"input":  "[]byte",
-			"output": []interface{}{"[]byte", "error"},
+			"output": []any{"[]byte", "error"},
 		},
-		"metagame.MyComp.HandlerOrRemoteStruct": map[string]interface{}{
-			"input": map[string]interface{}{
+		"metagame.MyComp.HandlerOrRemoteStruct": map[string]any{
+			"input": map[string]any{
 				"bytes": "[]byte",
 				"int":   "int",
-				"notPointer": map[string]interface{}{
+				"notPointer": map[string]any{
 					"int": "int",
 					"str": "string",
 				},
 				"str": "string",
-				"struct": map[string]interface{}{
+				"struct": map[string]any{
 					"int": "int",
-					"notPointer": map[string]interface{}{
+					"notPointer": map[string]any{
 						"int": "int",
 						"str": "string",
 					},
 				},
-				"slice": []interface{}{
-					map[string]interface{}{
+				"slice": []any{
+					map[string]any{
 						"int": "int",
 						"str": "string",
 					},
 				},
 				"time": "time.Time",
 			},
-			"output": []interface{}{
-				map[string]interface{}{
+			"output": []any{
+				map[string]any{
 					"int": "int",
-					"notPointer": map[string]interface{}{
+					"notPointer": map[string]any{
 						"Int": "int",
 						"str": "string",
 					},
 					"Str": "string",
-					"struct": map[string]interface{}{
+					"struct": map[string]any{
 						"int": "int",
-						"notPointer": map[string]interface{}{
+						"notPointer": map[string]any{
 							"Int": "int",
 							"str": "string",
 						},
 					},
-					"slice": []interface{}{
-						map[string]interface{}{
+					"slice": []any{
+						map[string]any{
 							"int": "int",
 							"Str": "string",
 						},
@@ -148,13 +148,13 @@ func TestHandlersDoc(t *testing.T) {
 				"error",
 			},
 		},
-		"metagame.MyComp.RemoteStruct": map[string]interface{}{
-			"input": map[string]interface{}{
+		"metagame.MyComp.RemoteStruct": map[string]any{
+			"input": map[string]any{
 				"A": "int32",
 				"B": "string",
 			},
-			"output": []interface{}{
-				map[string]interface{}{
+			"output": []any{
+				map[string]any{
 					"A": "int32",
 					"B": "string",
 				},
@@ -175,46 +175,46 @@ func TestHandlersDocTrue(t *testing.T) {
 
 	doc, err := HandlersDocs("metagame", handlerServices, false)
 	assert.NoError(t, err)
-	assert.Equal(t, map[string]interface{}{
-		"metagame.MyComp.HandlerOrRemoteStruct": map[string]interface{}{
-			"input": map[string]interface{}{
+	assert.Equal(t, map[string]any{
+		"metagame.MyComp.HandlerOrRemoteStruct": map[string]any{
+			"input": map[string]any{
 				"time":  "time.Time",
 				"bytes": "[]byte",
 				"int":   "int",
-				"notPointer": map[string]interface{}{
+				"notPointer": map[string]any{
 					"int": "int",
 					"str": "string",
 				},
-				"slice": []interface{}{map[string]interface{}{
+				"slice": []any{map[string]any{
 					"int": "int",
 					"str": "string",
 				},
 				},
 				"str": "string",
-				"struct": map[string]interface{}{
+				"struct": map[string]any{
 					"int": "int",
-					"notPointer": map[string]interface{}{
+					"notPointer": map[string]any{
 						"int": "int",
 						"str": "string",
 					},
 				},
 			},
-			"output": []interface{}{map[string]interface{}{
+			"output": []any{map[string]any{
 				"Str":   "string",
 				"bytes": "[]byte",
 				"int":   "int",
-				"notPointer": map[string]interface{}{
+				"notPointer": map[string]any{
 					"Int": "int",
 					"str": "string",
 				},
-				"slice": []interface{}{map[string]interface{}{
+				"slice": []any{map[string]any{
 					"Str": "string",
 					"int": "int",
 				},
 				},
-				"struct": map[string]interface{}{
+				"struct": map[string]any{
 					"int": "int",
-					"notPointer": map[string]interface{}{
+					"notPointer": map[string]any{
 						"Int": "int",
 						"str": "string",
 					},
@@ -224,28 +224,28 @@ func TestHandlersDocTrue(t *testing.T) {
 				"error",
 			},
 		},
-		"metagame.MyComp.HandlerRaw": map[string]interface{}{
+		"metagame.MyComp.HandlerRaw": map[string]any{
 			"input": "[]byte",
-			"output": []interface{}{
+			"output": []any{
 				"[]byte",
 				"error",
 			},
 		},
-		"metagame.MyComp.RemoteStruct": map[string]interface{}{
-			"input": map[string]interface{}{
+		"metagame.MyComp.RemoteStruct": map[string]any{
+			"input": map[string]any{
 				"A": "int32",
 				"B": "string",
 			},
-			"output": []interface{}{map[string]interface{}{
+			"output": []any{map[string]any{
 				"A": "int32",
 				"B": "string",
 			},
 				"error",
 			},
 		},
-		"metagame.MyComp.HandlerEmpty": map[string]interface{}{
-			"output": []interface{}{},
-			"input":  interface{}(nil),
+		"metagame.MyComp.HandlerEmpty": map[string]any{
+			"output": []any{},
+			"input":  any(nil),
 		},
 	}, doc)
 }
@@ -261,14 +261,14 @@ func TestRemotesDoc(t *testing.T) {
 
 	doc, err := RemotesDocs("metagame", remoteServices, false)
 	assert.NoError(t, err)
-	assert.Equal(t, map[string]interface{}{
-		"metagame.MyComp.RemoteStruct": map[string]interface{}{
-			"input": map[string]interface{}{
+	assert.Equal(t, map[string]any{
+		"metagame.MyComp.RemoteStruct": map[string]any{
+			"input": map[string]any{
 				"A": "int32",
 				"B": "string",
 			},
-			"output": []interface{}{
-				map[string]interface{}{
+			"output": []any{
+				map[string]any{
 					"A": "int32",
 					"B": "string",
 				},
@@ -287,18 +287,18 @@ func TestRemotesDocTrue(t *testing.T) {
 	remoteServices[s.Name] = s
 	doc, err := RemotesDocs("metagame", remoteServices, true)
 	assert.NoError(t, err)
-	assert.Equal(t, map[string]interface{}{
-		"metagame.MyComp.RemoteStruct": map[string]interface{}{
-			"input": map[string]interface{}{
-				"*test.SomeStruct": map[string]interface{}{
+	assert.Equal(t, map[string]any{
+		"metagame.MyComp.RemoteStruct": map[string]any{
+			"input": map[string]any{
+				"*test.SomeStruct": map[string]any{
 
 					"A": "int32",
 					"B": "string",
 				},
 			},
-			"output": []interface{}{
-				map[string]interface{}{
-					"*test.SomeStruct": map[string]interface{}{
+			"output": []any{
+				map[string]any{
+					"*test.SomeStruct": map[string]any{
 						"A": "int32",
 						"B": "string",
 					}},

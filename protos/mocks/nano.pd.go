@@ -39,7 +39,7 @@ func (m *MockPitayaClient) EXPECT() *MockPitayaClientMockRecorder {
 // Call mocks base method.
 func (m *MockPitayaClient) Call(ctx context.Context, in *protos.Request, opts ...grpc.CallOption) (*protos.Response, error) {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{ctx, in}
+	varargs := []any{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
@@ -50,16 +50,16 @@ func (m *MockPitayaClient) Call(ctx context.Context, in *protos.Request, opts ..
 }
 
 // Call indicates an expected call of Call.
-func (mr *MockPitayaClientMockRecorder) Call(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+func (mr *MockPitayaClientMockRecorder) Call(ctx, in any, opts ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{ctx, in}, opts...)
+	varargs := append([]any{ctx, in}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockPitayaClient)(nil).Call), varargs...)
 }
 
 // KickUser mocks base method.
 func (m *MockPitayaClient) KickUser(ctx context.Context, in *protos.KickMsg, opts ...grpc.CallOption) (*protos.KickAnswer, error) {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{ctx, in}
+	varargs := []any{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
@@ -70,16 +70,16 @@ func (m *MockPitayaClient) KickUser(ctx context.Context, in *protos.KickMsg, opt
 }
 
 // KickUser indicates an expected call of KickUser.
-func (mr *MockPitayaClientMockRecorder) KickUser(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+func (mr *MockPitayaClientMockRecorder) KickUser(ctx, in any, opts ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{ctx, in}, opts...)
+	varargs := append([]any{ctx, in}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "KickUser", reflect.TypeOf((*MockPitayaClient)(nil).KickUser), varargs...)
 }
 
 // PushToUser mocks base method.
 func (m *MockPitayaClient) PushToUser(ctx context.Context, in *protos.Push, opts ...grpc.CallOption) (*protos.Response, error) {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{ctx, in}
+	varargs := []any{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
@@ -90,16 +90,16 @@ func (m *MockPitayaClient) PushToUser(ctx context.Context, in *protos.Push, opts
 }
 
 // PushToUser indicates an expected call of PushToUser.
-func (mr *MockPitayaClientMockRecorder) PushToUser(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+func (mr *MockPitayaClientMockRecorder) PushToUser(ctx, in any, opts ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{ctx, in}, opts...)
+	varargs := append([]any{ctx, in}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PushToUser", reflect.TypeOf((*MockPitayaClient)(nil).PushToUser), varargs...)
 }
 
 // SessionBindRemote mocks base method.
 func (m *MockPitayaClient) SessionBindRemote(ctx context.Context, in *protos.BindMsg, opts ...grpc.CallOption) (*protos.Response, error) {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{ctx, in}
+	varargs := []any{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
@@ -110,9 +110,9 @@ func (m *MockPitayaClient) SessionBindRemote(ctx context.Context, in *protos.Bin
 }
 
 // SessionBindRemote indicates an expected call of SessionBindRemote.
-func (mr *MockPitayaClientMockRecorder) SessionBindRemote(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+func (mr *MockPitayaClientMockRecorder) SessionBindRemote(ctx, in any, opts ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{ctx, in}, opts...)
+	varargs := append([]any{ctx, in}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SessionBindRemote", reflect.TypeOf((*MockPitayaClient)(nil).SessionBindRemote), varargs...)
 }
 
@@ -150,7 +150,7 @@ func (m *MockPitayaServer) Call(arg0 context.Context, arg1 *protos.Request) (*pr
 }
 
 // Call indicates an expected call of Call.
-func (mr *MockPitayaServerMockRecorder) Call(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockPitayaServerMockRecorder) Call(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Call", reflect.TypeOf((*MockPitayaServer)(nil).Call), arg0, arg1)
 }
@@ -165,7 +165,7 @@ func (m *MockPitayaServer) KickUser(arg0 context.Context, arg1 *protos.KickMsg) 
 }
 
 // KickUser indicates an expected call of KickUser.
-func (mr *MockPitayaServerMockRecorder) KickUser(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockPitayaServerMockRecorder) KickUser(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "KickUser", reflect.TypeOf((*MockPitayaServer)(nil).KickUser), arg0, arg1)
 }
@@ -180,7 +180,7 @@ func (m *MockPitayaServer) PushToUser(arg0 context.Context, arg1 *protos.Push) (
 }
 
 // PushToUser indicates an expected call of PushToUser.
-func (mr *MockPitayaServerMockRecorder) PushToUser(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockPitayaServerMockRecorder) PushToUser(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PushToUser", reflect.TypeOf((*MockPitayaServer)(nil).PushToUser), arg0, arg1)
 }
@@ -195,7 +195,7 @@ func (m *MockPitayaServer) SessionBindRemote(arg0 context.Context, arg1 *protos.
 }
 
 // SessionBindRemote indicates an expected call of SessionBindRemote.
-func (mr *MockPitayaServerMockRecorder) SessionBindRemote(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockPitayaServerMockRecorder) SessionBindRemote(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SessionBindRemote", reflect.TypeOf((*MockPitayaServer)(nil).SessionBindRemote), arg0, arg1)
 }

@@ -126,7 +126,7 @@ func RegisterRPCJob(rpcJob worker.RPCJob) error {
 	return DefaultApp.RegisterRPCJob(rpcJob)
 }
 
-func Documentation(getPtrNames bool) (map[string]interface{}, error) {
+func Documentation(getPtrNames bool) (map[string]any, error) {
 	return DefaultApp.Documentation(getPtrNames)
 }
 
@@ -142,15 +142,15 @@ func RPCTo(ctx context.Context, serverID, routeStr string, reply proto.Message, 
 	return DefaultApp.RPCTo(ctx, serverID, routeStr, reply, arg)
 }
 
-func ReliableRPC(routeStr string, metadata map[string]interface{}, reply, arg proto.Message) (jid string, err error) {
+func ReliableRPC(routeStr string, metadata map[string]any, reply, arg proto.Message) (jid string, err error) {
 	return DefaultApp.ReliableRPC(routeStr, metadata, reply, arg)
 }
 
-func ReliableRPCWithOptions(routeStr string, metadata map[string]interface{}, reply, arg proto.Message, opts *config.EnqueueOpts) (jid string, err error) {
+func ReliableRPCWithOptions(routeStr string, metadata map[string]any, reply, arg proto.Message, opts *config.EnqueueOpts) (jid string, err error) {
 	return DefaultApp.ReliableRPCWithOptions(routeStr, metadata, reply, arg, opts)
 }
 
-func SendPushToUsers(route string, v interface{}, uids []string, frontendType string) ([]string, error) {
+func SendPushToUsers(route string, v any, uids []string, frontendType string) ([]string, error) {
 	return DefaultApp.SendPushToUsers(route, v, uids, frontendType)
 }
 
@@ -170,7 +170,7 @@ func GroupMembers(ctx context.Context, groupName string) ([]string, error) {
 	return DefaultApp.GroupMembers(ctx, groupName)
 }
 
-func GroupBroadcast(ctx context.Context, frontendType, groupName, route string, v interface{}) error {
+func GroupBroadcast(ctx context.Context, frontendType, groupName, route string, v any) error {
 	return DefaultApp.GroupBroadcast(ctx, frontendType, groupName, route, v)
 }
 

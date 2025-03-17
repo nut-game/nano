@@ -553,7 +553,7 @@ func file_examples_demo_protos_cluster_proto_rawDescGZIP() []byte {
 }
 
 var file_examples_demo_protos_cluster_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_examples_demo_protos_cluster_proto_goTypes = []interface{}{
+var file_examples_demo_protos_cluster_proto_goTypes = []any{
 	(*RPCMsg)(nil),       // 0: cluster_protos.RPCMsg
 	(*RPCRes)(nil),       // 1: cluster_protos.RPCRes
 	(*UserMessage)(nil),  // 2: cluster_protos.UserMessage
@@ -578,7 +578,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_examples_demo_protos_cluster_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[0].Exporter = func(v any, i int) any {
 			switch v := v.(*RPCMsg); i {
 			case 0:
 				return &v.state
@@ -590,7 +590,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 				return nil
 			}
 		}
-		file_examples_demo_protos_cluster_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[1].Exporter = func(v any, i int) any {
 			switch v := v.(*RPCRes); i {
 			case 0:
 				return &v.state
@@ -602,7 +602,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 				return nil
 			}
 		}
-		file_examples_demo_protos_cluster_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[2].Exporter = func(v any, i int) any {
 			switch v := v.(*UserMessage); i {
 			case 0:
 				return &v.state
@@ -614,7 +614,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 				return nil
 			}
 		}
-		file_examples_demo_protos_cluster_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[3].Exporter = func(v any, i int) any {
 			switch v := v.(*Stats); i {
 			case 0:
 				return &v.state
@@ -626,7 +626,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 				return nil
 			}
 		}
-		file_examples_demo_protos_cluster_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[4].Exporter = func(v any, i int) any {
 			switch v := v.(*SendRPCMsg); i {
 			case 0:
 				return &v.state
@@ -638,7 +638,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 				return nil
 			}
 		}
-		file_examples_demo_protos_cluster_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[5].Exporter = func(v any, i int) any {
 			switch v := v.(*NewUser); i {
 			case 0:
 				return &v.state
@@ -650,7 +650,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 				return nil
 			}
 		}
-		file_examples_demo_protos_cluster_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[6].Exporter = func(v any, i int) any {
 			switch v := v.(*AllMembers); i {
 			case 0:
 				return &v.state
@@ -662,7 +662,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 				return nil
 			}
 		}
-		file_examples_demo_protos_cluster_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[7].Exporter = func(v any, i int) any {
 			switch v := v.(*JoinResponse); i {
 			case 0:
 				return &v.state
@@ -674,7 +674,7 @@ func file_examples_demo_protos_cluster_proto_init() {
 				return nil
 			}
 		}
-		file_examples_demo_protos_cluster_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_examples_demo_protos_cluster_proto_msgTypes[8].Exporter = func(v any, i int) any {
 			switch v := v.(*Response); i {
 			case 0:
 				return &v.state

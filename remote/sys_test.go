@@ -37,7 +37,7 @@ func TestBindSession(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	id := int64(1)
 	uid := uuid.New().String()
-	d, err := json.Marshal(map[string]interface{}{
+	d, err := json.Marshal(map[string]any{
 		"hello": "test",
 	})
 	assert.NoError(t, err)
@@ -66,7 +66,7 @@ func TestBindSessionShouldErrorIfNotExists(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
 	uid := uuid.New().String()
-	d, err := json.Marshal(map[string]interface{}{
+	d, err := json.Marshal(map[string]any{
 		"hello": "test",
 	})
 	assert.NoError(t, err)
@@ -90,7 +90,7 @@ func TestBindSessionShouldErrorIfAlreadyBound(t *testing.T) {
 
 	id := int64(1)
 	uid := uuid.New().String()
-	d, err := json.Marshal(map[string]interface{}{
+	d, err := json.Marshal(map[string]any{
 		"hello": "test",
 	})
 	assert.NoError(t, err)
@@ -123,7 +123,7 @@ func TestPushSession(t *testing.T) {
 
 	id := int64(1)
 	uid := uuid.New().String()
-	d, err := json.Marshal(map[string]interface{}{
+	d, err := json.Marshal(map[string]any{
 		"hello":   "test",
 		"hello22": 2,
 	})
@@ -151,7 +151,7 @@ func TestPushSessionShouldFailIfSessionDoesntExists(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
 	uid := uuid.New().String()
-	d, err := json.Marshal(map[string]interface{}{
+	d, err := json.Marshal(map[string]any{
 		"hello":   "test",
 		"hello22": 2,
 	})

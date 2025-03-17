@@ -67,7 +67,7 @@ func TestUnmarshalHandlerArg(t *testing.T) {
 		handlerName string
 		isRawArg    bool
 		payload     []byte
-		out         interface{}
+		out         any
 		err         error
 	}{
 		{"raw_arg", "HandlerRaw", true, []byte("hello"), []byte("hello"), nil},
@@ -99,7 +99,7 @@ func TestUnmarshalHandlerArg(t *testing.T) {
 				mockSerializer.EXPECT().Unmarshal(
 					table.payload,
 					reflect.New(handler.Type.Elem()).Interface(),
-				).Do(func(p []byte, arg interface{}) {
+				).Do(func(p []byte, arg any) {
 					arg = table.out
 				}).Return(table.err)
 			}
@@ -159,7 +159,7 @@ func TestGetMsgType(t *testing.T) {
 	t.Parallel()
 	tables := []struct {
 		name    string
-		in      interface{}
+		in      any
 		msgType message.Type
 		err     error
 	}{
@@ -194,12 +194,12 @@ func TestExecuteBeforePipelineSuccess(t *testing.T) {
 	data := []byte("ok")
 	expected1 := []byte("oh noes 1")
 	expected2 := []byte("oh noes 2")
-	before1 := func(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+	before1 := func(ctx context.Context, in any) (context.Context, any, error) {
 		assert.Equal(t, c, ctx)
 		assert.Equal(t, data, in)
 		return ctx, expected1, nil
 	}
-	before2 := func(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+	before2 := func(ctx context.Context, in any) (context.Context, any, error) {
 		assert.Equal(t, c, ctx)
 		assert.Equal(t, expected1, in)
 		return ctx, expected2, nil
@@ -218,7 +218,7 @@ func TestExecuteBeforePipelineSuccess(t *testing.T) {
 func TestExecuteBeforePipelineError(t *testing.T) {
 	c := context.Background()
 	expected := errors.New("oh noes")
-	before := func(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+	before := func(ctx context.Context, in any) (context.Context, any, error) {
 		assert.Equal(t, c, ctx)
 		return ctx, nil, expected
 	}
@@ -245,13 +245,13 @@ func TestExecuteAfterPipelineSuccess(t *testing.T) {
 	expected2 := []byte("oh noes 2")
 	err0 := errors.New("start with this")
 	err1 := errors.New("send this error")
-	after1 := func(ctx context.Context, out interface{}, err error) (interface{}, error) {
+	after1 := func(ctx context.Context, out any, err error) (any, error) {
 		assert.Equal(t, c, ctx)
 		assert.Equal(t, data, out)
 		assert.Equal(t, err0, err)
 		return expected1, err1
 	}
-	after2 := func(ctx context.Context, out interface{}, err error) (interface{}, error) {
+	after2 := func(ctx context.Context, out any, err error) (any, error) {
 		assert.Equal(t, c, ctx)
 		assert.Equal(t, expected1, out)
 		assert.Equal(t, err1, err)
@@ -269,7 +269,7 @@ func TestExecuteAfterPipelineSuccess(t *testing.T) {
 
 func TestExecuteAfterPipelineError(t *testing.T) {
 	c := context.Background()
-	after := func(ctx context.Context, out interface{}, err error) (interface{}, error) {
+	after := func(ctx context.Context, out any, err error) (any, error) {
 		assert.Equal(t, c, ctx)
 		return nil, errors.New("oh noes")
 	}
@@ -286,7 +286,7 @@ func TestSerializeReturn(t *testing.T) {
 	tables := []struct {
 		name               string
 		isRawArg           bool
-		in                 interface{}
+		in                 any
 		out                []byte
 		errSerialize       error
 		errGetErrorPayload error

@@ -45,7 +45,7 @@ func (m *MockAgent) AnswerWithError(arg0 context.Context, arg1 uint, arg2 error)
 }
 
 // AnswerWithError indicates an expected call of AnswerWithError.
-func (mr *MockAgentMockRecorder) AnswerWithError(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockAgentMockRecorder) AnswerWithError(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AnswerWithError", reflect.TypeOf((*MockAgent)(nil).AnswerWithError), arg0, arg1, arg2)
 }
@@ -127,13 +127,13 @@ func (m *MockAgent) Kick(arg0 context.Context) error {
 }
 
 // Kick indicates an expected call of Kick.
-func (mr *MockAgentMockRecorder) Kick(arg0 interface{}) *gomock.Call {
+func (mr *MockAgentMockRecorder) Kick(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Kick", reflect.TypeOf((*MockAgent)(nil).Kick), arg0)
 }
 
 // Push mocks base method.
-func (m *MockAgent) Push(arg0 string, arg1 interface{}) error {
+func (m *MockAgent) Push(arg0 string, arg1 any) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Push", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -141,7 +141,7 @@ func (m *MockAgent) Push(arg0 string, arg1 interface{}) error {
 }
 
 // Push indicates an expected call of Push.
-func (mr *MockAgentMockRecorder) Push(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockAgentMockRecorder) Push(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Push", reflect.TypeOf((*MockAgent)(nil).Push), arg0, arg1)
 }
@@ -161,9 +161,9 @@ func (mr *MockAgentMockRecorder) RemoteAddr() *gomock.Call {
 }
 
 // ResponseMID mocks base method.
-func (m *MockAgent) ResponseMID(arg0 context.Context, arg1 uint, arg2 interface{}, arg3 ...bool) error {
+func (m *MockAgent) ResponseMID(arg0 context.Context, arg1 uint, arg2 any, arg3 ...bool) error {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{arg0, arg1, arg2}
+	varargs := []any{arg0, arg1, arg2}
 	for _, a := range arg3 {
 		varargs = append(varargs, a)
 	}
@@ -173,9 +173,9 @@ func (m *MockAgent) ResponseMID(arg0 context.Context, arg1 uint, arg2 interface{
 }
 
 // ResponseMID indicates an expected call of ResponseMID.
-func (mr *MockAgentMockRecorder) ResponseMID(arg0, arg1, arg2 interface{}, arg3 ...interface{}) *gomock.Call {
+func (mr *MockAgentMockRecorder) ResponseMID(arg0, arg1, arg2 any, arg3 ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{arg0, arg1, arg2}, arg3...)
+	varargs := append([]any{arg0, arg1, arg2}, arg3...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ResponseMID", reflect.TypeOf((*MockAgent)(nil).ResponseMID), varargs...)
 }
 
@@ -208,7 +208,7 @@ func (mr *MockAgentMockRecorder) SendHandshakeResponse() *gomock.Call {
 }
 
 // SendRequest mocks base method.
-func (m *MockAgent) SendRequest(arg0 context.Context, arg1, arg2 string, arg3 interface{}) (*protos.Response, error) {
+func (m *MockAgent) SendRequest(arg0 context.Context, arg1, arg2 string, arg3 any) (*protos.Response, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SendRequest", arg0, arg1, arg2, arg3)
 	ret0, _ := ret[0].(*protos.Response)
@@ -217,7 +217,7 @@ func (m *MockAgent) SendRequest(arg0 context.Context, arg1, arg2 string, arg3 in
 }
 
 // SendRequest indicates an expected call of SendRequest.
-func (mr *MockAgentMockRecorder) SendRequest(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+func (mr *MockAgentMockRecorder) SendRequest(arg0, arg1, arg2, arg3 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendRequest", reflect.TypeOf((*MockAgent)(nil).SendRequest), arg0, arg1, arg2, arg3)
 }
@@ -241,7 +241,7 @@ func (m *MockAgent) SetStatus(arg0 int32) {
 }
 
 // SetStatus indicates an expected call of SetStatus.
-func (mr *MockAgentMockRecorder) SetStatus(arg0 interface{}) *gomock.Call {
+func (mr *MockAgentMockRecorder) SetStatus(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetStatus", reflect.TypeOf((*MockAgent)(nil).SetStatus), arg0)
 }
@@ -292,7 +292,7 @@ func (m *MockAgentFactory) CreateAgent(arg0 net.Conn) agent.Agent {
 }
 
 // CreateAgent indicates an expected call of CreateAgent.
-func (mr *MockAgentFactoryMockRecorder) CreateAgent(arg0 interface{}) *gomock.Call {
+func (mr *MockAgentFactoryMockRecorder) CreateAgent(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAgent", reflect.TypeOf((*MockAgentFactory)(nil).CreateAgent), arg0)
 }

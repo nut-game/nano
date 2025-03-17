@@ -41,7 +41,7 @@ func TestNewSerializer(t *testing.T) {
 
 func TestMarshal(t *testing.T) {
 	var marshalTables = map[string]struct {
-		raw interface{}
+		raw any
 		err error
 	}{
 		"test_ok":            {&protos.Response{Data: []byte("data"), Error: &protos.Error{Msg: "error"}}, nil},
@@ -76,9 +76,9 @@ func TestUnmarshal(t *testing.T) {
 
 	var dest protos.Response
 	var unmarshalTables = map[string]struct {
-		expected interface{}
+		expected any
 		data     []byte
-		dest     interface{}
+		dest     any
 		err      error
 	}{
 		"test_ok":           {&protos.Response{Data: []byte("data"), Error: &protos.Error{Msg: "error"}}, data, &dest, nil},

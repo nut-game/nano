@@ -90,9 +90,9 @@ func TestProcessHandlerMessage(t *testing.T) {
 		route        *route.Route
 		errSerReturn error
 		errSerialize error
-		outSerialize interface{}
+		outSerialize any
 		handlerType  message.Type
-		msgType      interface{}
+		msgType      any
 		remote       bool
 		out          []byte
 		err          error
@@ -119,7 +119,7 @@ func TestProcessHandlerMessage(t *testing.T) {
 			mockSerializer := mocks.NewMockSerializer(ctrl)
 			if table.outSerialize != nil {
 				mockSerializer.EXPECT().Unmarshal(gomock.Any(), gomock.Any()).Return(table.errSerialize).Do(
-					func(p []byte, arg interface{}) {
+					func(p []byte, arg any) {
 						arg = table.outSerialize
 					})
 
@@ -142,7 +142,7 @@ func TestProcessHandlerMessageBrokenBeforePipeline(t *testing.T) {
 	handlerPool := NewHandlerPool()
 	handlerPool.handlers[rt.Short()] = &component.Handler{}
 	expected := errors.New("oh noes")
-	before := func(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+	before := func(ctx context.Context, in any) (context.Context, any, error) {
 		return ctx, nil, expected
 	}
 	beforeHandler := pipeline.NewChannel()
@@ -167,7 +167,7 @@ func TestProcessHandlerMessageBrokenAfterPipeline(t *testing.T) {
 	handlerPool := NewHandlerPool()
 	handlerPool.handlers[rt.Short()] = &component.Handler{Receiver: reflect.ValueOf(tObj), Method: m, Type: m.Type.In(2)}
 
-	after := func(ctx context.Context, out interface{}, err error) (interface{}, error) {
+	after := func(ctx context.Context, out any, err error) (any, error) {
 		return nil, errors.New("oh noes")
 	}
 	afterHandler := pipeline.NewAfterChannel()
@@ -182,7 +182,7 @@ func TestProcessHandlerMessageBrokenAfterPipeline(t *testing.T) {
 
 	mockSerializer := mocks.NewMockSerializer(ctrl)
 	mockSerializer.EXPECT().Unmarshal(gomock.Any(), gomock.Any()).Return(nil).Do(
-		func(p []byte, arg interface{}) {
+		func(p []byte, arg any) {
 			arg = &test.SomeStruct{}
 		})
 

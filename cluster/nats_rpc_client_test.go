@@ -426,7 +426,7 @@ func TestNatsRPCClientCall(t *testing.T) {
 
 	tables := []struct {
 		name     string
-		response interface{}
+		response any
 		expected *protos.Response
 		err      error
 	}{

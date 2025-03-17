@@ -59,13 +59,13 @@ func (m *MockNetworkEntity) Kick(arg0 context.Context) error {
 }
 
 // Kick indicates an expected call of Kick.
-func (mr *MockNetworkEntityMockRecorder) Kick(arg0 interface{}) *gomock.Call {
+func (mr *MockNetworkEntityMockRecorder) Kick(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Kick", reflect.TypeOf((*MockNetworkEntity)(nil).Kick), arg0)
 }
 
 // Push mocks base method.
-func (m *MockNetworkEntity) Push(arg0 string, arg1 interface{}) error {
+func (m *MockNetworkEntity) Push(arg0 string, arg1 any) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Push", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -73,7 +73,7 @@ func (m *MockNetworkEntity) Push(arg0 string, arg1 interface{}) error {
 }
 
 // Push indicates an expected call of Push.
-func (mr *MockNetworkEntityMockRecorder) Push(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockNetworkEntityMockRecorder) Push(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Push", reflect.TypeOf((*MockNetworkEntity)(nil).Push), arg0, arg1)
 }
@@ -93,9 +93,9 @@ func (mr *MockNetworkEntityMockRecorder) RemoteAddr() *gomock.Call {
 }
 
 // ResponseMID mocks base method.
-func (m *MockNetworkEntity) ResponseMID(arg0 context.Context, arg1 uint, arg2 interface{}, arg3 ...bool) error {
+func (m *MockNetworkEntity) ResponseMID(arg0 context.Context, arg1 uint, arg2 any, arg3 ...bool) error {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{arg0, arg1, arg2}
+	varargs := []any{arg0, arg1, arg2}
 	for _, a := range arg3 {
 		varargs = append(varargs, a)
 	}
@@ -105,14 +105,14 @@ func (m *MockNetworkEntity) ResponseMID(arg0 context.Context, arg1 uint, arg2 in
 }
 
 // ResponseMID indicates an expected call of ResponseMID.
-func (mr *MockNetworkEntityMockRecorder) ResponseMID(arg0, arg1, arg2 interface{}, arg3 ...interface{}) *gomock.Call {
+func (mr *MockNetworkEntityMockRecorder) ResponseMID(arg0, arg1, arg2 any, arg3 ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{arg0, arg1, arg2}, arg3...)
+	varargs := append([]any{arg0, arg1, arg2}, arg3...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ResponseMID", reflect.TypeOf((*MockNetworkEntity)(nil).ResponseMID), varargs...)
 }
 
 // SendRequest mocks base method.
-func (m *MockNetworkEntity) SendRequest(arg0 context.Context, arg1, arg2 string, arg3 interface{}) (*protos.Response, error) {
+func (m *MockNetworkEntity) SendRequest(arg0 context.Context, arg1, arg2 string, arg3 any) (*protos.Response, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SendRequest", arg0, arg1, arg2, arg3)
 	ret0, _ := ret[0].(*protos.Response)
@@ -121,7 +121,7 @@ func (m *MockNetworkEntity) SendRequest(arg0 context.Context, arg1, arg2 string,
 }
 
 // SendRequest indicates an expected call of SendRequest.
-func (mr *MockNetworkEntityMockRecorder) SendRequest(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+func (mr *MockNetworkEntityMockRecorder) SendRequest(arg0, arg1, arg2, arg3 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendRequest", reflect.TypeOf((*MockNetworkEntity)(nil).SendRequest), arg0, arg1, arg2, arg3)
 }

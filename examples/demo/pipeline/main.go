@@ -64,7 +64,7 @@ func (g *MetagameServer) HandlerNoArg(ctx context.Context) (*HandlerNoArgRespons
 // IMPORTANT: that this kind of pipeline will be hard to exist in real code
 // as a pipeline function executes for every handler and each of them
 // most probably have different parameter types.
-func (g *MetagameServer) simpleBefore(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+func (g *MetagameServer) simpleBefore(ctx context.Context, in any) (context.Context, any, error) {
 	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	logger.Info("Simple Before exec")
 
@@ -80,7 +80,7 @@ func (g *MetagameServer) simpleBefore(ctx context.Context, in interface{}) (cont
 }
 
 // Simple example of an after pipeline. The 2nd argument is the handler response.
-func (g *MetagameServer) simpleAfter(ctx context.Context, resp interface{}, err error) (interface{}, error) {
+func (g *MetagameServer) simpleAfter(ctx context.Context, resp any, err error) (any, error) {
 	logger := nano.GetDefaultLoggerFromCtx(ctx)
 	logger.Infof("Simple After exec - response: %v , error: %v", resp, err)
 

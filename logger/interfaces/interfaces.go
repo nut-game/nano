@@ -2,23 +2,23 @@ package interfaces
 
 // Logger interface for nano loggers
 type Logger interface {
-	Fatal(format ...interface{})
-	Fatalf(format string, args ...interface{})
-	Fatalln(args ...interface{})
+	Fatal(format ...any)
+	Fatalf(format string, args ...any)
+	Fatalln(args ...any)
 
-	Debug(args ...interface{})
-	Debugf(format string, args ...interface{})
-	Debugln(args ...interface{})
+	Debug(args ...any)
+	Debugf(format string, args ...any)
+	Debugln(args ...any)
 
-	Error(args ...interface{})
-	Errorf(format string, args ...interface{})
-	Errorln(args ...interface{})
+	Error(args ...any)
+	Errorf(format string, args ...any)
+	Errorln(args ...any)
 
-	Info(args ...interface{})
-	Infof(format string, args ...interface{})
-	Infoln(args ...interface{})
+	Info(args ...any)
+	Infof(format string, args ...any)
+	Infoln(args ...any)
 
-	Warn(args ...interface{})
-	Warnf(format string, args ...interface{})
-	Warnln(args ...interface{})
+	Warn(args ...any)
+	Warnf(format string, args ...any)
+	Warnln(args ...any)
 }

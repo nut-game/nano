@@ -42,7 +42,7 @@ func (m *MockReporter) ReportCount(arg0 string, arg1 map[string]string, arg2 flo
 }
 
 // ReportCount indicates an expected call of ReportCount.
-func (mr *MockReporterMockRecorder) ReportCount(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockReporterMockRecorder) ReportCount(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReportCount", reflect.TypeOf((*MockReporter)(nil).ReportCount), arg0, arg1, arg2)
 }
@@ -56,7 +56,7 @@ func (m *MockReporter) ReportGauge(arg0 string, arg1 map[string]string, arg2 flo
 }
 
 // ReportGauge indicates an expected call of ReportGauge.
-func (mr *MockReporterMockRecorder) ReportGauge(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockReporterMockRecorder) ReportGauge(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReportGauge", reflect.TypeOf((*MockReporter)(nil).ReportGauge), arg0, arg1, arg2)
 }
@@ -70,7 +70,7 @@ func (m *MockReporter) ReportHistogram(arg0 string, arg1 map[string]string, arg2
 }
 
 // ReportHistogram indicates an expected call of ReportHistogram.
-func (mr *MockReporterMockRecorder) ReportHistogram(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockReporterMockRecorder) ReportHistogram(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReportHistogram", reflect.TypeOf((*MockReporter)(nil).ReportHistogram), arg0, arg1, arg2)
 }
@@ -84,7 +84,7 @@ func (m *MockReporter) ReportSummary(arg0 string, arg1 map[string]string, arg2 f
 }
 
 // ReportSummary indicates an expected call of ReportSummary.
-func (mr *MockReporterMockRecorder) ReportSummary(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockReporterMockRecorder) ReportSummary(arg0, arg1, arg2 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReportSummary", reflect.TypeOf((*MockReporter)(nil).ReportSummary), arg0, arg1, arg2)
 }

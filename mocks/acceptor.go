@@ -89,7 +89,7 @@ func (m *MockPlayerConn) Read(arg0 []byte) (int, error) {
 }
 
 // Read indicates an expected call of Read.
-func (mr *MockPlayerConnMockRecorder) Read(arg0 interface{}) *gomock.Call {
+func (mr *MockPlayerConnMockRecorder) Read(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockPlayerConn)(nil).Read), arg0)
 }
@@ -117,7 +117,7 @@ func (m *MockPlayerConn) SetDeadline(arg0 time.Time) error {
 }
 
 // SetDeadline indicates an expected call of SetDeadline.
-func (mr *MockPlayerConnMockRecorder) SetDeadline(arg0 interface{}) *gomock.Call {
+func (mr *MockPlayerConnMockRecorder) SetDeadline(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetDeadline", reflect.TypeOf((*MockPlayerConn)(nil).SetDeadline), arg0)
 }
@@ -131,7 +131,7 @@ func (m *MockPlayerConn) SetReadDeadline(arg0 time.Time) error {
 }
 
 // SetReadDeadline indicates an expected call of SetReadDeadline.
-func (mr *MockPlayerConnMockRecorder) SetReadDeadline(arg0 interface{}) *gomock.Call {
+func (mr *MockPlayerConnMockRecorder) SetReadDeadline(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetReadDeadline", reflect.TypeOf((*MockPlayerConn)(nil).SetReadDeadline), arg0)
 }
@@ -145,7 +145,7 @@ func (m *MockPlayerConn) SetWriteDeadline(arg0 time.Time) error {
 }
 
 // SetWriteDeadline indicates an expected call of SetWriteDeadline.
-func (mr *MockPlayerConnMockRecorder) SetWriteDeadline(arg0 interface{}) *gomock.Call {
+func (mr *MockPlayerConnMockRecorder) SetWriteDeadline(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetWriteDeadline", reflect.TypeOf((*MockPlayerConn)(nil).SetWriteDeadline), arg0)
 }
@@ -160,7 +160,7 @@ func (m *MockPlayerConn) Write(arg0 []byte) (int, error) {
 }
 
 // Write indicates an expected call of Write.
-func (mr *MockPlayerConnMockRecorder) Write(arg0 interface{}) *gomock.Call {
+func (mr *MockPlayerConnMockRecorder) Write(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Write", reflect.TypeOf((*MockPlayerConn)(nil).Write), arg0)
 }

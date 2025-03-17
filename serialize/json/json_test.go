@@ -44,9 +44,9 @@ func TestMarshal(t *testing.T) {
 		Number float64
 	}
 	var marshalTables = map[string]struct {
-		raw       interface{}
+		raw       any
 		marshaled []byte
-		errType   interface{}
+		errType   any
 	}{
 		"test_ok": {
 			&MyStruct{Str: "hello", Number: 42},
@@ -85,7 +85,7 @@ func TestUnmarshal(t *testing.T) {
 	var unmarshalTables = map[string]struct {
 		data        []byte
 		unmarshaled *MyStruct
-		errType     interface{}
+		errType     any
 	}{
 		"test_ok": {
 			[]byte(`{"Str":"hello","Number":42}`),

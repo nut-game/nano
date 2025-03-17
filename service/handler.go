@@ -52,7 +52,6 @@ import (
 	"github.com/nut-game/nano/session"
 	"github.com/nut-game/nano/timer"
 	"github.com/nut-game/nano/tracing"
-
 )
 
 var (
@@ -374,9 +373,9 @@ func (h *HandlerService) DumpServices() {
 }
 
 // Docs returns documentation for handlers
-func (h *HandlerService) Docs(getPtrNames bool) (map[string]interface{}, error) {
+func (h *HandlerService) Docs(getPtrNames bool) (map[string]any, error) {
 	if h == nil {
-		return map[string]interface{}{}, nil
+		return map[string]any{}, nil
 	}
 	return docgenerator.HandlersDocs(h.server.Type, h.services, getPtrNames)
 }

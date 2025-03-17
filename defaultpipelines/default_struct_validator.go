@@ -18,7 +18,7 @@ type DefaultValidator struct {
 // based on the struct tags the parameter has.
 // This function has the pipeline.Handler signature so
 // it is possible to use it as a pipeline function
-func (v *DefaultValidator) Validate(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+func (v *DefaultValidator) Validate(ctx context.Context, in any) (context.Context, any, error) {
 	if in == nil {
 		return ctx, in, nil
 	}

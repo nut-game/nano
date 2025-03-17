@@ -516,10 +516,10 @@ func TestRemoteServiceHandleRPCUserWithHooks(t *testing.T) {
 	// 	errSubstring        string
 	// 	shouldRunBeforeHook bool
 	// 	shouldRunAfterHook  bool
-	// 	modifiedInput       interface{}
+	// 	modifiedInput       any
 	// 	modifiedCtx         context.Context
 	// 	modifiedInputError  error
-	// 	modifiedOutput      interface{}
+	// 	modifiedOutput      any
 	// 	modifiedOutputError error
 	// }{
 	// 	{"remote_not_found", &protos.Request{Msg: &protos.Msg{}}, route.NewRoute("bla", "bla", "bla"), nil, "route not found", false, false, nil, nil, nil, nil, nil},
@@ -553,7 +553,7 @@ func TestRemoteServiceHandleRPCUserWithHooks(t *testing.T) {
 	// 		afterHookInvoked := false
 
 	// 		remoteHooks := pipeline.NewRemoteHooks()
-	// 		remoteHooks.BeforeHandler.PushFront(func(ctx context.Context, in interface{}) (context.Context, interface{}, error) {
+	// 		remoteHooks.BeforeHandler.PushFront(func(ctx context.Context, in any) (context.Context, any, error) {
 	// 			if beforeHookInvoked {
 	// 				assert.FailNow(t, "BeforeHandler hook invoked twice")
 	// 			}
@@ -575,7 +575,7 @@ func TestRemoteServiceHandleRPCUserWithHooks(t *testing.T) {
 	// 			beforeHookInvoked = true
 	// 			return ctx, in, err
 	// 		})
-	// 		remoteHooks.AfterHandler.PushFront(func(ctx context.Context, out interface{}, err error) (interface{}, error) {
+	// 		remoteHooks.AfterHandler.PushFront(func(ctx context.Context, out any, err error) (any, error) {
 	// 			if afterHookInvoked {
 	// 				assert.FailNow(t, "AfterHandler hook invoked twice")
 	// 			}

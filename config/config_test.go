@@ -60,7 +60,7 @@ func TestNewConfig(t *testing.T) {
 	tables := []struct {
 		in  []*viper.Viper
 		key string
-		val interface{}
+		val any
 	}{
 		{[]*viper.Viper{}, "nano.buffer.agent.messages", 100},
 		{[]*viper.Viper{cfg}, "nano.buffer.agent.messages", 20},
@@ -167,7 +167,7 @@ func TestGet(t *testing.T) {
 	c := NewConfig()
 	tables := []struct {
 		key string
-		val interface{}
+		val any
 	}{
 		{"nano.buffer.agent.messages", 100},
 		{"unexistent", nil},

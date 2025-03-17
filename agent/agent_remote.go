@@ -103,7 +103,7 @@ func (a *Remote) Kick(ctx context.Context) error {
 }
 
 // Push pushes the message to the user
-func (a *Remote) Push(route string, v interface{}) error {
+func (a *Remote) Push(route string, v any) error {
 	if (reflect.TypeOf(a.rpcClient) == reflect.TypeOf(&cluster.NatsRPCClient{}) &&
 		a.Session.UID() == "") {
 		return constants.ErrNoUIDBind
@@ -128,7 +128,7 @@ func (a *Remote) Push(route string, v interface{}) error {
 }
 
 // ResponseMID reponds the message with mid to the user
-func (a *Remote) ResponseMID(ctx context.Context, mid uint, v interface{}, isError ...bool) error {
+func (a *Remote) ResponseMID(ctx context.Context, mid uint, v any, isError ...bool) error {
 	err := false
 	if len(isError) > 0 {
 		err = isError[0]
@@ -214,7 +214,7 @@ func (a *Remote) sendPush(m pendingMessage, userID string, sv *cluster.Server) (
 }
 
 // SendRequest sends a request to a server
-func (a *Remote) SendRequest(ctx context.Context, serverID, reqRoute string, v interface{}) (*protos.Response, error) {
+func (a *Remote) SendRequest(ctx context.Context, serverID, reqRoute string, v any) (*protos.Response, error) {
 	r, err := route.Decode(reqRoute)
 	if err != nil {
 		return nil, err

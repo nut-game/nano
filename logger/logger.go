@@ -26,25 +26,25 @@ import (
 )
 
 var (
-	Fatal   func(v ...interface{})
-	Fatalf  func(format string, v ...interface{})
-	Fatalln func(v ...interface{})
+	Fatal   func(v ...any)
+	Fatalf  func(format string, v ...any)
+	Fatalln func(v ...any)
 
-	Debug   func(v ...interface{})
-	Debugf  func(format string, v ...interface{})
-	Debugln func(v ...interface{})
+	Debug   func(v ...any)
+	Debugf  func(format string, v ...any)
+	Debugln func(v ...any)
 
-	Error   func(v ...interface{})
-	Errorf  func(format string, v ...interface{})
-	Errorln func(v ...interface{})
+	Error   func(v ...any)
+	Errorf  func(format string, v ...any)
+	Errorln func(v ...any)
 
-	Info   func(v ...interface{})
-	Infof  func(format string, v ...interface{})
-	Infoln func(v ...interface{})
+	Info   func(v ...any)
+	Infof  func(format string, v ...any)
+	Infoln func(v ...any)
 
-	Warn   func(v ...interface{})
-	Warnf  func(format string, v ...interface{})
-	Warnln func(v ...interface{})
+	Warn   func(v ...any)
+	Warnf  func(format string, v ...any)
+	Warnln func(v ...any)
 )
 
 // Log is the default logger

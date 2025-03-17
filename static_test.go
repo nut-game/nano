@@ -293,10 +293,10 @@ func TestStaticDocumentation(t *testing.T) {
 	tables := []struct {
 		name         string
 		expectedBool bool
-		returned     map[string]interface{}
+		returned     map[string]any
 		err          error
 	}{
-		{"Success", true, map[string]interface{}{}, nil},
+		{"Success", true, map[string]any{}, nil},
 		{"Error", true, nil, errors.New("error")},
 	}
 
@@ -396,14 +396,14 @@ func TestStaticReliableRPC(t *testing.T) {
 	tables := []struct {
 		name     string
 		route    string
-		metadata map[string]interface{}
+		metadata map[string]any
 		reply    proto.Message
 		arg      proto.Message
 		jid      string
 		err      error
 	}{
-		{"Success", "route", map[string]interface{}{}, nil, nil, "jid", nil},
-		{"Error", "route", map[string]interface{}{}, nil, nil, "", errors.New("error")},
+		{"Success", "route", map[string]any{}, nil, nil, "jid", nil},
+		{"Error", "route", map[string]any{}, nil, nil, "", errors.New("error")},
 	}
 
 	for _, row := range tables {
@@ -425,15 +425,15 @@ func TestStaticReliableRPCWithOptions(t *testing.T) {
 	tables := []struct {
 		name     string
 		route    string
-		metadata map[string]interface{}
+		metadata map[string]any
 		reply    proto.Message
 		arg      proto.Message
 		opts     *config.EnqueueOpts
 		jid      string
 		err      error
 	}{
-		{"Success", "route", map[string]interface{}{}, nil, nil, nil, "jid", nil},
-		{"Error", "route", map[string]interface{}{}, nil, nil, nil, "", errors.New("error")},
+		{"Success", "route", map[string]any{}, nil, nil, nil, "jid", nil},
+		{"Error", "route", map[string]any{}, nil, nil, nil, "", errors.New("error")},
 	}
 
 	for _, row := range tables {
@@ -455,7 +455,7 @@ func TestStaticSendPushToUsers(t *testing.T) {
 	tables := []struct {
 		name         string
 		route        string
-		v            interface{}
+		v            any
 		uids         []string
 		frontendType string
 		returned     []string

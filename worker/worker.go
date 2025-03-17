@@ -88,7 +88,7 @@ func (w *Worker) Started() bool {
 // EnqueueRPC enqueues rpc job to worker
 func (w *Worker) EnqueueRPC(
 	routeStr string,
-	metadata map[string]interface{},
+	metadata map[string]any,
 	reply, arg proto.Message,
 ) (jid string, err error) {
 	opts := w.enqueueOptions(w.opts)
@@ -103,7 +103,7 @@ func (w *Worker) EnqueueRPC(
 // EnqueueRPCWithOptions enqueues rpc job to worker
 func (w *Worker) EnqueueRPCWithOptions(
 	routeStr string,
-	metadata map[string]interface{},
+	metadata map[string]any,
 	reply, arg proto.Message,
 	opts *config.EnqueueOpts,
 ) (jid string, err error) {

@@ -34,7 +34,7 @@ func NewSerializer() *Serializer {
 }
 
 // Marshal returns the protobuf encoding of v.
-func (s *Serializer) Marshal(v interface{}) ([]byte, error) {
+func (s *Serializer) Marshal(v any) ([]byte, error) {
 	pb, ok := v.(proto.Message)
 	if !ok {
 		return nil, constants.ErrWrongValueType
@@ -44,7 +44,7 @@ func (s *Serializer) Marshal(v interface{}) ([]byte, error) {
 
 // Unmarshal parses the protobuf-encoded data and stores the result
 // in the value pointed to by v.
-func (s *Serializer) Unmarshal(data []byte, v interface{}) error {
+func (s *Serializer) Unmarshal(data []byte, v any) error {
 	pb, ok := v.(proto.Message)
 	if !ok {
 		return constants.ErrWrongValueType

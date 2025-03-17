@@ -24,7 +24,7 @@ import "google.golang.org/protobuf/proto"
 
 type rpcInfo struct {
 	Route    string
-	Metadata map[string]interface{}
+	Metadata map[string]any
 	Arg      proto.Message
 	Reply    proto.Message
 }

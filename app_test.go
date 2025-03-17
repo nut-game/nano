@@ -383,7 +383,7 @@ func TestAddMetricTagsToPropagateCtx(t *testing.T) {
 		"key": "value",
 	})
 	val := ctx.Value(constants.PropagateCtxKey)
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		constants.MetricTagsKey: map[string]string{
 			"key": "value",
 		},
@@ -393,7 +393,7 @@ func TestAddMetricTagsToPropagateCtx(t *testing.T) {
 func TestAddToPropagateCtx(t *testing.T) {
 	ctx := AddToPropagateCtx(context.Background(), "key", "val")
 	val := ctx.Value(constants.PropagateCtxKey)
-	assert.Equal(t, map[string]interface{}{"key": "val"}, val)
+	assert.Equal(t, map[string]any{"key": "val"}, val)
 }
 
 func TestGetFromPropagateCtx(t *testing.T) {
@@ -425,18 +425,18 @@ func TestDocumentation(t *testing.T) {
 	app.startupComponents()
 	doc, err := app.Documentation(false)
 	assert.NoError(t, err)
-	assert.Equal(t, map[string]interface{}{
-		"handlers": map[string]interface{}{},
-		"remotes": map[string]interface{}{
-			"testtype.sys.bindsession": map[string]interface{}{
-				"input": map[string]interface{}{
+	assert.Equal(t, map[string]any{
+		"handlers": map[string]any{},
+		"remotes": map[string]any{
+			"testtype.sys.bindsession": map[string]any{
+				"input": map[string]any{
 					"uid":  "string",
 					"data": "[]byte",
 					"id":   "int64",
 				},
-				"output": []interface{}{
-					map[string]interface{}{
-						"error": map[string]interface{}{
+				"output": []any{
+					map[string]any{
+						"error": map[string]any{
 							"msg":      "string",
 							"code":     "string",
 							"metadata": "map[string]string",
@@ -446,26 +446,26 @@ func TestDocumentation(t *testing.T) {
 					"error",
 				},
 			},
-			"testtype.sys.kick": map[string]interface{}{
-				"input": map[string]interface{}{
+			"testtype.sys.kick": map[string]any{
+				"input": map[string]any{
 					"userId": "string",
 				},
-				"output": []interface{}{
-					map[string]interface{}{
+				"output": []any{
+					map[string]any{
 						"kicked": "bool",
 					},
 					"error",
 				},
 			},
-			"testtype.sys.pushsession": map[string]interface{}{
-				"input": map[string]interface{}{
+			"testtype.sys.pushsession": map[string]any{
+				"input": map[string]any{
 					"data": "[]byte",
 					"id":   "int64",
 					"uid":  "string",
 				},
-				"output": []interface{}{
-					map[string]interface{}{
-						"error": map[string]interface{}{
+				"output": []any{
+					map[string]any{
+						"error": map[string]any{
 							"code":     "string",
 							"metadata": "map[string]string",
 							"msg":      "string",
@@ -485,21 +485,21 @@ func TestDocumentationTrue(t *testing.T) {
 	app.startupComponents()
 	doc, err := app.Documentation(true)
 	assert.NoError(t, err)
-	assert.Equal(t, map[string]interface{}{
-		"remotes": map[string]interface{}{
-			"testtype.sys.bindsession": map[string]interface{}{
-				"input": map[string]interface{}{
-					"*protos.Session": map[string]interface{}{
+	assert.Equal(t, map[string]any{
+		"remotes": map[string]any{
+			"testtype.sys.bindsession": map[string]any{
+				"input": map[string]any{
+					"*protos.Session": map[string]any{
 						"data": "[]byte",
 						"id":   "int64",
 						"uid":  "string",
 					},
 				},
-				"output": []interface{}{map[string]interface{}{
-					"*protos.Response": map[string]interface{}{
+				"output": []any{map[string]any{
+					"*protos.Response": map[string]any{
 						"data": "[]byte",
-						"error": map[string]interface{}{
-							"*protos.Error": map[string]interface{}{
+						"error": map[string]any{
+							"*protos.Error": map[string]any{
 								"code":     "string",
 								"metadata": "map[string]string",
 								"msg":      "string",
@@ -510,33 +510,33 @@ func TestDocumentationTrue(t *testing.T) {
 					"error",
 				},
 			},
-			"testtype.sys.kick": map[string]interface{}{
-				"input": map[string]interface{}{
-					"*protos.KickMsg": map[string]interface{}{
+			"testtype.sys.kick": map[string]any{
+				"input": map[string]any{
+					"*protos.KickMsg": map[string]any{
 						"userId": "string",
 					},
 				},
-				"output": []interface{}{map[string]interface{}{
-					"*protos.KickAnswer": map[string]interface{}{
+				"output": []any{map[string]any{
+					"*protos.KickAnswer": map[string]any{
 						"kicked": "bool",
 					},
 				},
 					"error",
 				},
 			},
-			"testtype.sys.pushsession": map[string]interface{}{
-				"input": map[string]interface{}{
-					"*protos.Session": map[string]interface{}{
+			"testtype.sys.pushsession": map[string]any{
+				"input": map[string]any{
+					"*protos.Session": map[string]any{
 						"data": "[]byte",
 						"id":   "int64",
 						"uid":  "string",
 					},
 				},
-				"output": []interface{}{map[string]interface{}{
-					"*protos.Response": map[string]interface{}{
+				"output": []any{map[string]any{
+					"*protos.Response": map[string]any{
 						"data": "[]byte",
-						"error": map[string]interface{}{
-							"*protos.Error": map[string]interface{}{
+						"error": map[string]any{
+							"*protos.Error": map[string]any{
 								"code":     "string",
 								"metadata": "map[string]string",
 								"msg":      "string",
@@ -548,7 +548,7 @@ func TestDocumentationTrue(t *testing.T) {
 				},
 			},
 		},
-		"handlers": map[string]interface{}{},
+		"handlers": map[string]any{},
 	}, doc)
 }
 

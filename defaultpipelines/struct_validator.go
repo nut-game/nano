@@ -9,7 +9,7 @@ import (
 //
 // The default struct validator used by nano is https://github.com/go-playground/validator.
 type StructValidator interface {
-	Validate(context.Context, interface{}) (context.Context, interface{}, error)
+	Validate(context.Context, any) (context.Context, any, error)
 }
 
 // StructValidatorInstance holds the default validator

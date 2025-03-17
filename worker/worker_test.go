@@ -102,7 +102,7 @@ func TestParsedRPCJob(t *testing.T) {
 					GetArgReply(route).
 					Return(&fakeProtoMessage{}, &fakeProtoMessage{}, nil)
 				mockRPCJob.EXPECT().
-					ServerDiscovery(route, map[string]interface{}{"stack": "a"}).
+					ServerDiscovery(route, map[string]any{"stack": "a"}).
 					Return("", testErr)
 			},
 			assert: func(f func(*workers.Msg), m *workers.Msg) {
@@ -126,7 +126,7 @@ func TestParsedRPCJob(t *testing.T) {
 					GetArgReply(route).
 					Return(&fakeProtoMessage{}, &fakeProtoMessage{}, nil)
 				mockRPCJob.EXPECT().
-					ServerDiscovery(route, map[string]interface{}{"stack": "a"}).
+					ServerDiscovery(route, map[string]any{"stack": "a"}).
 					Return(serverID, nil)
 				mockRPCJob.EXPECT().
 					RPC(ctx, serverID, route, &fakeProtoMessage{}, &fakeProtoMessage{Field: "string"}).
@@ -153,7 +153,7 @@ func TestParsedRPCJob(t *testing.T) {
 					GetArgReply(route).
 					Return(&fakeProtoMessage{}, &fakeProtoMessage{}, nil)
 				mockRPCJob.EXPECT().
-					ServerDiscovery(route, map[string]interface{}{"stack": "a"}).
+					ServerDiscovery(route, map[string]any{"stack": "a"}).
 					Return(serverID, nil)
 				mockRPCJob.EXPECT().
 					RPC(ctx, serverID, route, &fakeProtoMessage{}, &fakeProtoMessage{Field: "string"})

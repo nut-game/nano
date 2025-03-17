@@ -303,7 +303,7 @@ func TestAgentPushFailsIfClosedAgent(t *testing.T) {
 func TestAgentPushStruct(t *testing.T) {
 	tables := []struct {
 		name string
-		data interface{}
+		data any
 		err  error
 	}{
 		{"success_struct", &someStruct{A: "ok"}, nil},
@@ -488,7 +488,7 @@ func TestAgentResponseMID(t *testing.T) {
 	tables := []struct {
 		name   string
 		mid    uint
-		data   interface{}
+		data   any
 		msgErr bool
 		err    error
 	}{
@@ -920,8 +920,8 @@ func TestAnswerWithError(t *testing.T) {
 
 type customSerializer struct{}
 
-func (*customSerializer) Marshal(obj interface{}) ([]byte, error) { return json.Marshal(obj) }
-func (*customSerializer) Unmarshal(data []byte, obj interface{}) error {
+func (*customSerializer) Marshal(obj any) ([]byte, error) { return json.Marshal(obj) }
+func (*customSerializer) Unmarshal(data []byte, obj any) error {
 	return json.Unmarshal(data, obj)
 }
 func (*customSerializer) GetName() string { return "custom" }

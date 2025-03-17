@@ -41,7 +41,7 @@ func (m *MockServiceDiscovery) AddListener(listener cluster.SDListener) {
 }
 
 // AddListener indicates an expected call of AddListener.
-func (mr *MockServiceDiscoveryMockRecorder) AddListener(listener interface{}) *gomock.Call {
+func (mr *MockServiceDiscoveryMockRecorder) AddListener(listener any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddListener", reflect.TypeOf((*MockServiceDiscovery)(nil).AddListener), listener)
 }
@@ -80,7 +80,7 @@ func (m *MockServiceDiscovery) GetServer(id string) (*cluster.Server, error) {
 }
 
 // GetServer indicates an expected call of GetServer.
-func (mr *MockServiceDiscoveryMockRecorder) GetServer(id interface{}) *gomock.Call {
+func (mr *MockServiceDiscoveryMockRecorder) GetServer(id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetServer", reflect.TypeOf((*MockServiceDiscovery)(nil).GetServer), id)
 }
@@ -109,7 +109,7 @@ func (m *MockServiceDiscovery) GetServersByType(serverType string) (map[string]*
 }
 
 // GetServersByType indicates an expected call of GetServersByType.
-func (mr *MockServiceDiscoveryMockRecorder) GetServersByType(serverType interface{}) *gomock.Call {
+func (mr *MockServiceDiscoveryMockRecorder) GetServersByType(serverType any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetServersByType", reflect.TypeOf((*MockServiceDiscovery)(nil).GetServersByType), serverType)
 }
@@ -151,7 +151,7 @@ func (m *MockServiceDiscovery) SyncServers(firstSync bool) error {
 }
 
 // SyncServers indicates an expected call of SyncServers.
-func (mr *MockServiceDiscoveryMockRecorder) SyncServers(firstSync interface{}) *gomock.Call {
+func (mr *MockServiceDiscoveryMockRecorder) SyncServers(firstSync any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SyncServers", reflect.TypeOf((*MockServiceDiscovery)(nil).SyncServers), firstSync)
 }

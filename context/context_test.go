@@ -42,10 +42,10 @@ type registeredStruct struct{}
 func TestAddToPropagateCtx(t *testing.T) {
 	tables := []struct {
 		name  string
-		items map[string]interface{}
+		items map[string]any
 	}{
-		{"one_element", map[string]interface{}{"key1": "val1"}},
-		{"two_elements", map[string]interface{}{"key1": "val1", "key2": "val2"}},
+		{"one_element", map[string]any{"key1": "val1"}},
+		{"two_elements", map[string]any{"key1": "val1", "key2": "val2"}},
 	}
 
 	for _, table := range tables {
@@ -55,8 +55,8 @@ func TestAddToPropagateCtx(t *testing.T) {
 				ctx = AddToPropagateCtx(ctx, k, v)
 			}
 			val := ctx.Value(constants.PropagateCtxKey)
-			assert.IsType(t, map[string]interface{}{}, val)
-			assert.Equal(t, table.items, val.(map[string]interface{}))
+			assert.IsType(t, map[string]any{}, val)
+			assert.Equal(t, table.items, val.(map[string]any))
 		})
 	}
 }
@@ -64,10 +64,10 @@ func TestAddToPropagateCtx(t *testing.T) {
 func TestGetFromPropagateCtx(t *testing.T) {
 	tables := []struct {
 		name  string
-		items map[string]interface{}
+		items map[string]any
 	}{
-		{"one_element", map[string]interface{}{"key1": "val1"}},
-		{"two_elements", map[string]interface{}{"key1": "val1", "key2": "val2"}},
+		{"one_element", map[string]any{"key1": "val1"}},
+		{"two_elements", map[string]any{"key1": "val1", "key2": "val2"}},
 	}
 
 	for _, table := range tables {
@@ -94,11 +94,11 @@ func TestGetFromPropagateCtxReturnsNilIfNotFound(t *testing.T) {
 func TestToMap(t *testing.T) {
 	tables := []struct {
 		name  string
-		items map[string]interface{}
+		items map[string]any
 	}{
-		{"no_elements", map[string]interface{}{}},
-		{"one_element", map[string]interface{}{"key1": "val1"}},
-		{"two_elements", map[string]interface{}{"key1": "val1", "key2": "val2"}},
+		{"no_elements", map[string]any{}},
+		{"one_element", map[string]any{"key1": "val1"}},
+		{"two_elements", map[string]any{"key1": "val1", "key2": "val2"}},
 	}
 
 	for _, table := range tables {
@@ -118,16 +118,16 @@ func TestToMapReturnsEmptyIfNothingInPropagateKey(t *testing.T) {
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, "key", "val")
 	val := ToMap(ctx)
-	assert.Equal(t, map[string]interface{}{}, val)
+	assert.Equal(t, map[string]any{}, val)
 }
 
 func TestFromMap(t *testing.T) {
 	tables := []struct {
 		name  string
-		items map[string]interface{}
+		items map[string]any
 	}{
-		{"one_element", map[string]interface{}{"key1": "val1"}},
-		{"two_elements", map[string]interface{}{"key1": "val1", "key2": "val2"}},
+		{"one_element", map[string]any{"key1": "val1"}},
+		{"two_elements", map[string]any{"key1": "val1", "key2": "val2"}},
 	}
 
 	for _, table := range tables {
@@ -145,11 +145,11 @@ func TestFromMap(t *testing.T) {
 func TestEncode(t *testing.T) {
 	tables := []struct {
 		name  string
-		items map[string]interface{}
+		items map[string]any
 		err   error
 	}{
-		{"no_elements", map[string]interface{}{}, nil},
-		{"one_element", map[string]interface{}{"key1": "val1"}, nil},
+		{"no_elements", map[string]any{}, nil},
+		{"one_element", map[string]any{"key1": "val1"}, nil},
 	}
 
 	for _, table := range tables {
@@ -181,9 +181,9 @@ func TestEncode(t *testing.T) {
 func TestDecode(t *testing.T) {
 	tables := []struct {
 		name  string
-		items map[string]interface{}
+		items map[string]any
 	}{
-		{"one_element", map[string]interface{}{"key1": "val1"}},
+		{"one_element", map[string]any{"key1": "val1"}},
 	}
 
 	for _, table := range tables {

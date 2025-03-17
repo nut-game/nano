@@ -32,7 +32,7 @@ type RPCJob interface {
 	// and any metadata that is necessary to decide
 	ServerDiscovery(
 		route string,
-		rpcMetadata map[string]interface{},
+		rpcMetadata map[string]any,
 	) (serverID string, err error)
 
 	// RPC executes the RPC

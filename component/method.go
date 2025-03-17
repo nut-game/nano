@@ -65,7 +65,7 @@ func isRemoteMethod(method reflect.Method) bool {
 		}
 	}
 
-	// Method needs two outs: interface{}(that implements proto.Message), error
+	// Method needs two outs: any(that implements proto.Message), error
 	if mt.NumOut() != 2 {
 		return false
 	}
@@ -102,7 +102,7 @@ func isHandlerMethod(method reflect.Method) bool {
 		return false
 	}
 
-	// Method needs either no out or two outs: interface{}(or []byte), error
+	// Method needs either no out or two outs: any(or []byte), error
 	if mt.NumOut() != 0 && mt.NumOut() != 2 {
 		return false
 	}

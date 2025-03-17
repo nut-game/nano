@@ -31,16 +31,13 @@ import (
 
 	"github.com/golang/mock/gomock"
 
-
-
-
-	"github.com/stretchr/testify/assert"
 	"github.com/nut-game/nano/conn/message"
 	"github.com/nut-game/nano/constants"
 	pcontext "github.com/nut-game/nano/context"
 	"github.com/nut-game/nano/protos"
 	"github.com/nut-game/nano/serialize/mocks"
 	"github.com/nut-game/nano/tracing"
+	"github.com/stretchr/testify/assert"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/sdk/trace"
@@ -78,10 +75,10 @@ func TestPcall(t *testing.T) {
 	s := &someStruct{}
 	tables := []struct {
 		name       string
-		obj        interface{}
+		obj        any
 		methodName string
 		args       []reflect.Value
-		out        interface{}
+		out        any
 		err        error
 	}{
 		{"test_pcall_1", s, "TestFunc", []reflect.Value{reflect.ValueOf(s), reflect.ValueOf(10), reflect.ValueOf("bla")}, &someStruct{A: 10, B: "bla"}, nil},
@@ -135,8 +132,8 @@ func TestSliceContainsString(t *testing.T) {
 func TestSerializeOrRaw(t *testing.T) {
 	t.Parallel()
 	tables := []struct {
-		in  interface{}
-		out interface{}
+		in  any
+		out any
 	}{
 		{[]byte{1, 2, 3}, []byte{1, 2, 3}},
 		{[]byte{3, 2, 3}, []byte{3, 2, 3}},

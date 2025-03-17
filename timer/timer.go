@@ -146,7 +146,7 @@ func pexec(id int64, fn Func) {
 func Cron() {
 	now := time.Now()
 	unn := now.UnixNano()
-	Manager.timers.Range(func(idInterface, tInterface interface{}) bool {
+	Manager.timers.Range(func(idInterface, tInterface any) bool {
 		t := tInterface.(*Timer)
 		id := idInterface.(int64)
 		// prevent ChClosingTimer exceed

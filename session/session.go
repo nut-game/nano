@@ -79,8 +79,8 @@ type HandshakeClientData struct {
 // `sys` corresponds to information independent from the app and `user` information
 // that depends on the app and is customized by the user.
 type HandshakeData struct {
-	Sys  HandshakeClientData    `json:"sys"`
-	User map[string]interface{} `json:"user,omitempty"`
+	Sys  HandshakeClientData `json:"sys"`
+	User map[string]any      `json:"user,omitempty"`
 }
 
 type sessionImpl struct {
@@ -89,7 +89,7 @@ type sessionImpl struct {
 	uid                 string                                // binding user id
 	lastTime            int64                                 // last heartbeat time
 	entity              networkentity.NetworkEntity           // low-level network entity
-	data                map[string]interface{}                // session data store
+	data                map[string]any                        // session data store
 	handshakeData       *HandshakeData                        // handshake data received by the client
 	handshakeValidators map[string]func(*HandshakeData) error // validations to run on handshake
 	encodedData         []byte                                // session data encoded as a byte array
@@ -122,12 +122,12 @@ type Session interface {
 	GetRequestsInFlight() ReqInFlight
 	SetRequestInFlight(reqID string, reqData string, inFlight bool)
 
-	Push(route string, v interface{}) error
-	ResponseMID(ctx context.Context, mid uint, v interface{}, err ...bool) error
+	Push(route string, v any) error
+	ResponseMID(ctx context.Context, mid uint, v any, err ...bool) error
 	ID() int64
 	UID() string
-	GetData() map[string]interface{}
-	SetData(data map[string]interface{}) error
+	GetData() map[string]any
+	SetData(data map[string]any) error
 	GetDataEncoded() []byte
 	SetDataEncoded(encodedData []byte) error
 	SetFrontendData(frontendID string, frontendSessionID int64)
@@ -137,9 +137,9 @@ type Session interface {
 	Close()
 	RemoteAddr() net.Addr
 	Remove(key string) error
-	Set(key string, value interface{}) error
+	Set(key string, value any) error
 	HasKey(key string) bool
-	Get(key string) interface{}
+	Get(key string) any
 	Int(key string) int
 	Int8(key string) int8
 	Int16(key string) int16
@@ -153,7 +153,7 @@ type Session interface {
 	Float32(key string) float32
 	Float64(key string) float64
 	String(key string) string
-	Value(key string) interface{}
+	Value(key string) any
 	PushToFront(ctx context.Context) error
 	Clear()
 	SetHandshakeData(data *HandshakeData)
@@ -183,7 +183,7 @@ func (pool *sessionPoolImpl) NewSession(entity networkentity.NetworkEntity, fron
 	s := &sessionImpl{
 		id:                  pool.sessionIDSvc.sessionID(),
 		entity:              entity,
-		data:                make(map[string]interface{}),
+		data:                make(map[string]any),
 		handshakeData:       nil,
 		handshakeValidators: pool.handshakeValidators,
 		lastTime:            time.Now().Unix(),
@@ -282,7 +282,7 @@ func (pool *sessionPoolImpl) OnSessionClose(f func(s Session)) {
 func (pool *sessionPoolImpl) CloseAll() {
 	logger.Infof("closing all sessions, %d sessions", pool.SessionCount)
 	for pool.SessionCount > 0 {
-		pool.sessionsByID.Range(func(_, value interface{}) bool {
+		pool.sessionsByID.Range(func(_, value any) bool {
 			s := value.(Session)
 			if s.HasRequestsInFlight() {
 				reqsInFlight := s.GetRequestsInFlight()
@@ -357,13 +357,13 @@ func (s *sessionImpl) SetSubscriptions(subscriptions []*nats.Subscription) {
 }
 
 // Push message to client
-func (s *sessionImpl) Push(route string, v interface{}) error {
+func (s *sessionImpl) Push(route string, v any) error {
 	return s.entity.Push(route, v)
 }
 
 // ResponseMID responses message to client, mid is
 // request message ID
-func (s *sessionImpl) ResponseMID(ctx context.Context, mid uint, v interface{}, err ...bool) error {
+func (s *sessionImpl) ResponseMID(ctx context.Context, mid uint, v any, err ...bool) error {
 	return s.entity.ResponseMID(ctx, mid, v, err...)
 }
 
@@ -378,7 +378,7 @@ func (s *sessionImpl) UID() string {
 }
 
 // GetData gets the data
-func (s *sessionImpl) GetData() map[string]interface{} {
+func (s *sessionImpl) GetData() map[string]any {
 	s.RLock()
 	defer s.RUnlock()
 
@@ -386,7 +386,7 @@ func (s *sessionImpl) GetData() map[string]interface{} {
 }
 
 // SetData sets the whole session data
-func (s *sessionImpl) SetData(data map[string]interface{}) error {
+func (s *sessionImpl) SetData(data map[string]any) error {
 	s.Lock()
 	defer s.Unlock()
 
@@ -404,7 +404,7 @@ func (s *sessionImpl) SetDataEncoded(encodedData []byte) error {
 	if len(encodedData) == 0 {
 		return nil
 	}
-	var data map[string]interface{}
+	var data map[string]any
 	err := json.Unmarshal(encodedData, &data)
 	if err != nil {
 		return err
@@ -527,7 +527,7 @@ func (s *sessionImpl) Remove(key string) error {
 }
 
 // Set associates value with the key in session storage
-func (s *sessionImpl) Set(key string, value interface{}) error {
+func (s *sessionImpl) Set(key string, value any) error {
 	s.Lock()
 	defer s.Unlock()
 
@@ -545,7 +545,7 @@ func (s *sessionImpl) HasKey(key string) bool {
 }
 
 // Get returns a key value
-func (s *sessionImpl) Get(key string) interface{} {
+func (s *sessionImpl) Get(key string) any {
 	s.RLock()
 	defer s.RUnlock()
 
@@ -777,8 +777,8 @@ func (s *sessionImpl) String(key string) string {
 	return value
 }
 
-// Value returns the value associated with the key as a interface{}.
-func (s *sessionImpl) Value(key string) interface{} {
+// Value returns the value associated with the key as a any.
+func (s *sessionImpl) Value(key string) any {
 	s.RLock()
 	defer s.RUnlock()
 
@@ -803,7 +803,7 @@ func (s *sessionImpl) Clear() {
 	defer s.Unlock()
 
 	s.uid = ""
-	s.data = map[string]interface{}{}
+	s.data = map[string]any{}
 	s.updateEncodedData()
 }
 

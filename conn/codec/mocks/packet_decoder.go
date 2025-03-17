@@ -42,6 +42,6 @@ func (m *MockPacketDecoder) Decode(data []byte) ([]*packet.Packet, error) {
 }
 
 // Decode indicates an expected call of Decode
-func (mr *MockPacketDecoderMockRecorder) Decode(data interface{}) *gomock.Call {
+func (mr *MockPacketDecoderMockRecorder) Decode(data any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decode", reflect.TypeOf((*MockPacketDecoder)(nil).Decode), data)
 }

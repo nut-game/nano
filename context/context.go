@@ -28,14 +28,14 @@ import (
 )
 
 // AddToPropagateCtx adds a key and value that will be propagated through RPC calls
-func AddToPropagateCtx(ctx context.Context, key string, val interface{}) context.Context {
+func AddToPropagateCtx(ctx context.Context, key string, val any) context.Context {
 	propagate := ToMap(ctx)
 	propagate[key] = val
 	return context.WithValue(ctx, constants.PropagateCtxKey, propagate)
 }
 
 // GetFromPropagateCtx get a value from the propagate
-func GetFromPropagateCtx(ctx context.Context, key string) interface{} {
+func GetFromPropagateCtx(ctx context.Context, key string) any {
 	propagate := ToMap(ctx)
 	if val, ok := propagate[key]; ok {
 		return val
@@ -43,20 +43,20 @@ func GetFromPropagateCtx(ctx context.Context, key string) interface{} {
 	return nil
 }
 
-// ToMap returns the values that will be propagated through RPC calls in map[string]interface{} format
-func ToMap(ctx context.Context) map[string]interface{} {
+// ToMap returns the values that will be propagated through RPC calls in map[string]any format
+func ToMap(ctx context.Context) map[string]any {
 	if ctx == nil {
-		return map[string]interface{}{}
+		return map[string]any{}
 	}
 	p := ctx.Value(constants.PropagateCtxKey)
 	if p != nil {
-		return p.(map[string]interface{})
+		return p.(map[string]any)
 	}
-	return map[string]interface{}{}
+	return map[string]any{}
 }
 
 // FromMap creates a new context from a map with propagated values
-func FromMap(val map[string]interface{}) context.Context {
+func FromMap(val map[string]any) context.Context {
 	return context.WithValue(context.Background(), constants.PropagateCtxKey, val)
 }
 
@@ -75,7 +75,7 @@ func Decode(m []byte) (context.Context, error) {
 		// TODO maybe return an error
 		return nil, nil
 	}
-	mp := make(map[string]interface{}, 0)
+	mp := make(map[string]any, 0)
 	err := json.Unmarshal(m, &mp)
 	if err != nil {
 		return nil, err

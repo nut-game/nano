@@ -47,7 +47,7 @@ func (h *HandlerPool) ProcessHandlerMessage(
 	handlerHooks *pipeline.HandlerHooks,
 	session session.Session,
 	data []byte,
-	msgTypeIface interface{},
+	msgTypeIface any,
 	remote bool,
 ) ([]byte, error) {
 	if ctx == nil {

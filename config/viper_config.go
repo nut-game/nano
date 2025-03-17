@@ -53,7 +53,7 @@ func NewConfig(cfgs ...*viper.Viper) *Config {
 func (c *Config) fillDefaultValues() {
 	config := NewDefaultNanoConfig()
 
-	defaultsMap := map[string]interface{}{
+	defaultsMap := map[string]any{
 		"nano.serializertype":        config.SerializerType,
 		"nano.buffer.agent.messages": config.Buffer.Agent.Messages,
 		// the max buffer size that nats will accept, if this buffer overflows, messages will begin to be dropped
@@ -160,7 +160,7 @@ func (c *Config) fillDefaultValues() {
 }
 
 // UnmarshalKey unmarshals key into v
-func (c *Config) UnmarshalKey(key string, rawVal interface{}) error {
+func (c *Config) UnmarshalKey(key string, rawVal any) error {
 	key = strings.ToLower(key)
 	delimiter := "."
 	prefix := key + delimiter
@@ -170,7 +170,7 @@ func (c *Config) UnmarshalKey(key string, rawVal interface{}) error {
 		return nil
 	}
 	if isStringMapInterface(i) {
-		val := i.(map[string]interface{})
+		val := i.(map[string]any)
 		keys := c.AllKeys()
 		for _, k := range keys {
 			if !strings.HasPrefix(k, prefix) {
@@ -192,7 +192,7 @@ func (c *Config) UnmarshalKey(key string, rawVal interface{}) error {
 	return decode(i, defaultDecoderConfig(rawVal))
 }
 
-func isStringMapInterface(val interface{}) bool {
+func isStringMapInterface(val any) bool {
 	vt := reflect.TypeOf(val)
 	return vt.Kind() == reflect.Map &&
 		vt.Key().Kind() == reflect.String &&
@@ -200,7 +200,7 @@ func isStringMapInterface(val interface{}) bool {
 }
 
 // A wrapper around mapstructure.Decode that mimics the WeakDecode functionality
-func decode(input interface{}, config *mapstructure.DecoderConfig) error {
+func decode(input any, config *mapstructure.DecoderConfig) error {
 	decoder, err := mapstructure.NewDecoder(config)
 	if err != nil {
 		return err
@@ -210,7 +210,7 @@ func decode(input interface{}, config *mapstructure.DecoderConfig) error {
 
 // defaultDecoderConfig returns default mapstructure.DecoderConfig with support
 // of time.Duration values & string slices
-func defaultDecoderConfig(output interface{}, opts ...viper.DecoderConfigOption) *mapstructure.DecoderConfig {
+func defaultDecoderConfig(output any, opts ...viper.DecoderConfigOption) *mapstructure.DecoderConfig {
 	c := &mapstructure.DecoderConfig{
 		Metadata:         nil,
 		Result:           output,

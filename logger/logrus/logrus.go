@@ -32,11 +32,11 @@ func NewWithFieldLogger(logger logrus.FieldLogger) interfaces.Logger {
 	return &logrusImpl{FieldLogger: logger}
 }
 
-func (l *logrusImpl) WithFields(fields map[string]interface{}) interfaces.Logger {
+func (l *logrusImpl) WithFields(fields map[string]any) interfaces.Logger {
 	return &logrusImpl{FieldLogger: l.FieldLogger.WithFields(fields)}
 }
 
-func (l *logrusImpl) WithField(key string, value interface{}) interfaces.Logger {
+func (l *logrusImpl) WithField(key string, value any) interfaces.Logger {
 	return &logrusImpl{FieldLogger: l.FieldLogger.WithField(key, value)}
 }
 

@@ -42,12 +42,12 @@ import (
 
 var errInvalidMsg = errors.New("invalid message type provided")
 
-func unmarshalHandlerArg(handler *component.Handler, serializer serialize.Serializer, payload []byte) (interface{}, error) {
+func unmarshalHandlerArg(handler *component.Handler, serializer serialize.Serializer, payload []byte) (any, error) {
 	if handler.IsRawArg {
 		return payload, nil
 	}
 
-	var arg interface{}
+	var arg any
 	if handler.Type != nil {
 		arg = reflect.New(handler.Type.Elem()).Interface()
 		err := serializer.Unmarshal(payload, arg)
@@ -58,8 +58,8 @@ func unmarshalHandlerArg(handler *component.Handler, serializer serialize.Serial
 	return arg, nil
 }
 
-func unmarshalRemoteArg(remote *component.Remote, payload []byte) (interface{}, error) {
-	var arg interface{}
+func unmarshalRemoteArg(remote *component.Remote, payload []byte) (any, error) {
+	var arg any
 	if remote.Type != nil {
 		arg = reflect.New(remote.Type.Elem()).Interface()
 		pb, ok := arg.(proto.Message)
@@ -74,7 +74,7 @@ func unmarshalRemoteArg(remote *component.Remote, payload []byte) (interface{}, 
 	return arg, nil
 }
 
-func getMsgType(msgTypeIface interface{}) (message.Type, error) {
+func getMsgType(msgTypeIface any) (message.Type, error) {
 	var msgType message.Type
 	if val, ok := msgTypeIface.(message.Type); ok {
 		msgType = val
@@ -86,7 +86,7 @@ func getMsgType(msgTypeIface interface{}) (message.Type, error) {
 	return msgType, nil
 }
 
-func serializeReturn(ser serialize.Serializer, ret interface{}) ([]byte, error) {
+func serializeReturn(ser serialize.Serializer, ret any) ([]byte, error) {
 	res, err := util.SerializeOrRaw(ser, ret)
 	if err != nil {
 		logger.Errorf("Failed to serialize return: %s", err.Error())
@@ -107,7 +107,7 @@ func processHandlerMessage(
 	handlerHooks *pipeline.HandlerHooks,
 	session session.Session,
 	data []byte,
-	msgTypeIface interface{},
+	msgTypeIface any,
 	remote bool,
 ) ([]byte, error) {
 	if ctx == nil {

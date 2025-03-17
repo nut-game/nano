@@ -108,7 +108,7 @@ func (m *MockBindingStorage) GetUserFrontendID(uid, frontendType string) (string
 }
 
 // GetUserFrontendID indicates an expected call of GetUserFrontendID
-func (mr *MockBindingStorageMockRecorder) GetUserFrontendID(uid, frontendType interface{}) *gomock.Call {
+func (mr *MockBindingStorageMockRecorder) GetUserFrontendID(uid, frontendType any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserFrontendID", reflect.TypeOf((*MockBindingStorage)(nil).GetUserFrontendID), uid, frontendType)
 }
 
@@ -120,6 +120,6 @@ func (m *MockBindingStorage) PutBinding(uid string) error {
 }
 
 // PutBinding indicates an expected call of PutBinding
-func (mr *MockBindingStorageMockRecorder) PutBinding(uid interface{}) *gomock.Call {
+func (mr *MockBindingStorageMockRecorder) PutBinding(uid any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PutBinding", reflect.TypeOf((*MockBindingStorage)(nil).PutBinding), uid)
 }

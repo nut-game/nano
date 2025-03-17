@@ -110,7 +110,7 @@ func TestAgentRemotePush(t *testing.T) {
 		name         string
 		uid          string
 		rpcClient    cluster.RPCClient
-		data         interface{}
+		data         any
 		errSerialize error
 		err          error
 	}{
@@ -193,7 +193,7 @@ func TestAgentRemoteResponseMID(t *testing.T) {
 	tables := []struct {
 		name         string
 		mid          uint
-		data         interface{}
+		data         any
 		msgErr       bool
 		errEncode    error
 		errSerialize error
@@ -268,7 +268,7 @@ func TestAgentRemoteSendRequest(t *testing.T) {
 		name         string
 		serverID     string
 		reqRoute     string
-		data         interface{}
+		data         any
 		errSerialize error
 		errGetServer error
 		err          error

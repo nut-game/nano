@@ -34,11 +34,11 @@ import (
 	otelTrace "go.opentelemetry.io/otel/trace"
 )
 
-func castValueToCarrier(val interface{}) (propagation.MapCarrier, error) {
+func castValueToCarrier(val any) (propagation.MapCarrier, error) {
 	if v, ok := val.(propagation.MapCarrier); ok {
 		return v, nil
 	}
-	if m, ok := val.(map[string]interface{}); ok {
+	if m, ok := val.(map[string]any); ok {
 		carrier := make(propagation.MapCarrier)
 		for k, v := range m {
 			if s, ok := v.(string); ok {

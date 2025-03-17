@@ -22,7 +22,7 @@ type Connector struct {
 
 // SessionData struct
 type SessionData struct {
-	Data map[string]interface{}
+	Data map[string]any
 }
 
 // Response struct

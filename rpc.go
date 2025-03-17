@@ -44,7 +44,7 @@ func (app *App) RPCTo(ctx context.Context, serverID, routeStr string, reply prot
 // Default enqueue options are used
 func (app *App) ReliableRPC(
 	routeStr string,
-	metadata map[string]interface{},
+	metadata map[string]any,
 	reply, arg proto.Message,
 ) (jid string, err error) {
 	return app.worker.EnqueueRPC(routeStr, metadata, reply, arg)
@@ -54,7 +54,7 @@ func (app *App) ReliableRPC(
 // Receive worker options for this specific RPC
 func (app *App) ReliableRPCWithOptions(
 	routeStr string,
-	metadata map[string]interface{},
+	metadata map[string]any,
 	reply, arg proto.Message,
 	opts *config.EnqueueOpts,
 ) (jid string, err error) {

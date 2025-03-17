@@ -57,7 +57,7 @@ func (ma *mockAddr) Network() string { return "tcp" }
 func (ma *mockAddr) String() string  { return "192.0.2.1:25" }
 
 func getEncodedEmptyMap() []byte {
-	b, _ := json.Marshal(map[string]interface{}{})
+	b, _ := json.Marshal(map[string]any{})
 	return b
 }
 
@@ -219,13 +219,13 @@ func TestKick(t *testing.T) {
 func TestSessionUpdateEncodedData(t *testing.T) {
 	tables := []struct {
 		name string
-		data map[string]interface{}
+		data map[string]any
 	}{
-		{"testUpdateEncodedData_1", map[string]interface{}{"byte": []byte{1}}},
-		{"testUpdateEncodedData_2", map[string]interface{}{"int": 1}},
-		{"testUpdateEncodedData_3", map[string]interface{}{"struct": someStruct{A: 1, B: "aaa"}}},
-		{"testUpdateEncodedData_4", map[string]interface{}{"string": "aaa"}},
-		{"testUpdateEncodedData_5", map[string]interface{}{}},
+		{"testUpdateEncodedData_1", map[string]any{"byte": []byte{1}}},
+		{"testUpdateEncodedData_2", map[string]any{"int": 1}},
+		{"testUpdateEncodedData_3", map[string]any{"struct": someStruct{A: 1, B: "aaa"}}},
+		{"testUpdateEncodedData_4", map[string]any{"string": "aaa"}},
+		{"testUpdateEncodedData_5", map[string]any{}},
 	}
 
 	for _, table := range tables {
@@ -310,12 +310,12 @@ func TestSessionGetData(t *testing.T) {
 
 	tables := []struct {
 		name string
-		data map[string]interface{}
+		data map[string]any
 	}{
-		{"test_1", map[string]interface{}{"byte": []byte{1}, "string": "test", "int": 1}},
-		{"test_2", map[string]interface{}{"byte": []byte{1}, "struct": someStruct{A: 1, B: "aaa"}, "int": 34}},
-		{"test_3", map[string]interface{}{"string": "aaa"}},
-		{"test_4", map[string]interface{}{}},
+		{"test_1", map[string]any{"byte": []byte{1}, "string": "test", "int": 1}},
+		{"test_2", map[string]any{"byte": []byte{1}, "struct": someStruct{A: 1, B: "aaa"}, "int": 34}},
+		{"test_3", map[string]any{"string": "aaa"}},
+		{"test_4", map[string]any{}},
 	}
 
 	for _, table := range tables {
@@ -335,13 +335,13 @@ func TestSessionSetData(t *testing.T) {
 
 	tables := []struct {
 		name string
-		data map[string]interface{}
+		data map[string]any
 	}{
-		{"testSessionSetData_1", map[string]interface{}{"byte": []byte{1}}},
-		{"testSessionSetData_2", map[string]interface{}{"int": 1}},
-		{"testSessionSetData_3", map[string]interface{}{"struct": someStruct{A: 1, B: "aaa"}}},
-		{"testSessionSetData_4", map[string]interface{}{"string": "aaa"}},
-		{"testSessionSetData_5", map[string]interface{}{}},
+		{"testSessionSetData_1", map[string]any{"byte": []byte{1}}},
+		{"testSessionSetData_2", map[string]any{"int": 1}},
+		{"testSessionSetData_3", map[string]any{"struct": someStruct{A: 1, B: "aaa"}}},
+		{"testSessionSetData_4", map[string]any{"string": "aaa"}},
+		{"testSessionSetData_5", map[string]any{}},
 	}
 
 	for _, table := range tables {
@@ -396,12 +396,12 @@ func TestSessionSetEncodedData(t *testing.T) {
 
 	tables := []struct {
 		name string
-		data map[string]interface{}
+		data map[string]any
 	}{
-		{"testUpdateEncodedData_2", map[string]interface{}{"int": float64(1)}},
-		{"testUpdateEncodedData_3", map[string]interface{}{"struct": map[string]interface{}{"A": float64(1), "B": "aaa"}}},
-		{"testUpdateEncodedData_4", map[string]interface{}{"string": "aaa"}},
-		{"testUpdateEncodedData_5", map[string]interface{}{}},
+		{"testUpdateEncodedData_2", map[string]any{"int": float64(1)}},
+		{"testUpdateEncodedData_3", map[string]any{"struct": map[string]any{"A": float64(1), "B": "aaa"}}},
+		{"testUpdateEncodedData_4", map[string]any{"string": "aaa"}},
+		{"testUpdateEncodedData_5", map[string]any{}},
 	}
 
 	for _, table := range tables {
@@ -677,7 +677,7 @@ func TestSessionSet(t *testing.T) {
 
 	tables := []struct {
 		name   string
-		val    interface{}
+		val    any
 		errStr string
 	}{
 		{"ok", "val", ""},
@@ -705,7 +705,7 @@ func TestSessionRemove(t *testing.T) {
 
 	tables := []struct {
 		name string
-		val  interface{}
+		val  any
 	}{
 		{"existent", "val"},
 		{"unexistent", nil},
@@ -754,7 +754,7 @@ func TestSessionHasKey(t *testing.T) {
 
 	tables := []struct {
 		name string
-		val  interface{}
+		val  any
 	}{
 		{"existent", "val"},
 		{"unexistent", nil},
@@ -783,7 +783,7 @@ func TestSessionGet(t *testing.T) {
 
 	tables := []struct {
 		name string
-		val  interface{}
+		val  any
 	}{
 		{"existent", "val"},
 		{"unexistent", nil},
@@ -812,7 +812,7 @@ func TestSessionInt(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", 1, true},
@@ -847,7 +847,7 @@ func TestSessionInt8(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", int8(1), true},
@@ -882,7 +882,7 @@ func TestSessionInt16(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", int16(1), true},
@@ -917,7 +917,7 @@ func TestSessionInt32(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", int32(1), true},
@@ -952,7 +952,7 @@ func TestSessionInt64(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", int64(1), true},
@@ -987,7 +987,7 @@ func TestSessionUint(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", uint(1), true},
@@ -1022,7 +1022,7 @@ func TestSessionUint8(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", uint8(1), true},
@@ -1057,7 +1057,7 @@ func TestSessionUint16(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", uint16(1), true},
@@ -1092,7 +1092,7 @@ func TestSessionUint32(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", uint32(1), true},
@@ -1127,7 +1127,7 @@ func TestSessionUint64(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", uint64(1), true},
@@ -1162,7 +1162,7 @@ func TestSessionFloat32(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", float32(1), true},
@@ -1197,7 +1197,7 @@ func TestSessionFloat64(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", float64(1), true},
@@ -1232,7 +1232,7 @@ func TestSessionString(t *testing.T) {
 
 	tables := []struct {
 		name         string
-		val          interface{}
+		val          any
 		shouldReturn bool
 	}{
 		{"existent", "val", true},
@@ -1267,7 +1267,7 @@ func TestSessionValue(t *testing.T) {
 
 	tables := []struct {
 		name string
-		val  interface{}
+		val  any
 	}{
 		{"existent", "val"},
 		{"unexistent", nil},
@@ -1371,7 +1371,7 @@ func TestSessionGetHandshakeData(t *testing.T) {
 			BuildNumber: "20",
 			Version:     "14.0.2",
 		},
-		User: make(map[string]interface{}),
+		User: make(map[string]any),
 	}
 	data2 := &HandshakeData{
 		Sys: HandshakeClientData{
@@ -1380,8 +1380,8 @@ func TestSessionGetHandshakeData(t *testing.T) {
 			BuildNumber: "",
 			Version:     "ahaha",
 		},
-		User: map[string]interface{}{
-			"ababa": make(map[string]interface{}),
+		User: map[string]any{
+			"ababa": make(map[string]any),
 			"pepe":  1,
 		},
 	}
@@ -1417,7 +1417,7 @@ func TestSessionSetHandshakeData(t *testing.T) {
 			BuildNumber: "20",
 			Version:     "14.0.2",
 		},
-		User: make(map[string]interface{}),
+		User: make(map[string]any),
 	}
 	data2 := &HandshakeData{
 		Sys: HandshakeClientData{
@@ -1426,8 +1426,8 @@ func TestSessionSetHandshakeData(t *testing.T) {
 			BuildNumber: "",
 			Version:     "ahaha",
 		},
-		User: map[string]interface{}{
-			"ababa": make(map[string]interface{}),
+		User: map[string]any{
+			"ababa": make(map[string]any),
 			"pepe":  1,
 		},
 	}

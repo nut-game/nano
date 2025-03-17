@@ -33,13 +33,13 @@ func NewSerializer() *Serializer {
 }
 
 // Marshal returns the JSON encoding of v.
-func (s *Serializer) Marshal(v interface{}) ([]byte, error) {
+func (s *Serializer) Marshal(v any) ([]byte, error) {
 	return json.Marshal(v)
 }
 
 // Unmarshal parses the JSON-encoded data and stores the result
 // in the value pointed to by v.
-func (s *Serializer) Unmarshal(data []byte, v interface{}) error {
+func (s *Serializer) Unmarshal(data []byte, v any) error {
 	return json.Unmarshal(data, v)
 }
 

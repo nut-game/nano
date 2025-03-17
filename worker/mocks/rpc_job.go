@@ -48,7 +48,7 @@ func (m *MockRPCJob) GetArgReply(arg0 string) (protoiface.MessageV1, protoiface.
 }
 
 // GetArgReply indicates an expected call of GetArgReply.
-func (mr *MockRPCJobMockRecorder) GetArgReply(arg0 interface{}) *gomock.Call {
+func (mr *MockRPCJobMockRecorder) GetArgReply(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArgReply", reflect.TypeOf((*MockRPCJob)(nil).GetArgReply), arg0)
 }
@@ -62,13 +62,13 @@ func (m *MockRPCJob) RPC(arg0 context.Context, arg1, arg2 string, arg3, arg4 pro
 }
 
 // RPC indicates an expected call of RPC.
-func (mr *MockRPCJobMockRecorder) RPC(arg0, arg1, arg2, arg3, arg4 interface{}) *gomock.Call {
+func (mr *MockRPCJobMockRecorder) RPC(arg0, arg1, arg2, arg3, arg4 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RPC", reflect.TypeOf((*MockRPCJob)(nil).RPC), arg0, arg1, arg2, arg3, arg4)
 }
 
 // ServerDiscovery mocks base method.
-func (m *MockRPCJob) ServerDiscovery(arg0 string, arg1 map[string]interface{}) (string, error) {
+func (m *MockRPCJob) ServerDiscovery(arg0 string, arg1 map[string]any) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ServerDiscovery", arg0, arg1)
 	ret0, _ := ret[0].(string)
@@ -77,7 +77,7 @@ func (m *MockRPCJob) ServerDiscovery(arg0 string, arg1 map[string]interface{}) (
 }
 
 // ServerDiscovery indicates an expected call of ServerDiscovery.
-func (mr *MockRPCJobMockRecorder) ServerDiscovery(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockRPCJobMockRecorder) ServerDiscovery(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ServerDiscovery", reflect.TypeOf((*MockRPCJob)(nil).ServerDiscovery), arg0, arg1)
 }

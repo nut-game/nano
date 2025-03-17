@@ -45,7 +45,7 @@ type funcPtrMatcher struct {
 	ptr uintptr
 }
 
-func newFuncPtrMatcher(x interface{}) *funcPtrMatcher {
+func newFuncPtrMatcher(x any) *funcPtrMatcher {
 	if reflect.ValueOf(x).Kind() != reflect.Func {
 		panic("funcPtrMatcher only accepts functions as arguments")
 	}
@@ -54,7 +54,7 @@ func newFuncPtrMatcher(x interface{}) *funcPtrMatcher {
 	}
 }
 
-func (m funcPtrMatcher) Matches(x interface{}) bool {
+func (m funcPtrMatcher) Matches(x any) bool {
 	v := reflect.ValueOf(x)
 	switch v.Kind() {
 	case reflect.Func:

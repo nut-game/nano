@@ -29,7 +29,7 @@ type RPCJob struct {
 // is ok
 func (r *RPCJob) ServerDiscovery(
 	route string,
-	rpcMetadata map[string]interface{},
+	rpcMetadata map[string]any,
 ) (serverID string, err error) {
 	return "", nil
 }

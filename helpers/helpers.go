@@ -37,7 +37,7 @@ func GetFreePort(t testing.TB) int {
 }
 
 // GetMapKeys returns a string slice with the map keys
-func GetMapKeys(t *testing.T, m interface{}) []string {
+func GetMapKeys(t *testing.T, m any) []string {
 	if reflect.ValueOf(m).Kind() != reflect.Map {
 		t.Fatal(errors.New("GetMapKeys should receive a map"))
 	}
@@ -173,7 +173,7 @@ func FixtureGoldenFileName(t *testing.T, name string) string {
 	return filepath.Join("fixtures", name+".golden")
 }
 
-func vetExtras(extras []interface{}) (bool, string) {
+func vetExtras(extras []any) (bool, string) {
 	for i, extra := range extras {
 		if extra != nil {
 			zeroValue := reflect.Zero(reflect.TypeOf(extra)).Interface()
@@ -186,10 +186,10 @@ func vetExtras(extras []interface{}) (bool, string) {
 	return true, ""
 }
 
-func pollFuncReturn(f interface{}) (interface{}, error) {
+func pollFuncReturn(f any) (any, error) {
 	values := reflect.ValueOf(f).Call([]reflect.Value{})
 
-	extras := []interface{}{}
+	extras := []any{}
 	for _, value := range values[1:] {
 		extras = append(extras, value.Interface())
 	}
@@ -204,7 +204,7 @@ func pollFuncReturn(f interface{}) (interface{}, error) {
 }
 
 // ShouldEventuallyReceive should asserts that eventually channel c receives a value
-func ShouldEventuallyReceive(t testing.TB, c interface{}, timeouts ...time.Duration) interface{} {
+func ShouldEventuallyReceive(t testing.TB, c any, timeouts ...time.Duration) any {
 	t.Helper()
 	if !isChan(c) {
 		t.Fatal("ShouldEventuallyReceive c argument should be a channel")
@@ -237,7 +237,7 @@ func ShouldEventuallyReceive(t testing.TB, c interface{}, timeouts ...time.Durat
 }
 
 // ShouldAlwaysReturn asserts that the return of f should always be v, timeouts: 0 - evaluation interval, 1 - timeout
-func ShouldAlwaysReturn(t testing.TB, f interface{}, v interface{}, timeouts ...time.Duration) {
+func ShouldAlwaysReturn(t testing.TB, f any, v any, timeouts ...time.Duration) {
 	t.Helper()
 	interval := 10 * time.Millisecond
 	timeout := time.After(50 * time.Millisecond)
@@ -274,7 +274,7 @@ func ShouldAlwaysReturn(t testing.TB, f interface{}, v interface{}, timeouts ...
 }
 
 // ShouldEventuallyReturn asserts that eventually the return of f should be v, timeouts: 0 - evaluation interval, 1 - timeout
-func ShouldEventuallyReturn(t testing.TB, f interface{}, v interface{}, timeouts ...time.Duration) {
+func ShouldEventuallyReturn(t testing.TB, f any, v any, timeouts ...time.Duration) {
 	t.Helper()
 	interval := 10 * time.Millisecond
 	timeout := time.After(500 * time.Millisecond)

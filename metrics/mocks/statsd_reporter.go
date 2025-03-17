@@ -42,7 +42,7 @@ func (m *MockClient) Count(arg0 string, arg1 int64, arg2 []string, arg3 float64)
 }
 
 // Count indicates an expected call of Count.
-func (mr *MockClientMockRecorder) Count(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+func (mr *MockClientMockRecorder) Count(arg0, arg1, arg2, arg3 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Count", reflect.TypeOf((*MockClient)(nil).Count), arg0, arg1, arg2, arg3)
 }
@@ -56,7 +56,7 @@ func (m *MockClient) Gauge(arg0 string, arg1 float64, arg2 []string, arg3 float6
 }
 
 // Gauge indicates an expected call of Gauge.
-func (mr *MockClientMockRecorder) Gauge(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+func (mr *MockClientMockRecorder) Gauge(arg0, arg1, arg2, arg3 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Gauge", reflect.TypeOf((*MockClient)(nil).Gauge), arg0, arg1, arg2, arg3)
 }
@@ -70,7 +70,7 @@ func (m *MockClient) TimeInMilliseconds(arg0 string, arg1 float64, arg2 []string
 }
 
 // TimeInMilliseconds indicates an expected call of TimeInMilliseconds.
-func (mr *MockClientMockRecorder) TimeInMilliseconds(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+func (mr *MockClientMockRecorder) TimeInMilliseconds(arg0, arg1, arg2, arg3 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TimeInMilliseconds", reflect.TypeOf((*MockClient)(nil).TimeInMilliseconds), arg0, arg1, arg2, arg3)
 }

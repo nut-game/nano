@@ -86,30 +86,30 @@ type Nano interface {
 	Shutdown()
 	StartWorker()
 	RegisterRPCJob(rpcJob worker.RPCJob) error
-	Documentation(getPtrNames bool) (map[string]interface{}, error)
+	Documentation(getPtrNames bool) (map[string]any, error)
 	IsRunning() bool
 
 	RPC(ctx context.Context, routeStr string, reply proto.Message, arg proto.Message) error
 	RPCTo(ctx context.Context, serverID, routeStr string, reply proto.Message, arg proto.Message) error
 	ReliableRPC(
 		routeStr string,
-		metadata map[string]interface{},
+		metadata map[string]any,
 		reply, arg proto.Message,
 	) (jid string, err error)
 	ReliableRPCWithOptions(
 		routeStr string,
-		metadata map[string]interface{},
+		metadata map[string]any,
 		reply, arg proto.Message,
 		opts *config.EnqueueOpts,
 	) (jid string, err error)
 
-	SendPushToUsers(route string, v interface{}, uids []string, frontendType string) ([]string, error)
+	SendPushToUsers(route string, v any, uids []string, frontendType string) ([]string, error)
 	SendKickToUsers(uids []string, frontendType string) ([]string, error)
 
 	GroupCreate(ctx context.Context, groupName string) error
 	GroupCreateWithTTL(ctx context.Context, groupName string, ttlTime time.Duration) error
 	GroupMembers(ctx context.Context, groupName string) ([]string, error)
-	GroupBroadcast(ctx context.Context, frontendType, groupName, route string, v interface{}) error
+	GroupBroadcast(ctx context.Context, frontendType, groupName, route string, v any) error
 	GroupContainsMember(ctx context.Context, groupName, uid string) (bool, error)
 	GroupAddMember(ctx context.Context, groupName, uid string) error
 	GroupRemoveMember(ctx context.Context, groupName, uid string) error
@@ -493,12 +493,12 @@ func AddMetricTagsToPropagateCtx(
 }
 
 // AddToPropagateCtx adds a key and value that will be propagated through RPC calls
-func AddToPropagateCtx(ctx context.Context, key string, val interface{}) context.Context {
+func AddToPropagateCtx(ctx context.Context, key string, val any) context.Context {
 	return pcontext.AddToPropagateCtx(ctx, key, val)
 }
 
 // GetFromPropagateCtx adds a key and value that came through RPC calls
-func GetFromPropagateCtx(ctx context.Context, key string) interface{} {
+func GetFromPropagateCtx(ctx context.Context, key string) any {
 	return pcontext.GetFromPropagateCtx(ctx, key)
 }
 
@@ -509,7 +509,7 @@ func ExtractSpan(ctx context.Context) (trace.SpanContext, error) {
 }
 
 // Documentation returns handler and remotes documentacion
-func (app *App) Documentation(getPtrNames bool) (map[string]interface{}, error) {
+func (app *App) Documentation(getPtrNames bool) (map[string]any, error) {
 	handlerDocs, err := app.handlerService.Docs(getPtrNames)
 	if err != nil {
 		return nil, err
@@ -518,7 +518,7 @@ func (app *App) Documentation(getPtrNames bool) (map[string]interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	return map[string]interface{}{
+	return map[string]any{
 		"handlers": handlerDocs,
 		"remotes":  remoteDocs,
 	}, nil

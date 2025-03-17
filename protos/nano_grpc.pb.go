@@ -134,7 +134,7 @@ func RegisterNanoServer(s grpc.ServiceRegistrar, srv NanoServer) {
 	s.RegisterService(&Nano_ServiceDesc, srv)
 }
 
-func _Nano_Call_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Nano_Call_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -146,13 +146,13 @@ func _Nano_Call_Handler(srv interface{}, ctx context.Context, dec func(interface
 		Server:     srv,
 		FullMethod: Nano_Call_FullMethodName,
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(NanoServer).Call(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Nano_PushToUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Nano_PushToUser_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(Push)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -164,13 +164,13 @@ func _Nano_PushToUser_Handler(srv interface{}, ctx context.Context, dec func(int
 		Server:     srv,
 		FullMethod: Nano_PushToUser_FullMethodName,
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(NanoServer).PushToUser(ctx, req.(*Push))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Nano_SessionBindRemote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Nano_SessionBindRemote_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(BindMsg)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -182,13 +182,13 @@ func _Nano_SessionBindRemote_Handler(srv interface{}, ctx context.Context, dec f
 		Server:     srv,
 		FullMethod: Nano_SessionBindRemote_FullMethodName,
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(NanoServer).SessionBindRemote(ctx, req.(*BindMsg))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Nano_KickUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Nano_KickUser_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(KickMsg)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -200,7 +200,7 @@ func _Nano_KickUser_Handler(srv interface{}, ctx context.Context, dec func(inter
 		Server:     srv,
 		FullMethod: Nano_KickUser_FullMethodName,
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(NanoServer).KickUser(ctx, req.(*KickMsg))
 	}
 	return interceptor(ctx, in, info, handler)
