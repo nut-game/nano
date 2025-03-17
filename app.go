@@ -266,7 +266,7 @@ func (app *App) IsRunning() bool {
 
 // SetLogger logger setter
 func SetLogger(l logging.Logger) {
-	logger.Log = l
+	logger.SetLogger(l)
 }
 
 func (app *App) initSysRemotes() {
