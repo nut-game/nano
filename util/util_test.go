@@ -21,7 +21,6 @@
 package util
 
 import (
-	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -33,15 +32,9 @@ import (
 
 	"github.com/nut-game/nano/conn/message"
 	"github.com/nut-game/nano/constants"
-	pcontext "github.com/nut-game/nano/context"
 	"github.com/nut-game/nano/protos"
 	"github.com/nut-game/nano/serialize/mocks"
-	"github.com/nut-game/nano/tracing"
 	"github.com/stretchr/testify/assert"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/sdk/trace"
-	"go.opentelemetry.io/otel/sdk/trace/tracetest"
 )
 
 var update = flag.Bool("update", false, "update .golden files")
@@ -220,90 +213,4 @@ func TestConvertProtoToMessageType(t *testing.T) {
 			assert.Equal(t, table.out, out)
 		})
 	}
-}
-
-func TestStartSpanFromRequest(t *testing.T) {
-	t.Run("nil context", func(t *testing.T) {
-		ctx := StartSpanFromRequest(nil, "server1", "route1")
-		assert.Nil(t, ctx)
-	})
-
-	t.Run("valid context", func(t *testing.T) {
-		// Setup
-		exporter := tracetest.NewInMemoryExporter()
-		tp := trace.NewTracerProvider(trace.WithSyncer(exporter))
-		otel.SetTracerProvider(tp)
-
-		serverID := "server1"
-		route := "route1"
-		peerID := "peer1"
-		peerService := "peerService1"
-		requestID := "request1"
-
-		ctx := context.Background()
-		ctx = pcontext.AddToPropagateCtx(ctx, constants.PeerIDKey, peerID)
-		ctx = pcontext.AddToPropagateCtx(ctx, constants.PeerServiceKey, peerService)
-		ctx = pcontext.AddToPropagateCtx(ctx, constants.RequestIDKey, requestID)
-
-		// Execute
-		newCtx := StartSpanFromRequest(ctx, serverID, route)
-
-		// Assert
-		assert.NotNil(t, newCtx)
-
-		tracing.FinishSpan(newCtx, nil)
-
-		spans := exporter.GetSpans()
-		assert.Len(t, spans, 1)
-
-		span := spans[0]
-		assert.Equal(t, route, span.Name)
-
-		expectedAttrs := []attribute.KeyValue{
-			attribute.String("local.id", serverID),
-			attribute.String("span.kind", "server"),
-			attribute.String("peer.id", peerID),
-			attribute.String("peer.service", peerService),
-			attribute.String("request.id", requestID),
-		}
-
-		for _, attr := range expectedAttrs {
-			assert.Contains(t, span.Attributes, attr)
-		}
-	})
-
-	t.Run("context without propagated values", func(t *testing.T) {
-		// Setup
-		exporter := tracetest.NewInMemoryExporter()
-		tp := trace.NewTracerProvider(trace.WithSyncer(exporter))
-		otel.SetTracerProvider(tp)
-
-		serverID := "server1"
-		route := "route1"
-
-		ctx := context.Background()
-
-		// Execute
-		newCtx := StartSpanFromRequest(ctx, serverID, route)
-
-		// Assert
-		assert.NotNil(t, newCtx)
-
-		tracing.FinishSpan(newCtx, nil)
-
-		spans := exporter.GetSpans()
-		assert.Len(t, spans, 1)
-
-		span := spans[0]
-		assert.Equal(t, route, span.Name)
-
-		expectedAttrs := []attribute.KeyValue{
-			attribute.String("local.id", serverID),
-			attribute.String("span.kind", "server"),
-		}
-
-		for _, attr := range expectedAttrs {
-			assert.Contains(t, span.Attributes, attr)
-		}
-	})
 }

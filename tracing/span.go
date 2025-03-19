@@ -26,83 +26,84 @@ import (
 	"github.com/nut-game/nano/constants"
 	pcontext "github.com/nut-game/nano/context"
 	"github.com/nut-game/nano/logger"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/trace"
-	otelTrace "go.opentelemetry.io/otel/trace"
+	opentracing "github.com/opentracing/opentracing-go"
 )
 
-func castValueToCarrier(val any) (propagation.MapCarrier, error) {
-	if v, ok := val.(propagation.MapCarrier); ok {
+func castValueToCarrier(val any) (opentracing.TextMapCarrier, error) {
+	if v, ok := val.(opentracing.TextMapCarrier); ok {
 		return v, nil
 	}
-	if m, ok := val.(map[string]any); ok {
-		carrier := make(propagation.MapCarrier)
+	if m, ok := val.(map[string]interface{}); ok {
+		carrier := map[string]string{}
 		for k, v := range m {
 			if s, ok := v.(string); ok {
 				carrier[k] = s
 			} else {
-				logger.Warnf("value from span carrier cannot be cast to string: %+v", v)
+				logger.Log.Warnf("value from span carrier cannot be cast to string: %+v", v)
 			}
 		}
-		return carrier, nil
+		return opentracing.TextMapCarrier(carrier), nil
 	}
 	return nil, constants.ErrInvalidSpanCarrier
 }
 
-// ExtractSpan retrieves an OpenTelemetry span context from the given context.Context
+// ExtractSpan retrieves an opentracing span context from the given context.Context
 // The span context can be received directly (inside the context) or via an RPC call
-// (encoded in a carrier)
-func ExtractSpan(ctx context.Context) (otelTrace.SpanContext, error) {
-	span := otelTrace.SpanFromContext(ctx)
-	if span.SpanContext().IsValid() {
-		return span.SpanContext(), nil
-	}
-
-	if s := pcontext.GetFromPropagateCtx(ctx, constants.SpanPropagateCtxKey); s != nil {
-		carrier, err := castValueToCarrier(s)
-		if err != nil {
-			return otelTrace.SpanContext{}, err
+// (encoded in binary format)
+func ExtractSpan(ctx context.Context) (opentracing.SpanContext, error) {
+	var spanCtx opentracing.SpanContext
+	span := opentracing.SpanFromContext(ctx)
+	if span == nil {
+		if s := pcontext.GetFromPropagateCtx(ctx, constants.SpanPropagateCtxKey); s != nil {
+			var err error
+			carrier, err := castValueToCarrier(s)
+			if err != nil {
+				return nil, err
+			}
+			tracer := opentracing.GlobalTracer()
+			spanCtx, err = tracer.Extract(opentracing.TextMap, carrier)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, nil
 		}
-
-		propagator := otel.GetTextMapPropagator()
-		extractedCtx := propagator.Extract(ctx, propagation.MapCarrier(carrier))
-		extractedSpan := otelTrace.SpanFromContext(extractedCtx)
-		return extractedSpan.SpanContext(), nil
+	} else {
+		spanCtx = span.Context()
 	}
-
-	return otelTrace.SpanContext{}, nil
+	return spanCtx, nil
 }
 
-// InjectSpan retrieves an OpenTelemetry span from the current context and creates a new context
-// with it encoded in text map format inside the propagatable context content
+// InjectSpan retrieves an opentrancing span from the current context and creates a new context
+// with it encoded in binary format inside the propagatable context content
 func InjectSpan(ctx context.Context) (context.Context, error) {
-	span := otelTrace.SpanFromContext(ctx)
-	if !span.SpanContext().IsValid() {
+	span := opentracing.SpanFromContext(ctx)
+	if span == nil {
 		return ctx, nil
 	}
-
-	carrier := make(map[string]string)
-	otel.GetTextMapPropagator().Inject(ctx, propagation.MapCarrier(carrier))
-
-	return pcontext.AddToPropagateCtx(ctx, constants.SpanPropagateCtxKey, carrier), nil
+	spanData := opentracing.TextMapCarrier{}
+	tracer := opentracing.GlobalTracer()
+	err := tracer.Inject(span.Context(), opentracing.TextMap, spanData)
+	if err != nil {
+		return nil, err
+	}
+	return pcontext.AddToPropagateCtx(ctx, constants.SpanPropagateCtxKey, spanData), nil
 }
 
-// StartSpan starts a new span with a given parent context, operation name, and attributes.
-// It returns a context with the created span.
+// StartSpan starts a new span with a given parent context, operation name, tags and
+// optional parent span. It returns a context with the created span.
 func StartSpan(
 	parentCtx context.Context,
 	opName string,
-	attributes ...attribute.KeyValue,
-) (context.Context, trace.Span) {
-	tracer := otel.Tracer("nano")
-	ctx, span := tracer.Start(parentCtx, opName,
-		trace.WithAttributes(attributes...),
-	)
-
-	return ctx, span
+	tags opentracing.Tags,
+	reference ...opentracing.SpanContext,
+) context.Context {
+	var ref opentracing.SpanContext
+	if len(reference) > 0 {
+		ref = reference[0]
+	}
+	span := opentracing.StartSpan(opName, opentracing.ChildOf(ref), tags)
+	return opentracing.ContextWithSpan(parentCtx, span)
 }
 
 // FinishSpan finishes a span retrieved from the given context and logs the error if it exists
@@ -110,13 +111,12 @@ func FinishSpan(ctx context.Context, err error) {
 	if ctx == nil {
 		return
 	}
-	span := otelTrace.SpanFromContext(ctx)
+	span := opentracing.SpanFromContext(ctx)
 	if span == nil {
 		return
 	}
-	defer span.End()
+	defer span.Finish()
 	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, err.Error())
+		LogError(span, err.Error())
 	}
 }

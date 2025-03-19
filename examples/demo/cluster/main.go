@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"os"
 
 	"strings"
 
@@ -15,8 +16,10 @@ import (
 	"github.com/nut-game/nano/examples/demo/cluster/services"
 	"github.com/nut-game/nano/groups"
 	"github.com/nut-game/nano/route"
-	"github.com/nut-game/nano/tracing"
+	"github.com/nut-game/nano/tracing/jaeger"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	jaegercfg "github.com/uber/jaeger-client-go/config"
 )
 
 var app nano.Nano
@@ -75,11 +78,22 @@ func configureFrontend() {
 	}
 }
 
-func configureOpenTelemetry(logger logrus.FieldLogger) {
-	err := tracing.InitializeOtel()
-	if err != nil {
-		logger.Errorf("Failed to initialize OpenTelemetry: %v", err)
+func configureJaeger(config *viper.Viper, logger logrus.FieldLogger) {
+	cfg, err := jaegercfg.FromEnv()
+	if cfg.ServiceName == "" {
+		logger.Error("Could not init jaeger tracer without ServiceName, either set environment JAEGER_SERVICE_NAME or cfg.ServiceName = \"my-api\"")
+		return
 	}
+	if err != nil {
+		logger.Error("Could not parse Jaeger env vars: %s", err.Error())
+		return
+	}
+	options := jaeger.Options{
+		Disabled:    cfg.Disabled,
+		Probability: cfg.Sampler.Param,
+		ServiceName: cfg.ServiceName,
+	}
+	jaeger.Configure(options)
 }
 
 func main() {
@@ -89,7 +103,9 @@ func main() {
 
 	flag.Parse()
 
-	configureOpenTelemetry(logrus.New())
+	if os.Getenv("JAEGER_SERVICE_NAME") != "" {
+		configureJaeger(viper.GetViper(), logrus.New())
+	}
 
 	builder := nano.NewDefaultBuilder(*isFrontend, *svType, nano.Cluster, map[string]string{}, *config.NewDefaultNanoConfig())
 	if *isFrontend {

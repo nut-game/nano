@@ -41,8 +41,7 @@ import (
 	"github.com/nut-game/nano/serialize"
 	"github.com/nut-game/nano/tracing"
 
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
+	opentracing "github.com/opentracing/opentracing-go"
 )
 
 func getLoggerFromArgs(args []reflect.Value) interfaces.Logger {
@@ -190,34 +189,20 @@ func StartSpanFromRequest(
 	if ctx == nil {
 		return nil
 	}
-
+	tags := opentracing.Tags{
+		"local.id":     serverID,
+		"span.kind":    "server",
+		"peer.id":      pcontext.GetFromPropagateCtx(ctx, constants.PeerIDKey),
+		"peer.service": pcontext.GetFromPropagateCtx(ctx, constants.PeerServiceKey),
+		"request.id":   pcontext.GetFromPropagateCtx(ctx, constants.RequestIDKey),
+	}
 	parent, err := tracing.ExtractSpan(ctx)
 	if err != nil {
-		return nil
+		if err != opentracing.ErrSpanContextNotFound {
+			logger.Log.Warnf("failed to retrieve parent span: %s", err.Error())
+		}
 	}
-
-	ctx = trace.ContextWithRemoteSpanContext(ctx, parent)
-
-	// Create a new context and span
-	attributes := []attribute.KeyValue{
-		attribute.String("local.id", serverID),
-		attribute.String("span.kind", "server"),
-	}
-	peerId, ok := pcontext.GetFromPropagateCtx(ctx, constants.PeerIDKey).(string)
-	if ok {
-		attributes = append(attributes, attribute.String("peer.id", peerId))
-	}
-	peerService, ok := pcontext.GetFromPropagateCtx(ctx, constants.PeerServiceKey).(string)
-	if ok {
-		attributes = append(attributes, attribute.String("peer.service", peerService))
-	}
-	requestId, ok := pcontext.GetFromPropagateCtx(ctx, constants.RequestIDKey).(string)
-	if ok {
-		attributes = append(attributes, attribute.String("request.id", requestId))
-	}
-
-	ctx, _ = tracing.StartSpan(ctx, route, attributes...)
-
+	ctx = tracing.StartSpan(ctx, route, tags, parent)
 	return ctx
 }
 

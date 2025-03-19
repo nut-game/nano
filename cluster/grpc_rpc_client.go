@@ -39,8 +39,7 @@ import (
 	"github.com/nut-game/nano/route"
 	"github.com/nut-game/nano/session"
 	"github.com/nut-game/nano/tracing"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
+	"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
 )
 
@@ -109,15 +108,13 @@ func (gs *GRPCClient) Call(
 	if err != nil {
 		logger.Warnf("[grpc client] failed to retrieve parent span: %s", err.Error())
 	}
-	ctx = trace.ContextWithRemoteSpanContext(ctx, parent)
-
-	attributes := []attribute.KeyValue{
-		attribute.String("span.kind", "client"),
-		attribute.String("local.id", gs.server.ID),
-		attribute.String("peer.serverType", server.Type),
-		attribute.String("peer.id", server.ID),
+	tags := opentracing.Tags{
+		"span.kind":       "client",
+		"local.id":        gs.server.ID,
+		"peer.serverType": server.Type,
+		"peer.id":         server.ID,
 	}
-	ctx, _ = tracing.StartSpan(ctx, "GRPC RPC Call", attributes...)
+	ctx = tracing.StartSpan(ctx, "GRPC RPC Call", tags, parent)
 	defer tracing.FinishSpan(ctx, err)
 
 	if session != nil {

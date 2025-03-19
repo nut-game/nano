@@ -38,8 +38,8 @@ import (
 	"github.com/nut-game/nano/route"
 	"github.com/nut-game/nano/session"
 	"github.com/nut-game/nano/tracing"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
+	"github.com/opentracing/opentracing-go"
+
 	"google.golang.org/protobuf/proto"
 )
 
@@ -156,14 +156,13 @@ func (ns *NatsRPCClient) Call(
 	if err != nil {
 		logger.Warnf("failed to retrieve parent span: %s", err.Error())
 	}
-	ctx = trace.ContextWithRemoteSpanContext(ctx, parent)
-	attributes := []attribute.KeyValue{
-		attribute.String("span.kind", "client"),
-		attribute.String("local.id", ns.server.ID),
-		attribute.String("peer.serverType", server.Type),
-		attribute.String("peer.id", server.ID),
+	tags := opentracing.Tags{
+		"span.kind":       "client",
+		"local.id":        ns.server.ID,
+		"peer.serverType": server.Type,
+		"peer.id":         server.ID,
 	}
-	ctx, _ = tracing.StartSpan(ctx, "NATS RPC Call", attributes...)
+	ctx = tracing.StartSpan(ctx, "NATS RPC Call", tags, parent)
 	defer tracing.FinishSpan(ctx, err)
 
 	if !ns.running {
@@ -252,6 +251,7 @@ func (ns *NatsRPCClient) Init() error {
 	conn, err := setupNatsConn(
 		ns.connString,
 		ns.appDieChan,
+		nats.RetryOnFailedConnect(false),
 		nats.MaxReconnects(ns.maxReconnectionRetries),
 		nats.Timeout(ns.connectionTimeout),
 		nats.Compression(ns.websocketCompression),

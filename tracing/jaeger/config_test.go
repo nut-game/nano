@@ -1,4 +1,4 @@
-// Copyright (c) nano Author and TFG Co. All Rights Reserved.
+// Copyright (c) TFG Co. All Rights Reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,7 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package constants
+package jaeger
 
-// VERSION returns current nano version
-var VERSION = "0.2.0"
+import (
+	"testing"
+
+	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/stretchr/testify/assert"
+	j "github.com/uber/jaeger-client-go"
+)
+
+func TestConfigure(t *testing.T) {
+	closer, err := Configure(Options{ServiceName: "test-svc"})
+	assert.NoError(t, err)
+	tracer := opentracing.GlobalTracer()
+	assert.NotNil(t, tracer)
+	assert.IsType(t, &j.Tracer{}, tracer)
+	defer closer.Close()
+}

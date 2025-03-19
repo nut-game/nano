@@ -43,7 +43,7 @@ type etcdServiceDiscovery struct {
 	syncServersInterval time.Duration
 	heartbeatTTL        time.Duration
 	logHeartbeat        bool
-	// lastHeartbeatTime      time.Time
+	lastHeartbeatTime      time.Time
 	leaseID                clientv3.LeaseID
 	mapByTypeLock          sync.RWMutex
 	serverMapByType        map[string]map[string]*Server
@@ -614,19 +614,18 @@ func (sd *etcdServiceDiscovery) revoke() error {
 	close(sd.stopLeaseChan)
 	c := make(chan error, 1)
 	go func() {
-		defer close(c)
-		logger.Debug("waiting for etcd revoke")
-		_, err := sd.cli.Revoke(context.TODO(), sd.leaseID)
-		c <- err
-		logger.Debug("finished waiting for etcd revoke")
+		if sd.cli != nil {
+			defer close(c)
+			logger.Debug("waiting for etcd revoke")
+			ctx, cancel := context.WithTimeout(context.Background(), sd.revokeTimeout)
+			_, err := sd.cli.Revoke(ctx, sd.leaseID)
+			cancel()
+			c <- err
+			logger.Debug("finished waiting for etcd revoke")
+		}
 	}()
-	select {
-	case err := <-c:
-		return err // completed normally
-	case <-time.After(sd.revokeTimeout):
-		logger.Warn("timed out waiting for etcd revoke")
-		return nil // timed out
-	}
+	err := <-c
+	return err // completed normally
 }
 
 func (sd *etcdServiceDiscovery) addServer(sv *Server) {

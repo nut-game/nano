@@ -47,10 +47,7 @@ import (
 	"github.com/nut-game/nano/util"
 	"github.com/nut-game/nano/util/compression"
 
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
-	"go.opentelemetry.io/otel/trace/noop"
+	opentracing "github.com/opentracing/opentracing-go"
 )
 
 var (
@@ -61,6 +58,8 @@ var (
 	// herd contains the handshake error response data
 	herd []byte
 	once sync.Once
+
+	noOpTracer = opentracing.NoopTracer{}
 )
 
 const handlerType = "handler"
@@ -559,39 +558,38 @@ func (a *agentImpl) write() {
 
 func (a *agentImpl) writeToConnection(ctx context.Context, data []byte) error {
 	span := createConnectionSpan(ctx, a.conn, "conn write")
+	defer span.Finish()
 
 	a.conn.SetWriteDeadline(time.Now().Add(a.writeTimeout))
 	_, writeErr := a.conn.Write(data)
-
-	if span != nil {
-		defer span.End()
-
-		if writeErr != nil {
-			span.RecordError(writeErr)
-			span.SetStatus(codes.Error, writeErr.Error())
-		}
+	if writeErr != nil {
+		tracing.LogError(span, writeErr.Error())
+		return writeErr
 	}
-
 	return writeErr
 }
 
-func createConnectionSpan(ctx context.Context, conn net.Conn, op string) trace.Span {
+func createConnectionSpan(ctx context.Context, conn net.Conn, op string) opentracing.Span {
 	if ctx == nil {
-		_, span := noop.NewTracerProvider().Tracer("noop").Start(context.TODO(), op)
-		return span
+		return noOpTracer.StartSpan(op)
 	}
+
 	remoteAddress := ""
 	if conn.RemoteAddr() != nil {
 		remoteAddress = conn.RemoteAddr().String()
 	}
 
-	attrs := []attribute.KeyValue{
-		attribute.String("span.kind", "connection"),
-		attribute.String("addr", remoteAddress),
+	tags := opentracing.Tags{
+		"span.kind": "connection",
+		"addr":      remoteAddress,
 	}
 
-	_, span := tracing.StartSpan(ctx, op, attrs...)
-	return span
+	var parent opentracing.SpanContext
+	if span := opentracing.SpanFromContext(ctx); span != nil {
+		parent = span.Context()
+	}
+
+	return opentracing.StartSpan(op, opentracing.ChildOf(parent), tags)
 }
 
 // SendRequest sends a request to a server
@@ -609,10 +607,9 @@ func (a *agentImpl) AnswerWithError(ctx context.Context, mid uint, err error) {
 		}
 	}()
 	if ctx != nil && err != nil {
-		span := trace.SpanFromContext(ctx)
-		if span.IsRecording() {
-			span.SetStatus(codes.Error, err.Error())
-			span.RecordError(err)
+		s := opentracing.SpanFromContext(ctx)
+		if s != nil {
+			tracing.LogError(s, err.Error())
 		}
 	}
 	p, e := util.GetErrorPayload(a.serializer, err)

@@ -30,7 +30,7 @@ import (
 	"time"
 
 	"github.com/nats-io/nuid"
-	"go.opentelemetry.io/otel/attribute"
+	"github.com/opentracing/opentracing-go"
 
 	"github.com/nut-game/nano/acceptor"
 	"github.com/nut-game/nano/pipeline"
@@ -294,15 +294,14 @@ func (h *HandlerService) processMessage(a agent.Agent, msg *message.Message) {
 	ctx := pcontext.AddToPropagateCtx(context.Background(), constants.StartTimeKey, time.Now().UnixNano())
 	ctx = pcontext.AddToPropagateCtx(ctx, constants.RouteKey, msg.Route)
 	ctx = pcontext.AddToPropagateCtx(ctx, constants.RequestIDKey, requestID)
-
-	attributes := []attribute.KeyValue{
-		attribute.String("local.id", h.server.ID),
-		attribute.String("span.kind", "server"),
-		attribute.String("msg.type", strings.ToLower(msg.Type.String())),
-		attribute.String("user.id", a.GetSession().UID()),
-		attribute.String("request.id", requestID),
+	tags := opentracing.Tags{
+		"local.id":   h.server.ID,
+		"span.kind":  "server",
+		"msg.type":   strings.ToLower(msg.Type.String()),
+		"user.id":    a.GetSession().UID(),
+		"request.id": requestID,
 	}
-	ctx, _ = tracing.StartSpan(ctx, msg.Route, attributes...)
+	ctx = tracing.StartSpan(ctx, msg.Route, tags)
 	ctx = context.WithValue(ctx, constants.SessionCtxKey, a.GetSession())
 
 	r, err := route.Decode(msg.Route)

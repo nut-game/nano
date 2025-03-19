@@ -23,21 +23,18 @@ package tracing
 import (
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/nut-game/nano/constants"
 	pcontext "github.com/nut-game/nano/context"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/propagation"
-	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	"go.opentelemetry.io/otel/trace"
+	"github.com/nut-game/nano/tracing/jaeger"
+	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/stretchr/testify/assert"
 )
 
-var tracerProvider *sdktrace.TracerProvider
+var closer io.Closer
 
 func TestMain(m *testing.M) {
 	setup()
@@ -47,51 +44,63 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	tracerProvider = sdktrace.NewTracerProvider()
-	otel.SetTracerProvider(tracerProvider)
-	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
+	closer, _ = jaeger.Configure(jaeger.Options{ServiceName: "spanTest"})
 }
 
 func shutdown() {
-	_ = tracerProvider.Shutdown(context.Background())
+	closer.Close()
+}
+
+func assertBaggage(t *testing.T, ctx opentracing.SpanContext, expected map[string]string) {
+	b := extractBaggage(ctx, true)
+	assert.Equal(t, expected, b)
+}
+
+func extractBaggage(ctx opentracing.SpanContext, allItems bool) map[string]string {
+	b := make(map[string]string)
+	ctx.ForeachBaggageItem(func(k, v string) bool {
+		b[k] = v
+		return allItems
+	})
+	return b
 }
 
 func TestExtractSpan(t *testing.T) {
-	ctx, span := otel.Tracer("test").Start(context.Background(), "op")
-	defer span.End()
-
+	span := opentracing.StartSpan("op", opentracing.ChildOf(nil))
+	ctx := opentracing.ContextWithSpan(context.Background(), span)
 	spanCtx, err := ExtractSpan(ctx)
 	assert.NoError(t, err)
-	assert.Equal(t, span.SpanContext(), spanCtx)
-	assert.True(t, spanCtx.IsValid())
+	assert.Equal(t, span.Context(), spanCtx)
 }
 
 func TestExtractSpanInjectedSpan(t *testing.T) {
-	ctx, span := otel.Tracer("test").Start(context.Background(), "someOp")
-	defer span.End()
+	span := opentracing.StartSpan("someOp")
+	span.SetBaggageItem("some_key", "12345")
+	span.SetBaggageItem("some-other-key", "42")
+	expectedBaggage := map[string]string{"some_key": "12345", "some-other-key": "42"}
 
-	carrier := propagation.MapCarrier{}
-	otel.GetTextMapPropagator().Inject(ctx, carrier)
-	ctx = pcontext.AddToPropagateCtx(context.Background(), constants.SpanPropagateCtxKey, carrier)
+	spanData := opentracing.TextMapCarrier{}
+	tracer := opentracing.GlobalTracer()
+	err := tracer.Inject(span.Context(), opentracing.TextMap, spanData)
+	assert.NoError(t, err)
+	ctx := pcontext.AddToPropagateCtx(context.Background(), constants.SpanPropagateCtxKey, spanData)
 
 	spanCtx, err := ExtractSpan(ctx)
 	assert.NoError(t, err)
-	assert.Equal(t, span.SpanContext().TraceID(), spanCtx.TraceID())
-	assert.Equal(t, span.SpanContext().SpanID(), spanCtx.SpanID())
-	assert.True(t, spanCtx.IsValid())
+	assertBaggage(t, spanCtx, expectedBaggage)
 }
 
 func TestExtractSpanNoSpan(t *testing.T) {
 	spanCtx, err := ExtractSpan(context.Background())
 	assert.NoError(t, err)
-	assert.Equal(t, trace.SpanContext{}, spanCtx)
+	assert.Nil(t, spanCtx)
 }
 
 func TestExtractSpanBadInjected(t *testing.T) {
 	ctx := pcontext.AddToPropagateCtx(context.Background(), constants.SpanPropagateCtxKey, []byte("nope"))
 	spanCtx, err := ExtractSpan(ctx)
 	assert.Equal(t, constants.ErrInvalidSpanCarrier, err)
-	assert.Equal(t, trace.SpanContext{}, spanCtx)
+	assert.Nil(t, spanCtx)
 }
 
 func TestInjectSpanContextWithoutSpan(t *testing.T) {
@@ -102,78 +111,24 @@ func TestInjectSpanContextWithoutSpan(t *testing.T) {
 }
 
 func TestInjectSpan(t *testing.T) {
-	ctx, span := otel.Tracer("test").Start(context.Background(), "op")
-	defer span.End()
-
-	injectedCtx, err := InjectSpan(ctx)
+	span := opentracing.StartSpan("op", opentracing.ChildOf(nil))
+	origCtx := opentracing.ContextWithSpan(context.Background(), span)
+	ctx, err := InjectSpan(origCtx)
 	assert.NoError(t, err)
-	assert.NotEqual(t, ctx, injectedCtx)
-	encodedCtx := pcontext.GetFromPropagateCtx(injectedCtx, constants.SpanPropagateCtxKey)
+	assert.NotEqual(t, origCtx, ctx)
+	encodedCtx := pcontext.GetFromPropagateCtx(ctx, constants.SpanPropagateCtxKey)
 	assert.NotNil(t, encodedCtx)
 }
 
 func TestStartSpan(t *testing.T) {
-	parentCtx := context.Background()
-	opName := "test-operation"
-	attributes := []attribute.KeyValue{
-		attribute.String("key1", "value1"),
-		attribute.Int("key2", 42),
-	}
+	origCtx := context.Background()
+	ctxWithSpan := StartSpan(origCtx, "my-op", opentracing.Tags{"hi": "hello"})
+	assert.NotEqual(t, origCtx, ctxWithSpan)
 
-	ctx, span := StartSpan(parentCtx, opName, attributes...)
-	defer span.End()
-
+	span := opentracing.SpanFromContext(ctxWithSpan)
 	assert.NotNil(t, span)
-	assert.NotEqual(t, parentCtx, ctx)
-
-	spanCtx := span.SpanContext()
-	assert.True(t, spanCtx.IsValid())
-	assert.NotEmpty(t, spanCtx.TraceID())
-	assert.NotEmpty(t, spanCtx.SpanID())
-
-	// Check if attributes are set
-	spanAttrs := span.(interface{ Attributes() []attribute.KeyValue }).Attributes()
-	assert.Len(t, spanAttrs, len(attributes))
-	for i, attr := range attributes {
-		assert.Equal(t, attr, spanAttrs[i])
-	}
 }
 
-func TestFinishSpan(t *testing.T) {
-	t.Run("with error", func(t *testing.T) {
-		ctx, span := StartSpan(context.Background(), "test-operation")
-		testErr := errors.New("test error")
-
-		FinishSpan(ctx, testErr)
-
-		spanStatus := span.(sdktrace.ReadOnlySpan).Status().Code
-		assert.Equal(t, codes.Error, spanStatus)
-
-		spanEvents := span.(interface{ Events() []sdktrace.Event }).Events()
-		assert.Len(t, spanEvents, 1)
-		assert.Equal(t, "exception", spanEvents[0].Name)
-		spanError := span.(sdktrace.ReadOnlySpan).Status().Description
-		assert.Equal(t, testErr.Error(), spanError)
-	})
-
-	t.Run("without error", func(t *testing.T) {
-		ctx, span := StartSpan(context.Background(), "test-operation")
-
-		FinishSpan(ctx, nil)
-
-		spanStatus := span.(sdktrace.ReadOnlySpan).Status().Code
-		assert.Equal(t, codes.Unset, spanStatus)
-
-		spanEvents := span.(interface{ Events() []sdktrace.Event }).Events()
-		assert.Len(t, spanEvents, 0)
-	})
-
-	t.Run("nil context", func(t *testing.T) {
-		assert.NotPanics(t, func() {
-			FinishSpan(nil, nil)
-		})
-	})
-}
 func TestFinishSpanNilCtx(t *testing.T) {
 	assert.NotPanics(t, func() { FinishSpan(nil, nil) })
 }
@@ -183,26 +138,11 @@ func TestFinishSpanCtxWithoutSpan(t *testing.T) {
 }
 
 func TestFinishSpanWithErr(t *testing.T) {
-	ctx, span := StartSpan(context.Background(), "my-op", attribute.String("hi", "hello"))
-	assert.NotPanics(t, func() { FinishSpan(ctx, errors.New("hello")) })
-
-	spanStatus := span.(sdktrace.ReadOnlySpan).Status().Code
-	assert.Equal(t, codes.Error, spanStatus)
-
-	spanEvents := span.(interface{ Events() []sdktrace.Event }).Events()
-	assert.Len(t, spanEvents, 1)
-	assert.Equal(t, "exception", spanEvents[0].Name)
-	spanError := span.(sdktrace.ReadOnlySpan).Status().Description
-	assert.Equal(t, "hello", spanError)
+	ctxWithSpan := StartSpan(context.Background(), "my-op", opentracing.Tags{"hi": "hello"})
+	assert.NotPanics(t, func() { FinishSpan(ctxWithSpan, errors.New("hello")) })
 }
 
-func TestFinishSpanWithoutErr(t *testing.T) {
-	ctx, span := StartSpan(context.Background(), "my-op", attribute.String("hi", "hello"))
-	assert.NotPanics(t, func() { FinishSpan(ctx, nil) })
-
-	spanStatus := span.(sdktrace.ReadOnlySpan).Status().Code
-	assert.Equal(t, codes.Unset, spanStatus)
-
-	spanEvents := span.(interface{ Events() []sdktrace.Event }).Events()
-	assert.Len(t, spanEvents, 0)
+func TestFinishSpan(t *testing.T) {
+	ctxWithSpan := StartSpan(context.Background(), "my-op", opentracing.Tags{"hi": "hello"})
+	assert.NotPanics(t, func() { FinishSpan(ctxWithSpan, nil) })
 }

@@ -346,6 +346,7 @@ func (ns *NatsRPCServer) Init() error {
 	conn, err := setupNatsConn(
 		ns.connString,
 		ns.appDieChan,
+		nats.RetryOnFailedConnect(false),
 		nats.MaxReconnects(ns.maxReconnectionRetries),
 		nats.Timeout(ns.connectionTimeout),
 		nats.Compression(ns.websocketCompression),
@@ -397,8 +398,8 @@ func (ns *NatsRPCServer) subscribe(topic string) (*nats.Subscription, error) {
 	return ns.conn.ChanSubscribe(topic, ns.subChan)
 }
 
-func (ns *NatsRPCServer) stop() {
-}
+// func (ns *NatsRPCServer) stop() {
+// }
 
 func (ns *NatsRPCServer) reportMetrics() {
 	if ns.metricsReporters != nil {

@@ -53,7 +53,7 @@ import (
 	"github.com/nut-game/nano/timer"
 	"github.com/nut-game/nano/tracing"
 	"github.com/nut-game/nano/worker"
-	"go.opentelemetry.io/otel/trace"
+	"github.com/opentracing/opentracing-go"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -131,12 +131,12 @@ type Nano interface {
 
 // App is the base app struct
 type App struct {
-	acceptors []acceptor.Acceptor
-	config    config.NanoConfig
-	debug     bool
-	dieChan   chan bool
-	heartbeat time.Duration
-	// onSessionBind     func(session.Session)
+	acceptors         []acceptor.Acceptor
+	config            config.NanoConfig
+	debug             bool
+	dieChan           chan bool
+	heartbeat         time.Duration
+	onSessionBind     func(session.Session)
 	router            *router.Router
 	rpcClient         cluster.RPCClient
 	rpcServer         cluster.RPCServer
@@ -502,9 +502,9 @@ func GetFromPropagateCtx(ctx context.Context, key string) any {
 	return pcontext.GetFromPropagateCtx(ctx, key)
 }
 
-// ExtractSpan retrieves an OpenTelemetry span context from the given context
+// ExtractSpan retrieves an opentracing span context from the given context
 // The span context can be received directly or via an RPC call
-func ExtractSpan(ctx context.Context) (trace.SpanContext, error) {
+func ExtractSpan(ctx context.Context) (opentracing.SpanContext, error) {
 	return tracing.ExtractSpan(ctx)
 }
 
