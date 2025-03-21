@@ -75,7 +75,10 @@ func (h *PrettyHandler) WithGroup(name string) slog.Handler {
 
 func NewPrettyHandler(out io.Writer, level slog.Level) *PrettyHandler {
 	return &PrettyHandler{
-		Handler: slog.NewTextHandler(out, &slog.HandlerOptions{Level: level}),
-		o:       out,
+		Handler: slog.NewTextHandler(out,
+			&slog.HandlerOptions{
+				Level: level,
+			}),
+		o: out,
 	}
 }

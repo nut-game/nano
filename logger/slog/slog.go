@@ -40,7 +40,8 @@ func (l *slogImpl) Warnln(args ...any) {
 func New() interfaces.Logger {
 	level := slog.LevelInfo
 	// todo 目前没有处理With相关的，加了也没有用。
-	logger := slog.New(NewPrettyHandler(os.Stdout, level)).With(slog.String("src", "nano"))
+	// slog.Default().With(slog.String("key", "value"))
+	logger := slog.New(NewPrettyHandler(os.Stdout, level))
 	return &slogImpl{Logger: logger}
 }
 
