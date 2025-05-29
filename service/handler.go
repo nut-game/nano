@@ -184,16 +184,14 @@ func (h *HandlerService) Handle(conn acceptor.PlayerConn) {
 
 		if err != nil {
 			// Check if this is an expected error due to connection being closed
-			if errors.Is(err, net.ErrClosed) {
-				logger.Debugf("Connection no longer available while reading next available message: %s", err.Error())
-			} else if err == constants.ErrConnectionClosed {
-				logger.Debugf("Connection no longer available while reading next available message: %s", err.Error())
+			if errors.Is(err, net.ErrClosed) || err == constants.ErrConnectionClosed {
+				logger.Debug("Connection no longer available while reading next available message")
 			} else {
 				// Differentiate errors for valid sessions, to avoid noise from load balancer healthchecks and other internet noise
 				if a.GetStatus() != constants.StatusStart {
-					logger.Errorf("Error reading next available message for UID: %s, Build: %s, error: %s", a.GetSession().UID(), "a.GetSession().GetHandshakeData().Sys.BuildNumber", err.Error())
+					logger.Error("Error reading next available message")
 				} else {
-					logger.Debugf("Error reading next available message on initial connection: %s", err.Error())
+					logger.Debug("Error reading next available message on initial connection")
 				}
 			}
 

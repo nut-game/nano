@@ -73,6 +73,7 @@ func (c *Config) fillDefaultValues() {
 		"nano.cluster.rpc.client.nats.pinginterval":           config.Cluster.RPC.Client.Nats.PingInterval,
 		"nano.cluster.rpc.client.nats.maxpingsoutstanding":    config.Cluster.RPC.Client.Nats.MaxPingsOutstanding,
 		"nano.cluster.rpc.client.nats.requesttimeout":         config.Cluster.RPC.Client.Nats.RequestTimeout,
+		"nano.cluster.rpc.server.loopbackenabled":             config.Cluster.RPC.Server.LoopbackEnabled,
 		"nano.cluster.rpc.server.grpc.port":                   config.Cluster.RPC.Server.Grpc.Port,
 		"nano.cluster.rpc.server.nats.connect":                config.Cluster.RPC.Server.Nats.Connect,
 		"nano.cluster.rpc.server.nats.connectiontimeout":      config.Cluster.RPC.Server.Nats.ConnectionTimeout,

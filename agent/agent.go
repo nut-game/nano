@@ -30,6 +30,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"syscall"
 	"time"
 
 	"github.com/nut-game/nano/config"
@@ -190,6 +191,7 @@ func newAgent(
 	// initialize heartbeat and handshake data on first user connection
 	serializerName := serializer.GetName()
 
+	// TODO: Remove this once.Do and move the validation somewhere else, maybe during pitaya initialization. The current approach makes tests interfere with each other quite easily.
 	once.Do(func() {
 		hbdEncode(heartbeatTime, packetEncoder, messageEncoder.IsCompressionEnabled(), serializerName)
 		herdEncode(heartbeatTime, packetEncoder, messageEncoder.IsCompressionEnabled(), serializerName)
@@ -322,12 +324,11 @@ func (a *agentImpl) Push(route string, v any) error {
 
 	switch d := v.(type) {
 	case []byte:
-		logger.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%dbytes",
-			a.Session.ID(), a.Session.UID(), route, len(d))
+		logger.Debugf("bytes", len(d))
 	default:
-		logger.Debugf("Type=Push, ID=%d, UID=%s, Route=%s, Data=%+v",
-			a.Session.ID(), a.Session.UID(), route, v)
+		logger.Debugf("data", fmt.Sprintf("%+v", d))
 	}
+	logger.Debugf("pushing message to session")
 	return a.send(pendingMessage{typ: message.Push, route: route, payload: v})
 }
 
@@ -348,12 +349,11 @@ func (a *agentImpl) ResponseMID(ctx context.Context, mid uint, v any, isError ..
 
 	switch d := v.(type) {
 	case []byte:
-		logger.Debugf("Type=Response, ID=%d, UID=%s, MID=%d, Data=%dbytes",
-			a.Session.ID(), a.Session.UID(), mid, len(d))
+		logger.Debugf("bytes", len(d))
 	default:
-		logger.Infof("Type=Response, ID=%d, UID=%s, MID=%d, Data=%+v",
-			a.Session.ID(), a.Session.UID(), mid, v)
+		logger.Infof("data", fmt.Sprintf("%+v", d))
 	}
+	logger.Debugf("responding message to session")
 
 	return a.send(pendingMessage{ctx: ctx, typ: message.Response, mid: mid, payload: v, err: err})
 }
@@ -408,10 +408,48 @@ func (a *agentImpl) Kick(ctx context.Context) error {
 	// packet encode
 	p, err := a.encoder.Encode(packet.Kick, nil)
 	if err != nil {
-		return err
+		return fmt.Errorf("agent kick encoding failed: %w", err)
 	}
-	_, err = a.conn.Write(p)
-	return err
+	if err := a.writeToConnection(ctx, p); err != nil {
+		// 1. Check for a closed connection (most likely scenario for a "dead connection")
+		if e.Is(err, net.ErrClosed) {
+			// Handle specifically: connection was already closed
+			// This could mean the client disconnected before the kick.
+			return errors.NewError(err, errors.ErrClientClosedRequest, map[string]string{
+				"reason": "agent kick failed: connection already closed",
+			})
+		}
+
+		// 2. Check for a timeout (if you have write deadlines)
+		if e.Is(err, os.ErrDeadlineExceeded) {
+			// Handle specifically: write operation timed out
+			return errors.NewError(err, errors.ErrRequestTimeout, map[string]string{
+				"reason": "agent kick failed: write timeout",
+			})
+		}
+
+		// 3. Unwrap OpError to check for specific syscall errors if needed
+		var opError *net.OpError
+		if e.As(err, &opError) {
+			if e.Is(opError.Err, syscall.EPIPE) {
+				// Handle specifically: broken pipe (often means client disconnected)
+				return errors.NewError(err, errors.ErrClosedRequest, map[string]string{
+					"reason": "agent kick failed: write timeout",
+				})
+			}
+			if e.Is(opError.Err, syscall.ECONNRESET) {
+				// Handle specifically: connection reset by peer
+				return errors.NewError(err, errors.ErrClientClosedRequest, map[string]string{
+					"reason": "agent kick failed: connection reset by peer",
+				})
+			}
+		}
+
+		return errors.NewError(err, errors.ErrClosedRequest, map[string]string{
+			"reason": "agent kick message failed",
+		})
+	}
+	return nil
 }
 
 // SetLastAt sets the last at to now
@@ -696,7 +734,10 @@ func (a *agentImpl) reportChannelSize() {
 	}
 	for _, mr := range a.metricsReporters {
 		if err := mr.ReportGauge(metrics.ChannelCapacity, map[string]string{"channel": "agent_chsend"}, float64(chSendCapacity)); err != nil {
-			logger.Warnf("failed to report chSend channel capaacity: %s", err.Error())
+			logger.Warnf("failed to report gauge chSend channel capacity: %s", err.Error())
+		}
+		if err := mr.ReportHistogram(metrics.ChannelCapacityHistogram, map[string]string{"channel": "agent_chsend"}, float64(chSendCapacity)); err != nil {
+			logger.Warnf("failed to report histogram chSend channel capacity: %s", err.Error())
 		}
 	}
 }

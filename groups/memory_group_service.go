@@ -29,38 +29,22 @@ type MemoryGroup struct {
 
 // NewMemoryGroupService returns a new group instance
 func NewMemoryGroupService(config config.MemoryGroupConfig) *MemoryGroupService {
-	ctx, cancel := context.WithCancel(context.Background())
-
-	service := &MemoryGroupService{cancelFunc: cancel}
 	memoryOnce.Do(func() {
 		memoryGroups = make(map[string]*MemoryGroup)
-		go groupTTLCleanup(ctx, config.TickDuration)
+		go groupTTLCleanup(config.TickDuration)
 	})
-	return service
+	return &MemoryGroupService{}
 }
 
-func groupTTLCleanup(ctx context.Context, interval time.Duration) {
-	ticker := time.NewTicker(interval)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case now := <-ticker.C:
-			memoryGroupsMu.Lock()
-			for groupName, mg := range memoryGroups {
-				if mg.TTL != 0 && now.UnixNano()-mg.LastRefresh > mg.TTL {
-					delete(memoryGroups, groupName)
-				}
-			}
-			memoryGroupsMu.Unlock()
-		case <-ctx.Done():
-			memoryGroupsMu.Lock()
-			for groupName := range memoryGroups {
+func groupTTLCleanup(duration time.Duration) {
+	for now := range time.Tick(duration) {
+		memoryGroupsMu.Lock()
+		for groupName, mg := range memoryGroups {
+			if mg.TTL != 0 && now.UnixNano()-mg.LastRefresh > mg.TTL {
 				delete(memoryGroups, groupName)
 			}
-			memoryGroupsMu.Unlock()
-			return
 		}
+		memoryGroupsMu.Unlock()
 	}
 }
 
@@ -216,10 +200,4 @@ func (c *MemoryGroupService) GroupRenewTTL(ctx context.Context, groupName string
 		return nil
 	}
 	return constants.ErrMemoryTTLNotFound
-}
-
-func (c *MemoryGroupService) Close() {
-	if c.cancelFunc != nil {
-		c.cancelFunc()
-	}
 }

@@ -22,7 +22,6 @@ var (
 
 // EtcdGroupService base ETCD struct solution
 type EtcdGroupService struct {
-	cancelFunc context.CancelFunc
 }
 
 // NewEtcdGroupService returns a new group instance
@@ -282,10 +281,4 @@ func (c *EtcdGroupService) GroupRenewTTL(ctx context.Context, groupName string) 
 		return err
 	}
 	return constants.ErrEtcdLeaseNotFound
-}
-
-func (c *EtcdGroupService) Close() {
-	if c.cancelFunc != nil {
-		c.cancelFunc()
-	}
 }

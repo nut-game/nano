@@ -105,7 +105,6 @@ func waitForServerToBeReady(t testing.TB, out *bufio.Reader) {
 	}, true, 100*time.Millisecond, 30*time.Second)
 }
 
-// StartServer starts a server
 func StartServer(
 	t testing.TB,
 	frontend, debug bool,
@@ -113,6 +112,31 @@ func StartServer(
 	port int,
 	sdPrefix string,
 	grpc, lazyConnection bool,
+	envVars ...string,
+) func() {
+	return startServer(t, frontend, debug, svType, port, sdPrefix, grpc, lazyConnection, false, envVars...)
+}
+
+func StartServerWithLoopback(
+	t testing.TB,
+	frontend, debug bool,
+	svType string,
+	port int,
+	sdPrefix string,
+	grpc, lazyConnection bool,
+) func() {
+	return startServer(t, frontend, debug, svType, port, sdPrefix, grpc, lazyConnection, true)
+}
+
+// StartServer starts a server
+func startServer(
+	t testing.TB,
+	frontend, debug bool,
+	svType string,
+	port int,
+	sdPrefix string,
+	grpc, lazyConnection, loopback bool,
+	envVars ...string,
 ) func() {
 	grpcPort := GetFreePort(t)
 	promPort := GetFreePort(t)
@@ -143,10 +167,11 @@ func StartServer(
 	)
 
 	// always use a random port for prometheus, to avoid e2e conflicts
-	cmd.Env = []string{
+	cmd.Env = append(envVars, []string{
 		fmt.Sprintf("NANO_METRICS_PROMETHEUS_PORT=%d", promPort),
 		fmt.Sprintf("NANO_CLUSTER_RPC_CLIENT_GRPC_LAZYCONNECTION=%v", lazyConnection),
-	}
+		fmt.Sprintf("NANO_CLUSTER_RPC_SERVER_LOOPBACKENABLED=%v", loopback),
+	}...)
 
 	outPipe, err := cmd.StderrPipe()
 	if err != nil {
@@ -160,8 +185,7 @@ func StartServer(
 
 	waitForServerToBeReady(t, bufio.NewReader(outPipe))
 	return func() {
-		err := cmd.Process.Kill()
-		if err != nil {
+		if err := cmd.Process.Kill(); err != nil {
 			t.Fatal(err)
 		}
 	}

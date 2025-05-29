@@ -294,10 +294,6 @@ func (ns *NatsRPCServer) processMessages(threadID int) {
 			}
 		}
 		p, err := ns.marshalResponse(ns.responses[threadID])
-		if err != nil {
-			logger.Errorf("error sending message response: %s", err.Error())
-		}
-
 		err = ns.conn.Publish(ns.requests[threadID].GetMsg().GetReply(), p)
 		if err != nil {
 			logger.Errorf("error sending message response: %s", err.Error())
@@ -398,8 +394,8 @@ func (ns *NatsRPCServer) subscribe(topic string) (*nats.Subscription, error) {
 	return ns.conn.ChanSubscribe(topic, ns.subChan)
 }
 
-// func (ns *NatsRPCServer) stop() {
-// }
+func (ns *NatsRPCServer) stop() {
+}
 
 func (ns *NatsRPCServer) reportMetrics() {
 	if ns.metricsReporters != nil {
@@ -416,7 +412,9 @@ func (ns *NatsRPCServer) reportMetrics() {
 			if err := mr.ReportGauge(metrics.ChannelCapacity, map[string]string{"channel": "rpc_server_subchan"}, float64(subChanCapacity)); err != nil {
 				logger.Warnf("failed to report subChan queue capacity: %s", err.Error())
 			}
-
+			if err := mr.ReportHistogram(metrics.ChannelCapacityHistogram, map[string]string{"channel": "rpc_server_subchan"}, float64(subChanCapacity)); err != nil {
+				logger.Warnf("failed to report subChan queue capacity histogram: %s", err.Error())
+			}
 			// bindingschan
 			bindingsChanCapacity := ns.messagesBufferSize - len(ns.bindingsChan)
 			if bindingsChanCapacity == 0 {
@@ -424,6 +422,9 @@ func (ns *NatsRPCServer) reportMetrics() {
 			}
 			if err := mr.ReportGauge(metrics.ChannelCapacity, map[string]string{"channel": "rpc_server_bindingschan"}, float64(bindingsChanCapacity)); err != nil {
 				logger.Warnf("failed to report bindingsChan capacity: %s", err.Error())
+			}
+			if err := mr.ReportHistogram(metrics.ChannelCapacityHistogram, map[string]string{"channel": "rpc_server_bindingschan"}, float64(bindingsChanCapacity)); err != nil {
+				logger.Warnf("failed to report bindingsChan capacity histogram: %s", err.Error())
 			}
 
 			// userpushch
@@ -433,6 +434,9 @@ func (ns *NatsRPCServer) reportMetrics() {
 			}
 			if err := mr.ReportGauge(metrics.ChannelCapacity, map[string]string{"channel": "rpc_server_userpushchan"}, float64(userPushChanCapacity)); err != nil {
 				logger.Warnf("failed to report userPushCh capacity: %s", err.Error())
+			}
+			if err := mr.ReportHistogram(metrics.ChannelCapacityHistogram, map[string]string{"channel": "rpc_server_userpushchan"}, float64(userPushChanCapacity)); err != nil {
+				logger.Warnf("failed to report userPushCh capacity histogram: %s", err.Error())
 			}
 		}
 	}

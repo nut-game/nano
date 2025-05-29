@@ -157,6 +157,8 @@ type App struct {
 	sessionModulesArr []sessionModuleWrapper
 	groups            groups.GroupService
 	sessionPool       session.SessionPool
+	externalDieChan   chan bool
+	sgChan            chan os.Signal
 }
 
 // NewApp is the base constructor for a nano app instance
@@ -212,9 +214,9 @@ func NewApp(
 	return app
 }
 
-// GetDieChan gets the channel that the app sinalizes when its going to die
+// GetDieChan gets the channel that the app sinalizes when its going to die.
 func (app *App) GetDieChan() chan bool {
-	return app.dieChan
+	return app.externalDieChan
 }
 
 // SetDebug toggles debug on/off
@@ -324,8 +326,7 @@ func (app *App) Start() {
 		app.running = false
 	}()
 
-	sg := make(chan os.Signal, 1)
-	signal.Notify(sg, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
+	signal.Notify(app.sgChan, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 
 	maxSessionCount := func() int64 {
 		count := app.sessionPool.GetSessionCount()
@@ -340,7 +341,7 @@ func (app *App) Start() {
 	select {
 	case <-app.dieChan:
 		logger.Warn("the app will shutdown in a few seconds")
-	case s := <-sg:
+	case s := <-app.sgChan:
 		logger.Warn("got signal: ", s, ", shutting down...")
 		if app.config.Session.Drain.Enabled && s == syscall.SIGTERM {
 			logger.Info("Session drain is enabled, draining all sessions before shutting down")
@@ -353,7 +354,7 @@ func (app *App) Start() {
 					break loop
 				}
 				select {
-				case s := <-sg:
+				case s := <-app.sgChan:
 					logger.Warn("got signal: ", s)
 					if s == syscall.SIGINT {
 						logger.Warnf("Bypassing session draing due to SIGINT. %d sessions will be immediately terminated", maxSessionCount())
@@ -367,9 +368,11 @@ func (app *App) Start() {
 				}
 			}
 		}
-		close(app.dieChan)
 	}
 
+	app.Shutdown()
+	close(app.externalDieChan)
+	close(app.sgChan)
 	logger.Warn("server is stopping...")
 
 	app.sessionPool.CloseAll()

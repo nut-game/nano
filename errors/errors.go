@@ -40,6 +40,8 @@ const ErrClientClosedRequest = "NANO-499"
 
 // ErrClosedRequest is a string code representing the closed request error
 const ErrClosedRequest = "NANO-498"
+// ErrRequestTimeout is a string code representing the request timeout error
+const ErrRequestTimeout = "NANO-408"
 
 // Error is an error with a code, message and metadata
 type Error struct {

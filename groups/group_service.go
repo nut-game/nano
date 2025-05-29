@@ -18,7 +18,6 @@ type (
 		GroupRemoveAll(ctx context.Context, groupName string) error
 		GroupRemoveMember(ctx context.Context, groupName, uid string) error
 		GroupRenewTTL(ctx context.Context, groupName string) error
-		Close()
 	}
 )
 
