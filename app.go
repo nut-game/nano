@@ -205,6 +205,8 @@ func NewApp(
 		modulesArr:        []moduleWrapper{},
 		sessionModulesArr: []sessionModuleWrapper{},
 		sessionPool:       sessionPool,
+		externalDieChan:   make(chan bool),
+		sgChan:            make(chan os.Signal, 1),
 	}
 	if app.heartbeat == time.Duration(0) {
 		app.heartbeat = config.Heartbeat.Interval
