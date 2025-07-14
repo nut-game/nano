@@ -24,6 +24,7 @@ import (
 	"context"
 
 	"github.com/nut-game/nano/cluster"
+	"github.com/nut-game/nano/logger"
 	"github.com/nut-game/nano/session"
 )
 
@@ -59,12 +60,24 @@ func (u *UniqueSession) OnUserBind(uid, fid string) {
 // Init initializes the module
 func (u *UniqueSession) Init() error {
 	u.sessionPool.OnSessionBind(func(ctx context.Context, s session.Session) error {
-		oldSession := u.sessionPool.GetSessionByUID(s.UID())
-		if oldSession != nil {
-			return oldSession.Kick(ctx)
-		}
-		err := u.rpcClient.BroadcastSessionBind(s.UID())
-		return err
+		u.kickOldSession(ctx, s)
+		return u.rpcClient.BroadcastSessionBind(s.UID())
 	})
+	return nil
+}
+
+func (u *UniqueSession) kickOldSession(ctx context.Context, s session.Session) error {
+	oldSession := u.sessionPool.GetSessionByUID(s.UID())
+	if oldSession != nil {
+		err := oldSession.Kick(ctx)
+		if err != nil {
+			logger.Errorf("kicking old session failed, forcing close => old_session_id: %v, new_session_id: %v, uid: %v, error: %v.",
+				oldSession.ID(),
+				s.ID(),
+				s.UID(),
+				err.Error())
+			oldSession.Close()
+		}
+	}
 	return nil
 }

@@ -62,6 +62,7 @@ func WithLoopbackEnabled(enabled bool) func(*Server) {
 		server.loopbackEnabled = enabled
 	}
 }
+
 // NewServer ctor
 func NewServer(id, serverType string, frontend bool, metadata ...map[string]string) *Server {
 	d := make(map[string]string)
@@ -74,11 +75,11 @@ func NewServer(id, serverType string, frontend bool, metadata ...map[string]stri
 	}
 	return &Server{
 		loopbackEnabled: false,
-		ID:       id,
-		Type:     serverType,
-		Metadata: d,
-		Frontend: frontend,
-		Hostname: h,
+		ID:              id,
+		Type:            serverType,
+		Metadata:        d,
+		Frontend:        frontend,
+		Hostname:        h,
 	}
 }
 

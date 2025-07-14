@@ -32,8 +32,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/nut-game/nano"
 	"github.com/nut-game/nano/acceptor"
-	e "github.com/nut-game/nano/errors"
 
 	"github.com/gorilla/websocket"
 
@@ -208,7 +208,7 @@ func (c *Client) pendingRequestsReaper() {
 				}
 			}
 			for _, pendingReq := range toDelete {
-				err := e.NewError(errors.New("request timeout"), "NANO-504")
+				err := nano.Error(errors.New("request timeout"), "NANO-504")
 				errMarshalled, _ := json.Marshal(err)
 				// send a timeout to incoming msg chan
 				m := &message.Message{

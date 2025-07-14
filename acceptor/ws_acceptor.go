@@ -66,11 +66,11 @@ func NewWSAcceptor(addr string, certs ...string) *WSAcceptor {
 }
 
 func (w *WSAcceptor) IsRunning() bool {
-	return w.running
+        return w.running
 }
 
 func (w *WSAcceptor) GetConfiguredAddress() string {
-	return w.addr
+        return w.addr
 }
 
 // GetAddr returns the addr the acceptor will listen on

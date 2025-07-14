@@ -39,10 +39,10 @@ import (
 )
 
 type etcdServiceDiscovery struct {
-	cli                 *clientv3.Client
-	syncServersInterval time.Duration
-	heartbeatTTL        time.Duration
-	logHeartbeat        bool
+	cli                    *clientv3.Client
+	syncServersInterval    time.Duration
+	heartbeatTTL           time.Duration
+	logHeartbeat           bool
 	lastHeartbeatTime      time.Time
 	leaseID                clientv3.LeaseID
 	mapByTypeLock          sync.RWMutex
@@ -454,11 +454,11 @@ type parallelGetter struct {
 	workChan    chan parallelGetterWork
 }
 
-func newParallelGetter(cli *clientv3.Client, numWorkers int) *parallelGetter {
+func newParallelGetter(cli *clientv3.Client, numWorkers int) parallelGetter {
 	if numWorkers <= 0 {
 		numWorkers = 10
 	}
-	p := &parallelGetter{
+	p := parallelGetter{
 		cli:        cli,
 		numWorkers: numWorkers,
 		workChan:   make(chan parallelGetterWork),

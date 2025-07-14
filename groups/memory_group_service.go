@@ -17,7 +17,6 @@ var (
 
 // MemoryGroupService base in server memory solution
 type MemoryGroupService struct {
-	cancelFunc context.CancelFunc
 }
 
 // MemoryGroup is the struct stored in each group key(which is the name of the group)
